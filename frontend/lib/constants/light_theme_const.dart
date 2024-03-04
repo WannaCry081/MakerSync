@@ -4,12 +4,12 @@ import "package:flutter/material.dart";
 ThemeData lightTheme = ThemeData(
   useMaterial3: true,
   brightness: Brightness.light,
-  primaryColor : const Color.fromARGB(255, 104, 110, 198),
-  colorScheme: const ColorScheme.dark(
-    primary: Color.fromARGB(255, 104, 110, 198),
-    secondary: Color.fromARGB(255, 234, 233, 249),
-    tertiary: Color.fromARGB(255, 59, 60, 63),
-    background: Color.fromARGB(255, 33, 33, 33),
-    onBackground: Colors.white
-  )
+  primaryColor : const Color.fromARGB(255, 54, 48, 98),
+  colorScheme: const ColorScheme.light(
+    primary: Color.fromARGB(255, 54, 48, 98),
+    secondary: Color.fromARGB(255, 166, 177, 225),
+    tertiary: Color.fromARGB(255, 244, 238, 255),
+    background : Colors.white,
+    onBackground:  Color.fromARGB(255, 33, 33, 33)
+  ),
 );
