@@ -5,6 +5,8 @@ import "package:frontend/constants/light_theme_const.dart";
 import "package:frontend/constants/dark_theme_const.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 
+import "package:frontend/views/Onboarding/index.dart";
+
 
 void main(){
   runApp(
@@ -44,11 +46,15 @@ class MyApp extends StatelessWidget {
             theme : lightTheme,
             darkTheme : darkTheme,
             themeMode: getCurrentTheme(theme),
-            home : Scaffold()
+            home : getCurrentView()
           )
         );
       },
     );
+  }
+
+  Widget getCurrentView(){
+    return const OnboardingView();
   }
 
   ThemeMode? getCurrentTheme(String theme){
