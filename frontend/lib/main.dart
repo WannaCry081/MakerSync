@@ -1,8 +1,19 @@
 import "package:flutter/material.dart";
+import "package:frontend/providers/settings_provider.dart";
+import "package:provider/provider.dart";
 
 
 void main(){
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create :(context) => SettingsProvider(),
+        )
+      ],
+      child : const MyApp()
+    )
+  );
 }
 
 
