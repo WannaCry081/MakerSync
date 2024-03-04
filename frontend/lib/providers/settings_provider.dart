@@ -24,4 +24,8 @@ class SettingsProvider with ChangeNotifier {
   String getString(String key){
     return _pref?.getString(key) ?? "";
   }
+
+  Future<void> setBool(String key, bool value) async{
+    await _pref?.setBool(key, value);
+  }
 }
