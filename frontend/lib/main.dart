@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
-import "package:frontend/providers/settings_provider.dart";
 import "package:provider/provider.dart";
+import "package:frontend/providers/settings_provider.dart";
+import "package:frontend/constants/light_theme_const.dart";
 
 
 void main(){
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context){
     return MaterialApp(
       title : "MakerSync",
+      theme : lightTheme,
       debugShowCheckedModeBanner: false,
       home : Scaffold()
     );
