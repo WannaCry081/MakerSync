@@ -20,4 +20,8 @@ class SettingsProvider with ChangeNotifier {
   int getInt(String key){
     return _pref?.getInt(key) ?? -1;
   }
+
+  String getString(String key){
+    return _pref?.getString(key) ?? "";
+  }
 }
