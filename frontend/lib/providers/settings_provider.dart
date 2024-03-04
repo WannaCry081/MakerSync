@@ -32,4 +32,8 @@ class SettingsProvider with ChangeNotifier {
   Future<void> setInt(String key, int value) async{
     await _pref?.setInt(key, value);
   }
+
+  Future<void> setString(String key, String value) async{
+    await _pref?.setString(key, value);
+  }
 }
