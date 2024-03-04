@@ -3,6 +3,7 @@ import "package:provider/provider.dart";
 import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/constants/light_theme_const.dart";
 import "package:frontend/constants/dark_theme_const.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
 
 
 void main(){
@@ -24,12 +25,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
-    return MaterialApp(
-      title : "MakerSync",
-      theme : lightTheme,
-      darkTheme : darkTheme,
-      debugShowCheckedModeBanner: false,
-      home : Scaffold()
+    return Builder(
+      builder: (context) {
+        final SettingsProvider settings = Provider.of<SettingsProvider>(context);
+        final String theme = settings.getString("theme");
+        
+        return ScreenUtilInit(
+          designSize: const Size(360, 690),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder : (context, child) {
+            return child!;
+          },
+
+          child : MaterialApp(
+            title : "MakerSync",
+            debugShowCheckedModeBanner: false,
+            theme : lightTheme,
+            darkTheme : darkTheme,
+            home : Scaffold()
+          )
+        );
+      },
     );
   }
 }
