@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       builder: (context) {
         final SettingsProvider settings = Provider.of<SettingsProvider>(context);
         final String theme = settings.getString("theme");
-        
+
         return ScreenUtilInit(
           designSize: const Size(360, 690),
           minTextAdapt: true,
@@ -43,10 +43,21 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme : lightTheme,
             darkTheme : darkTheme,
+            themeMode: getCurrentTheme(theme),
             home : Scaffold()
           )
         );
       },
     );
+  }
+
+  ThemeMode? getCurrentTheme(String theme){
+    switch (theme){
+      case "light" : 
+        return ThemeMode.light;
+      case "dark":
+        return ThemeMode.dark;
+    }
+    return ThemeMode.system;
   }
 }
