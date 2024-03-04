@@ -12,4 +12,9 @@ class SettingsProvider with ChangeNotifier {
   Future<void> _init() async {
     _pref = await SharedPreferences.getInstance();
   }
+
+  bool getBool(String key) {
+    return _pref?.getBool(key) ?? false; 
+  }
+
 }
