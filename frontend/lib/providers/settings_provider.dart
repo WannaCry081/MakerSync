@@ -17,4 +17,7 @@ class SettingsProvider with ChangeNotifier {
     return _pref?.getBool(key) ?? false; 
   }
 
+  int getInt(String key){
+    return _pref?.getInt(key) ?? -1;
+  }
 }
