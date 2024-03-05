@@ -16,6 +16,7 @@ class ForgotPasswordView extends StatefulWidget {
 
 class _ForgotPasswordViewState extends State<ForgotPasswordView> {
 
+  final GlobalKey<FormState> _form = GlobalKey<FormState>();
   final TextEditingController _email = TextEditingController(text : "");
 
   @override
@@ -45,10 +46,12 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
 
   Widget content() {
     return Form(
+      key: _form,
       child : Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children : [
           MSBackButtonWidget(
-            btnOnTap: (){},
+            btnOnTap: navigateToLogin,
           ),
 
           SizedBox(height : 30.h),
@@ -99,5 +102,9 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
         ]
       )
     );
+  }
+
+  void navigateToLogin(){
+    Navigator.of(context).pop();
   }
 }
