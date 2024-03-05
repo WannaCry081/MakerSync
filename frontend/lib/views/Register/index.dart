@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:frontend/views/Login/index.dart";
 import "package:frontend/widgets/back_button_widget.dart";
 import "package:frontend/widgets/button_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
@@ -163,7 +164,7 @@ class _RegisterViewState extends State<RegisterView> {
               ),
       
               GestureDetector(
-                onTap : (){},
+                onTap : navigateToLogin,
                 child : MSTextWidget(
                   "Sign In", 
                   fontColor: Theme.of(context).colorScheme.primary,
@@ -174,6 +175,14 @@ class _RegisterViewState extends State<RegisterView> {
           )
         ]
       ),
+    );
+  }
+
+  void navigateToLogin() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder : (context) => const LoginView(),
+      )
     );
   }
 }
