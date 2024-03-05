@@ -25,6 +25,14 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController _password = TextEditingController(text : "");
 
   @override
+  void dispose() {
+    super.dispose();
+
+    _email.dispose();
+    _password.dispose();
+  }
+
+  @override
   Widget build(BuildContext context){
     return Scaffold(
       body : MSWrapperWidget(
