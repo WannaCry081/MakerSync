@@ -31,7 +31,7 @@ class _HomeViewState extends State<HomeView> {
               children: [ 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +61,6 @@ class _HomeViewState extends State<HomeView> {
 
                 SizedBox(
                   height: 45.h,
-                  width: MediaQuery.of(context).size.width,
                   child: AdvancedSegment(
                     controller: _controller,
                     segments: const {
@@ -81,7 +80,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     sliderOffset: 6,
                     sliderDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
+                      borderRadius: BorderRadius.circular(5.r),
                       color: Theme.of(context).colorScheme.primary
                     ),
                     backgroundColor: Theme.of(context).colorScheme.tertiary
