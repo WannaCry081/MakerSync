@@ -43,14 +43,14 @@ class _LoginViewState extends State<LoginView> {
           ),
           
           child : Center(
-            child : content(context)
+            child : content()
           )
         )
       )
     );
   }
 
-  Widget content(BuildContext context){
+  Widget content(){
     return Form(
       key : _form,
       child : Column(
