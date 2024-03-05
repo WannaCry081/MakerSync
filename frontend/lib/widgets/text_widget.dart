@@ -6,6 +6,7 @@ class MSTextWidget extends StatelessWidget {
 
   final String text;
   final TextAlign ? textAlign;
+  final TextOverflow ? textOverflow;
   final TextDecoration ? textDecoration;
   final double ? fontSize;
   final double ? fontHeight;
@@ -17,6 +18,7 @@ class MSTextWidget extends StatelessWidget {
       super.key,
       this.textAlign,
       this.textDecoration,
+      this.textOverflow,
       this.fontSize,
       this.fontHeight,
       this.fontColor,
@@ -36,7 +38,8 @@ class MSTextWidget extends StatelessWidget {
         height: fontHeight,
         color : fontColor,
         decoration: textDecoration
-      )
+      ),
+      overflow: textOverflow,
     );
   }
 }
