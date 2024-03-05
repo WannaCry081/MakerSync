@@ -35,10 +35,10 @@ class _OverviewViewState extends State<OverviewView> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircularPercentIndicator(
-            radius: 120,
+            radius: 120.r,
             lineWidth: 35,
             percent: _progressValue,
-            progressColor: Theme.of(context).colorScheme.secondary,
+            progressColor: Theme.of(context).colorScheme.primary,
             backgroundColor: Theme.of(context).colorScheme.tertiary,
             circularStrokeCap: CircularStrokeCap.round,
             center: MSTextWidget(
@@ -55,7 +55,7 @@ class _OverviewViewState extends State<OverviewView> {
             child: Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.tertiary,
-                borderRadius: BorderRadius.circular(10.0)
+                borderRadius: BorderRadius.circular(10.r)
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
