@@ -53,7 +53,7 @@ class _MSTextFieldWidgetState extends State<MSTextFieldWidget> {
       padding: EdgeInsets.only(
         left: 15.w,
         right: (widget.fieldIsObsecure)
-          ? 5.w
+          ? 10.w
           : 15.w
       ),
       decoration: BoxDecoration(
