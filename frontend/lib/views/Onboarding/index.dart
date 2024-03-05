@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:frontend/views/Login/index.dart";
 import "package:frontend/widgets/button_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
 import "package:frontend/widgets/wrapper_widget.dart";
@@ -99,7 +100,7 @@ class OnboardingView extends StatelessWidget {
             children : [
         
               MSButtonWidget(
-                btnOnTap: () {},
+                btnOnTap: () => navigateToLogin(context),
                 btnColor : Theme.of(context).colorScheme.primary,
                 child : Center(
                   child : MSTextWidget(
@@ -167,4 +168,13 @@ class OnboardingView extends StatelessWidget {
       ],
     );
   }
+
+  void navigateToLogin(BuildContext context) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder : (context) => const LoginView()
+      )
+    );
+  }
+
 }
