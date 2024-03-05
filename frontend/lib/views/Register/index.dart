@@ -21,6 +21,16 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController _rePassword = TextEditingController(text : "");
 
   @override
+  void dispose(){
+    super.dispose();
+
+    _name.dispose();
+    _email.dispose();
+    _password.dispose();
+    _rePassword.dispose();
+  }
+
+  @override
   Widget build(BuildContext context){
     return Scaffold(
       body : MSWrapperWidget(
