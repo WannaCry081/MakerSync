@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:frontend/views/Onboarding/index.dart";
 import "package:frontend/widgets/wrapper_widget.dart";
 import "package:frontend/widgets/button_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
@@ -46,7 +47,7 @@ class _LoginViewState extends State<LoginView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children : [
           MSBackButtonWidget(
-            btnOnTap: (){},
+            btnOnTap: navigateToOnboarding,
           ),
       
           SizedBox(height : 30.h),
@@ -151,4 +152,11 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
+  void navigateToOnboarding(){
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder : (context) => const OnboardingView()
+      )
+    );
+  }
 }
