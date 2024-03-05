@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:frontend/views/Onboarding/index.dart";
+import "package:frontend/views/ForgotPassword/index.dart";
 import "package:frontend/views/Register/index.dart";
 import "package:frontend/widgets/wrapper_widget.dart";
 import "package:frontend/widgets/button_widget.dart";
@@ -104,7 +105,7 @@ class _LoginViewState extends State<LoginView> {
           Align(
             alignment: Alignment.centerRight,
             child: GestureDetector(
-              onTap: (){},
+              onTap: navigateToForgotPassword,
               child : const MSTextWidget(
                 "Forgot Password?",
                 fontWeight: FontWeight.w600,
@@ -168,4 +169,12 @@ class _LoginViewState extends State<LoginView> {
       )
     );
   }
+
+  void navigateToForgotPassword() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder : (context) => const ForgotPasswordView(),
+      )
+    );
+  } 
 }
