@@ -8,14 +8,14 @@ import 'package:frontend/views/Dashboard/Home/overview_view.dart';
 import 'package:frontend/widgets/text_widget.dart';
 
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeViewState extends State<HomeView> {
   final _controller = ValueNotifier('Overview');
 
   @override
@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                   ),
 
                   SvgPicture.asset(
-                      "assets/svg/Logo.svg",
+                      "assets/svgs/Logo.svg",
                       height: 48.h
                     )
                   ],
@@ -76,7 +76,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                     inactiveStyle: TextStyle(
                       fontFamily: "Inter",
-                      fontSize: 16.sp
+                      fontSize: 16.sp,
+                      color: Theme.of(context).colorScheme.onBackground
                     ),
                     sliderOffset: 6,
                     sliderDecoration: BoxDecoration(
