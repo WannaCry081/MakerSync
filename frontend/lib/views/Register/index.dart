@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:frontend/views/Login/index.dart";
+import "package:frontend/views/Onboarding/index.dart";
 import "package:frontend/widgets/back_button_widget.dart";
 import "package:frontend/widgets/button_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
@@ -15,6 +16,8 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
+
+  final GlobalKey<FormState> _form = GlobalKey<FormState>();
 
   final TextEditingController _name = TextEditingController(text : "");
   final TextEditingController _email = TextEditingController(text : "");
@@ -51,10 +54,12 @@ class _RegisterViewState extends State<RegisterView> {
 
   Widget content(){
     return Form(
+      key: _form,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children : [
           MSBackButtonWidget(
-            btnOnTap: (){},
+            btnOnTap: navigateToOnboarding,
           ),
       
           SizedBox(height : 30.h),
@@ -175,6 +180,14 @@ class _RegisterViewState extends State<RegisterView> {
           )
         ]
       ),
+    );
+  }
+
+  void navigateToOnboarding() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder : (context) => const OnboardingView()
+      )
     );
   }
 
