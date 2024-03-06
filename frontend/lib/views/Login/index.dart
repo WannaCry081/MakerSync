@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:frontend/views/Dashboard/index.dart";
 import "package:frontend/views/Onboarding/index.dart";
 import "package:frontend/views/ForgotPassword/index.dart";
 import "package:frontend/views/Register/index.dart";
@@ -125,7 +126,7 @@ class _LoginViewState extends State<LoginView> {
           SizedBox(height : 30.h),
           
           MSButtonWidget(
-            btnOnTap: (){},
+            btnOnTap: navigateToDashboard,
             btnColor : Theme.of(context).colorScheme.primary,
             child : Center(
               child : MSTextWidget(
@@ -185,4 +186,12 @@ class _LoginViewState extends State<LoginView> {
       )
     );
   } 
+
+  void navigateToDashboard() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => DashboardView()
+      )
+    );
+  }
 }
