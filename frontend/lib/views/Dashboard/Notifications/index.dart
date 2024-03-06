@@ -2,57 +2,74 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/widgets/text_widget.dart';
+import 'package:frontend/widgets/wrapper_widget.dart';
 
-class NotificationsView extends StatelessWidget {
+class NotificationsView extends StatefulWidget {
   const NotificationsView({super.key});
 
   @override
+  State<NotificationsView> createState() => _NotificationsViewState();
+}
+
+class _NotificationsViewState extends State<NotificationsView> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding( 
+      body: MSWrapperWidget(
+        child: Padding(
           padding: EdgeInsets.symmetric(
+            horizontal: 22.w,
             vertical: 22.h,
-            horizontal: 22.w
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-
-              SizedBox(height: 15.h),
-
-              MSTextWidget(
-                "Notifications",
-                fontSize: 26.sp,
-                fontColor: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.bold
-              ),
-
-              SizedBox(height: 20.h),
-
-              Expanded(
-                child: SizedBox(
-                  child: ListView.builder(
-                    itemCount: 10,
-                    itemBuilder: (context, index){
-                      return notificationCard(
-                        context,
-                        "Shiela Mae Lepon", 
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam feugiat, quam et sollicitudin pharetra"
-                      );
-                    }
-                  )
-                ),
-              )
-            ],
-          ),
-        ),
+          
+          child: content(),
+        )
       )
     );
   }
 
-  
-  Widget notificationCard(context, name, email) {
+  Widget content(){
+    return Scaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 15.h),
+      
+          MSTextWidget(
+            "Notifications",
+            fontSize: 26.sp,
+            fontColor: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.bold
+          ),
+      
+          SizedBox(height: 15.h),
+      
+          Expanded(
+            child: SizedBox(
+              child: ListView.builder(
+                itemCount: 10,
+                itemBuilder: (context, index){
+                  return notificationCard(
+                    context: context,
+                    name: "Shiela Mae Lepon", 
+                    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam feugiat, quam et sollicitudin pharetra",
+                    date: "Feb 15"
+                  );
+                }
+              )
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget notificationCard({
+    required BuildContext context, 
+    required String name,
+    required String content,
+    required String date
+  }) {
   return Padding(
     padding: EdgeInsets.symmetric(
       vertical: 7.5.h,
@@ -79,14 +96,14 @@ class NotificationsView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MSTextWidget(
-                  "$name",
+                  name,
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
                   fontColor: Theme.of(context).colorScheme.onBackground,
                   textOverflow: TextOverflow.ellipsis,
                 ),
                 MSTextWidget(
-                  "$email",
+                  content,
                   fontWeight: FontWeight.w500,
                   fontColor: Colors.grey.shade600,
                   textOverflow: TextOverflow.ellipsis,
@@ -97,7 +114,7 @@ class NotificationsView extends StatelessWidget {
           ),
 
           MSTextWidget(
-            "Feb 15",
+            date,
             fontSize: 10.sp,
             fontColor: Colors.grey.shade500,
             fontHeight: 2.h,
@@ -107,5 +124,4 @@ class NotificationsView extends StatelessWidget {
     ),
   );
 }
-
 }
