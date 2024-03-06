@@ -7,59 +7,55 @@ class EmergencyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: (){},
-              child: Stack(
-                children:[
-                  Container(
-                    height: 260.h, 
-                    width: 260.w,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context).brightness == Brightness.dark  
-                        ? Colors.grey.shade700
-                        : Colors.grey.shade200
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: (){},
+          child: Stack(
+            children:[
+              Container(
+                height: 260.h, 
+                width: 260.w,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).brightness == Brightness.dark  
+                    ? Colors.grey.shade700
+                    : Colors.grey.shade200
+                )
+              ),
+              Positioned.fill(
+                child: Center(
+                  child: ElevatedButton(
+                    onPressed: (){},
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 70.h,
+                        horizontal: 70.w),
+                      backgroundColor: Colors.red[400],
+                      foregroundColor: Colors.white,
+                    ),
+                    child: MSTextWidget(
+                      "STOP",
+                      fontSize: 40.sp,
+                      fontWeight: FontWeight.bold
                     )
                   ),
-                  Positioned.fill(
-                    child: Center(
-                      child: ElevatedButton(
-                       onPressed: (){},
-                        style: ElevatedButton.styleFrom(
-                          shape: const CircleBorder(),
-                          padding: EdgeInsets.symmetric(
-                            vertical: 70.h,
-                            horizontal: 70.w),
-                          backgroundColor: Colors.red[400],
-                          foregroundColor: Colors.white,
-                        ),
-                        child: MSTextWidget(
-                          "STOP",
-                          fontSize: 40.sp,
-                          fontWeight: FontWeight.bold
-                        )
-                      ),
-                    ),
-                  )
-                ]
-              ),
-            ),
+                ),
+              )
+            ]
+          ),
+        ),
 
-            SizedBox(height: 40.h),
+        SizedBox(height: 40.h),
 
-            MSTextWidget(
-              "Press the button to initiate an emergency stop of the machine.",
-              fontSize: 16.sp,
-              textAlign: TextAlign.center,
-            )
-          ],
+        MSTextWidget(
+          "Press the button to initiate an emergency stop of the machine.",
+          fontSize: 16.sp,
+          textAlign: TextAlign.center,
         )
-      )
+      ],
     );
   }
 }
