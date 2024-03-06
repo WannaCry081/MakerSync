@@ -16,7 +16,9 @@ class MembersView extends StatelessWidget {
             itemCount: 10,
             itemBuilder: (context, index){
               return memberCard(
-                context, "John Doe", "johndoe@gmail.com"
+                context: context, 
+                name: "John Doe", 
+                email: "johndoe@gmail.com"
               );
             }
           ),
@@ -25,7 +27,11 @@ class MembersView extends StatelessWidget {
     );
   }
 
-  Widget memberCard(context, name, email) {
+  Widget memberCard({
+    required BuildContext context,
+    required String name,
+    required String email
+  }) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 7.5.h),
       child: Container(
@@ -64,18 +70,17 @@ class MembersView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MSTextWidget(
-                  "$name",
+                  name,
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
                   fontColor: Theme.of(context).colorScheme.onBackground,
                   
                 ),
                 MSTextWidget(
-                  "$email",
+                  email,
                   fontWeight: FontWeight.w500,
                   fontColor: Colors.grey.shade600,
                   fontHeight: 1.h,
-                  
                 ),
               ],
             ),
