@@ -14,6 +14,7 @@ class MSTextFieldWidget extends StatefulWidget {
   final Color? fieldBorderColor;
   final bool fieldIsObsecure;
   final bool fieldIsValid;
+  final bool? fieldIsReadOnly;
   final String? fieldLabelText;
   final Color? fieldLabelColor;
   final String? Function(String?)? fieldValidator;
@@ -33,6 +34,7 @@ class MSTextFieldWidget extends StatefulWidget {
     this.fieldLabelColor,
     this.fieldValidator,
     this.fieldIsValid = false,
+    this.fieldIsReadOnly = false,
     this.fieldOnChanged
   });
 
@@ -72,6 +74,7 @@ class _MSTextFieldWidgetState extends State<MSTextFieldWidget> {
                 controller: widget.controller,
                 onChanged: widget.fieldOnChanged,
                 validator: widget.fieldValidator,
+                readOnly: widget.fieldIsReadOnly!,
                 obscureText: (widget.fieldIsObsecure && !_showPassword),
                 style: TextStyle(
                   fontFamily : "Inter",
