@@ -52,15 +52,14 @@ class _ProfileViewState extends State<ProfileView> {
             ),
         child: MSWrapperWidget(
         child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 22.w,
-            vertical: 22.h
-          ),
+            padding: EdgeInsets.symmetric(
+              horizontal: 22.w,
+              vertical: 22.h
+            ),
 
-          child: content()
+            child: content()
+          )
         )
-      )
-
       )
     );
   }
