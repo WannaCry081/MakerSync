@@ -6,6 +6,7 @@ import 'package:frontend/views/Dashboard/Settings/dark_mode.dart';
 import 'package:frontend/views/Dashboard/Settings/profile_view.dart';
 import 'package:frontend/widgets/button_widget.dart';
 import 'package:frontend/widgets/text_widget.dart';
+import 'package:frontend/widgets/wrapper_widget.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
@@ -20,132 +21,137 @@ class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      body: MSWrapperWidget(
         child: Padding(
           padding: EdgeInsets.symmetric(
-            vertical: 22.h,
-            horizontal: 22.w
+            horizontal: 22.w,
+            vertical: 22.h
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 15.h),
-      
-              MSTextWidget(
-                "Settings",
-                fontSize: 26.sp,
-                fontColor: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.bold
-              ),
-      
-              SizedBox(height: 30.h),
-      
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).brightness == Brightness.dark
-                    ? Theme.of(context).colorScheme.tertiary
-                    : Colors.grey.shade50,
-                  borderRadius: BorderRadius.circular(10.r),
-                  border: Border.all(
-                    color: Theme.of(context).brightness == Brightness.dark 
-                      ? Colors.grey.shade600
-                      : Colors.grey.shade300
-                  )
-                ),
-                child: Column(
-                  children: [
-                    settingsItem(
-                      context,
-                      const Icon(FeatherIcons.user, color: Colors.white),
-                      "Profile",
-                      Icon(
-                        FeatherIcons.chevronRight,
-                        color: Theme.of(context).colorScheme.onBackground),
-                      (){}
-                    ),
-                  
-                    settingsItem(
-                      context,
-                      const Icon(FeatherIcons.lock, color: Colors.white),
-                      "Change Password",
-                      Icon(
-                        FeatherIcons.chevronRight,
-                        color: Theme.of(context).colorScheme.onBackground),
-                      (){}
-                    ),
-      
-                    settingsItem(
-                      context,
-                      const Icon(FeatherIcons.moon, color: Colors.white),
-                      "Dark Mode",
-                      Icon(
-                        FeatherIcons.chevronRight,
-                        color: Theme.of(context).colorScheme.onBackground),
-                      (){}
-                    ),
-      
-                    settingsItem(
-                      context,
-                      const Icon(FeatherIcons.bell, color: Colors.white), 
-                      "Notifications",
-                      Switch(
-                        value: _isNotifications,
-                        activeColor: Theme.of(context).colorScheme.primary,
-                        onChanged: ((bool value) {
-                          setState(() => _isNotifications = value);
-                        })
-                      ),
-                      (){},
-                      isLast: true
-                    ),
-      
-                    SizedBox(height: 10.h)
-                  ]
-                )
-              ),
-              const Spacer(),
-      
-              MSButtonWidget(
-                btnOnTap: (){},
-                btnColor: Colors.red.shade300,
-                child: Center(
-                  child: MSTextWidget(
-                    "Disconect from Device",
-                    fontColor: Colors.white,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600
-                  )
-                )
-              ),
-              
-              SizedBox(height: 15.h),
-      
-              MSButtonWidget(
-                btnOnTap: (){},
-                btnColor: Theme.of(context).colorScheme.primary,
-                child: Center(
-                  child: MSTextWidget(
-                    "Log out",
-                    fontColor: Colors.white,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600
-                  )
-                )
-              ),
-            ]
-          ),
+
+          child: content()
         )
       )
     );
   }
 
-  Widget settingsItem(
-    BuildContext context, 
-    Icon icon, 
-    String title, 
-    Widget widget, 
-    void Function() onTap,
-    {bool isLast = false}) 
+  Widget content(){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 15.h),
+
+        MSTextWidget(
+          "Settings",
+          fontSize: 26.sp,
+          fontColor: Theme.of(context).colorScheme.primary,
+          fontWeight: FontWeight.bold
+        ),
+
+        SizedBox(height: 30.h),
+
+        Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).brightness == Brightness.dark
+              ? Theme.of(context).colorScheme.tertiary
+              : Colors.grey.shade50,
+            borderRadius: BorderRadius.circular(10.r),
+            border: Border.all(
+              color: Theme.of(context).brightness == Brightness.dark 
+                ? Colors.grey.shade600
+                : Colors.grey.shade300
+            )
+          ),
+          child: Column(
+            children: [
+              settingsItem(
+                context: context,
+                iconData: FeatherIcons.user,
+                title: "Profile",
+                widget: Icon(
+                  FeatherIcons.chevronRight,
+                  color: Theme.of(context).colorScheme.onBackground),
+                onTap: navigateToProfile
+              ),
+            
+              settingsItem(
+                context: context,
+                iconData: FeatherIcons.lock,
+                title: "Change Password",
+                widget: Icon(
+                  FeatherIcons.chevronRight,
+                  color: Theme.of(context).colorScheme.onBackground),
+                onTap: navigateToChangePassword
+              ),
+
+              settingsItem(
+                context:context,
+                iconData: FeatherIcons.moon,
+                title: "Dark Mode",
+                widget: Icon(
+                  FeatherIcons.chevronRight,
+                  color: Theme.of(context).colorScheme.onBackground),
+                onTap: navigateToDarkMode
+              ),
+
+              settingsItem(
+                context: context,
+                iconData: FeatherIcons.bell,
+                title: "Notifications",
+                widget: Switch(
+                  value: _isNotifications,
+                  activeColor: Theme.of(context).colorScheme.primary,
+                  onChanged: ((bool value) {
+                    setState(() => _isNotifications = value);
+                  })
+                ),
+                isLast: true
+              ),
+
+              SizedBox(height: 10.h)
+            ]
+          )
+        ),
+        const Spacer(),
+
+        MSButtonWidget(
+          btnOnTap: (){},
+          btnColor: Colors.red.shade300,
+          child: Center(
+            child: MSTextWidget(
+              "Disconect from Device",
+              fontColor: Colors.white,
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w600
+            )
+          )
+        ),
+        
+        SizedBox(height: 15.h),
+
+        MSButtonWidget(
+          btnOnTap: (){},
+          btnColor: Theme.of(context).colorScheme.primary,
+          child: Center(
+            child: MSTextWidget(
+              "Log out",
+              fontColor: Colors.white,
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w600
+            )
+          )
+        ),
+      ]
+    );
+  }
+
+  Widget settingsItem({
+    required BuildContext context,
+    required IconData iconData,
+    required String title,
+    required Widget widget,
+    void Function() ? onTap,
+    bool isLast = false,
+  }) 
   {
     return GestureDetector(
       onTap: onTap,
@@ -167,7 +173,10 @@ class _SettingsViewState extends State<SettingsView> {
                         color: Theme.of(context).colorScheme.primary,
                         borderRadius: BorderRadius.circular(5.r),
                       ),
-                      child: icon
+                      child: Icon(
+                        iconData,
+                        color: Colors.white
+                      )
                     ),
           
                     SizedBox(width: 15.w),
@@ -195,8 +204,7 @@ class _SettingsViewState extends State<SettingsView> {
                   height: 10.h, 
                   color: Theme.of(context).brightness == Brightness.dark
                     ? Colors.grey.shade600
-                    : Colors.grey.shade300
-              )) 
+                    : Colors.grey.shade300 )) 
             ],
           ),
         ],
