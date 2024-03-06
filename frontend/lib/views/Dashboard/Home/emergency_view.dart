@@ -20,7 +20,7 @@ class EmergencyView extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Theme.of(context).brightness == Brightness.dark  
-                    ? Colors.grey.shade700
+                    ? Colors.grey.shade600
                     : Colors.grey.shade200
                 )
               ),
