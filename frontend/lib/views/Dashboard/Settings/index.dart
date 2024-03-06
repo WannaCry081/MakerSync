@@ -21,14 +21,34 @@ class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: MSWrapperWidget(
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+        ? Theme.of(context).colorScheme.background
+        : null,
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: Theme.of(context).brightness == Brightness.dark
+          ? null
+          : BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.white,
+                  Colors.white,
+                  Theme.of(context).colorScheme.secondary
+                ]
+              )
+            ),
+        child: MSWrapperWidget(
         child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 22.w,
-            vertical: 22.h
-          ),
+            padding: EdgeInsets.symmetric(
+              horizontal: 22.w,
+              vertical: 22.h
+            ),
 
-          child: content()
+            child: content()
+          )
         )
       )
     );
@@ -53,12 +73,12 @@ class _SettingsViewState extends State<SettingsView> {
           decoration: BoxDecoration(
             color: Theme.of(context).brightness == Brightness.dark
               ? Theme.of(context).colorScheme.tertiary
-              : Colors.grey.shade50,
+              : Colors.white,
             borderRadius: BorderRadius.circular(10.r),
             border: Border.all(
               color: Theme.of(context).brightness == Brightness.dark 
                 ? Colors.grey.shade600
-                : Colors.grey.shade300
+                : Colors.grey.shade200
             )
           ),
           child: Column(
@@ -111,6 +131,7 @@ class _SettingsViewState extends State<SettingsView> {
             ]
           )
         ),
+        
         const Spacer(),
 
         MSButtonWidget(
@@ -204,7 +225,7 @@ class _SettingsViewState extends State<SettingsView> {
                   height: 10.h, 
                   color: Theme.of(context).brightness == Brightness.dark
                     ? Colors.grey.shade600
-                    : Colors.grey.shade300 )) 
+                    : Colors.grey.shade200 )) 
             ],
           ),
         ],
