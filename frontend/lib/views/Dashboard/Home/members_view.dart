@@ -11,9 +11,9 @@ class MembersView extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Container(
-          padding: EdgeInsets.only(top: 20.h),
+          padding: EdgeInsets.only(top: 15.h),
           child: ListView.builder(
-            itemCount: 5,
+            itemCount: 10,
             itemBuilder: (context, index){
               return memberCard(
                 context, "John Doe", "johndoe@gmail.com"
