@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/views/Dashboard/Settings/change_password_view.dart';
+import 'package:frontend/views/Dashboard/Settings/dark_mode.dart';
+import 'package:frontend/views/Dashboard/Settings/profile_view.dart';
 import 'package:frontend/widgets/button_widget.dart';
 import 'package:frontend/widgets/text_widget.dart';
 
@@ -39,9 +42,15 @@ class _SettingsViewState extends State<SettingsView> {
       
               Container(
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.tertiary,
+                  color: Theme.of(context).brightness == Brightness.dark
+                    ? Theme.of(context).colorScheme.tertiary
+                    : Colors.grey.shade50,
                   borderRadius: BorderRadius.circular(10.r),
-                  border: Border.all(color: Colors.grey.shade300)
+                  border: Border.all(
+                    color: Theme.of(context).brightness == Brightness.dark 
+                      ? Colors.grey.shade600
+                      : Colors.grey.shade300
+                  )
                 ),
                 child: Column(
                   children: [
@@ -51,7 +60,8 @@ class _SettingsViewState extends State<SettingsView> {
                       "Profile",
                       Icon(
                         FeatherIcons.chevronRight,
-                        color: Theme.of(context).colorScheme.onBackground)
+                        color: Theme.of(context).colorScheme.onBackground),
+                      (){}
                     ),
                   
                     settingsItem(
@@ -60,7 +70,8 @@ class _SettingsViewState extends State<SettingsView> {
                       "Change Password",
                       Icon(
                         FeatherIcons.chevronRight,
-                        color: Theme.of(context).colorScheme.onBackground)
+                        color: Theme.of(context).colorScheme.onBackground),
+                      (){}
                     ),
       
                     settingsItem(
@@ -69,7 +80,8 @@ class _SettingsViewState extends State<SettingsView> {
                       "Dark Mode",
                       Icon(
                         FeatherIcons.chevronRight,
-                        color: Theme.of(context).colorScheme.onBackground)
+                        color: Theme.of(context).colorScheme.onBackground),
+                      (){}
                     ),
       
                     settingsItem(
@@ -83,6 +95,7 @@ class _SettingsViewState extends State<SettingsView> {
                           setState(() => _isNotifications = value);
                         })
                       ),
+                      (){},
                       isLast: true
                     ),
       
@@ -126,55 +139,92 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 
-  Widget settingsItem(context, icon, title, widget, {bool isLast = false}) {
-    return Column(
-      children: [
-        Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 10, left: 15, right: 10),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children:[
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 8.h,
-                      horizontal: 8.w
+  Widget settingsItem(
+    BuildContext context, 
+    Icon icon, 
+    String title, 
+    Widget widget, 
+    void Function() onTap,
+    {bool isLast = false}) 
+  {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 10, left: 15, right: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children:[
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 8.h,
+                        horizontal: 8.w
+                      ),
+                      decoration:  BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(5.r),
+                      ),
+                      child: icon
                     ),
-                    decoration:  BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
-                      borderRadius: BorderRadius.circular(5.r),
+          
+                    SizedBox(width: 15.w),
+          
+                    MSTextWidget(
+                      title,
+                      fontSize: 16.sp,
                     ),
-                    child: icon
-                  ),
-        
-                  SizedBox(width: 15.w),
-        
-                  MSTextWidget(
-                    title,
-                    fontSize: 16.sp,
-                  ),
-        
-                  const Spacer(),
-
-                  widget,
-                ]
+          
+                    const Spacer(),
+      
+                    widget,
+                  ]
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+      
+          if (!isLast)
+          Row(
+            children: [
+              Expanded(
+                child: Divider( 
+                  indent: 70, 
+                  height: 10.h, 
+                  color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey.shade600
+                    : Colors.grey.shade300
+              )) 
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
-        if (!isLast)
-        Row(
-          children: [
-            Expanded(
-              child: Divider( 
-                indent: 70, 
-                height: 10.h, 
-                color: Colors.grey.shade300))
-          ],
-        ),
-      ],
+  void navigateToProfile(){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const ProfileView()
+      )
+    );
+  }
+
+  void navigateToChangePassword(){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const ChangePasswordView()
+      )
+    );
+  }
+
+  void navigateToDarkMode(){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const DarkModeView()
+      )
     );
   }
 }
