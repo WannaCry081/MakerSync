@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
@@ -70,48 +71,55 @@ class _ProfileViewState extends State<ProfileView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MSBackButtonWidget(
-            btnOnTap: navigateToSettings
-          ),
-      
-          SizedBox(height: 30.h),
-      
-          MSTextWidget(
-            "Profile",
-            fontSize: 26.sp,
-            fontColor: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.bold,
+          Row(
+            children: [
+              MSBackButtonWidget(
+                btnOnTap: navigateToSettings
+              ),
+
+              SizedBox(width: 15.w),
+
+              MSTextWidget(
+                "Profile",
+                fontSize: 26.sp, 
+                fontColor: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ],
           ),
       
           SizedBox(height: 40.h),
       
-          Align(
-            alignment: Alignment.center,
-            child: Stack(
-              children:[
-                SvgPicture.asset(
-                  "assets/svgs/Logo.svg",
-                  height: 150.h,
-                ),
-                
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    height: 45.h,
-                    width: 45.w,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    child: Icon(
-                      FeatherIcons.camera,
-                      color: Theme.of(context).colorScheme.background
-                    ),
+          GestureDetector(
+            onTap: (){},
+            child: Align(
+              alignment: Alignment.center,
+              child: Stack(
+                children:[
+                  SvgPicture.asset(
+                    "assets/svgs/Logo.svg",
+                    height: 150.h,
+                  ),
+                  
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      height: 45.h,
+                      width: 45.w,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      child: Icon(
+                        FeatherIcons.camera,
+                        color: Theme.of(context).colorScheme.background
+                      ),
+                    )
                   )
-                )
-              ]
-            )
+                ]
+              )
+            ),
           ),
 
           SizedBox(height: 30.h),
