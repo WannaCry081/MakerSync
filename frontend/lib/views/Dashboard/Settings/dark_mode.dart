@@ -114,6 +114,33 @@ class _DarkModeViewState extends State<DarkModeView> {
     );
   }
 
+  void updateTheme(String theme){
+    final settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
+    settingsProvider.setTheme(theme);
+  }
+  
+  onChangedHandler(SwitchOptions? value){
+    setState(() =>  _option = value);
+    if(value != null) {
+      String theme;
+      switch(value){
+        case SwitchOptions.DarkMode: theme = "dark"; break;
+        case SwitchOptions.LightMode: theme = "light"; break;
+        case SwitchOptions.SystemSettings: theme = "system"; break;
+        default: theme = "light";
+      }
+      updateTheme(theme);
+    }
+  }
+
+  void navigateToSettings(){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const SettingsView()
+      )
+    );
+  }
+
 }
 
 enum SwitchOptions {
