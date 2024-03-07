@@ -116,7 +116,7 @@ class _DarkModeViewState extends State<DarkModeView> {
 
   void updateTheme(String theme){
     final settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
-    settingsProvider.setTheme(theme);
+    settingsProvider.setString("theme", theme);
   }
   
   onChangedHandler(SwitchOptions? value){
