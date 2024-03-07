@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
@@ -29,6 +28,7 @@ class _ProfileViewState extends State<ProfileView> {
 
     _newDisplayName.dispose();
   }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,8 +97,10 @@ class _ProfileViewState extends State<ProfileView> {
               child: Stack(
                 children:[
                   SvgPicture.asset(
-                    "assets/svgs/Logo.svg",
-                    height: 150.h,
+                    Theme.of(context).brightness == Brightness.dark
+                    ? "assets/svgs/Logo_DarkMode.svg"
+                    : "assets/svgs/Logo_LightMode.svg",
+                    height: 150.h
                   ),
                   
                   Positioned(
