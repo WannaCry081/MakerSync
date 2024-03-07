@@ -63,7 +63,9 @@ class _HomeViewState extends State<HomeView> {
           ),
 
           SvgPicture.asset(
-              "assets/svgs/Logo.svg",
+              Theme.of(context).brightness == Brightness.dark
+              ? "assets/svgs/Logo_DarkMode.svg"
+              : "assets/svgs/Logo_LightMode.svg",
               height: 48.h
             )
           ],
@@ -73,6 +75,7 @@ class _HomeViewState extends State<HomeView> {
 
         SizedBox(
           height: 45.h,
+          width: MediaQuery.of(context).size.width,
           child: AdvancedSegment(
             controller: _controller,
             segments: const {
@@ -80,14 +83,12 @@ class _HomeViewState extends State<HomeView> {
               "Members" : "Members",
               "Emergency" : "Emergency",
             },
-            activeStyle: TextStyle(
+            activeStyle: const TextStyle(
               fontFamily: "Inter",
-              fontSize: 16.sp,
               color: Colors.white
             ),
             inactiveStyle: TextStyle(
               fontFamily: "Inter",
-              fontSize: 16.sp,
               color: Theme.of(context).colorScheme.onBackground
             ),
             sliderOffset: 6,
