@@ -27,10 +27,12 @@ class SettingsProvider with ChangeNotifier {
 
   Future<void> setBool(String key, bool value) async{
     await _pref?.setBool(key, value);
+    notifyListeners();
   }
 
   Future<void> setInt(String key, int value) async{
     await _pref?.setInt(key, value);
+    notifyListeners();
   }
 
   Future<void> setString(String key, String value) async{
