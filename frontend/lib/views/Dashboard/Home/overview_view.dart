@@ -3,9 +3,11 @@ import "package:flutter/services.dart";
 import "package:flutter_barcode_scanner/flutter_barcode_scanner.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
+import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/widgets/button_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
 import "package:percent_indicator/circular_percent_indicator.dart";
+import "package:provider/provider.dart";
 
 
 class OverviewView extends StatefulWidget {
@@ -16,15 +18,17 @@ class OverviewView extends StatefulWidget {
 }
 
 class _OverviewViewState extends State<OverviewView> {
-  bool _isConnected = false;
+
   bool _isScanFail = false;
   double _progressValue = 0.4;
   String _code = "D8yxV57U";
   String _scanCodeResult = "";
 
-  
   @override
   Widget build(BuildContext context){
+    final SettingsProvider settings  = Provider.of<SettingsProvider>(context);
+    final bool _isConnected = settings.getBool("isConnected");
+
     return Scaffold( 
       body : Center(
         child: _isConnected ? connectedView() : disconnectedView(),
@@ -173,15 +177,15 @@ class _OverviewViewState extends State<OverviewView> {
     }
 
     if(!mounted) return;
-    setState(() => _scanCodeResult = scan);
-
-    if(_code == _scanCodeResult){
-      setState((){
-         _isConnected = true;
-         _isScanFail = false;
-      });
-    } else {
-      setState(() => _isScanFail = true);
-    }
+    final SettingsProvider settings = Provider.of<SettingsProvider>(context);
+    setState(() {
+      _scanCodeResult = scan;
+      if(_code == _scanCodeResult){
+        settings.setBool("isConnected", true);
+        _isScanFail = false;
+      } else {
+        _isScanFail = true;
+      }
+    });
   }
 }
