@@ -25,11 +25,6 @@ class SettingsProvider with ChangeNotifier {
     return _pref?.getString(key) ?? "";
   }
 
-  Future<void> setTheme(String value) async {
-    await _pref?.setString("theme", value);
-    notifyListeners();
-  }
-
   Future<void> setBool(String key, bool value) async{
     await _pref?.setBool(key, value);
   }
@@ -40,5 +35,6 @@ class SettingsProvider with ChangeNotifier {
 
   Future<void> setString(String key, String value) async{
     await _pref?.setString(key, value);
+    notifyListeners();
   }
 }
