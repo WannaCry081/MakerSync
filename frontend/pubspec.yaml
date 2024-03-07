@@ -70,7 +70,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/svgs/Logo.svg
+    - assets/svgs/Logo_LightMode.svg
+    - assets/svgs/Logo_DarkMode.svg
     - assets/svgs/Blob1.svg
     - assets/svgs/Blob2.svg
     - assets/svgs/Meeting.svg
