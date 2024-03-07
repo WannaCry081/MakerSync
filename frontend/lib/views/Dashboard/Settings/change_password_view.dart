@@ -76,7 +76,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
             btnOnTap: navigateToSettings
           ),
       
-          SizedBox(height: 30.h),
+          SizedBox(height: 20.h),
       
           MSTextWidget(
             "Change Password",
@@ -84,8 +84,14 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
             fontColor: Theme.of(context).colorScheme.primary,
             fontWeight: FontWeight.bold,
           ),
+
+          SizedBox(height : 5.h),
+                
+          const MSTextWidget(
+            "Your password should be at least 6 characters and\nshould include a combination of numbers, letters,\nand special characters.",
+          ),
       
-          SizedBox(height: 40.h),
+          SizedBox(height: 30.h),
 
           MSTextFieldWidget(
             controller : _currentPassword,
