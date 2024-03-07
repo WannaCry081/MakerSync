@@ -47,8 +47,10 @@ class MembersView extends StatelessWidget {
           children: [
             Stack(
               children: [
-                SvgPicture.asset(
-                  "assets/svgs/Logo.svg"
+               SvgPicture.asset(
+                  Theme.of(context).brightness == Brightness.dark
+                  ? "assets/svgs/Logo_DarkMode.svg"
+                  : "assets/svgs/Logo_LightMode.svg",
                 ),
                 Positioned(
                   bottom: 0, right: 0,
@@ -74,8 +76,10 @@ class MembersView extends StatelessWidget {
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
                   fontColor: Theme.of(context).colorScheme.onBackground,
-                  
                 ),
+
+                SizedBox(height: 3.h),
+
                 MSTextWidget(
                   email,
                   fontWeight: FontWeight.w500,
