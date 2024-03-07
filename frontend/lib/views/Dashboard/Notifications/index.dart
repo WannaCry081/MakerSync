@@ -73,7 +73,6 @@ class _NotificationsViewState extends State<NotificationsView> {
   return Padding(
     padding: EdgeInsets.symmetric(
       vertical: 7.5.h,
-      horizontal: 7.5.w
     ),
     child: Container(
       padding: EdgeInsets.symmetric(
@@ -87,7 +86,11 @@ class _NotificationsViewState extends State<NotificationsView> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SvgPicture.asset("assets/svgs/Logo.svg"),
+          SvgPicture.asset(
+            Theme.of(context).brightness == Brightness.dark
+            ? "assets/svgs/Logo_DarkMode.svg"
+            : "assets/svgs/Logo_LightMode.svg",
+          ),
 
           SizedBox(width: 12.w),
           
@@ -102,6 +105,9 @@ class _NotificationsViewState extends State<NotificationsView> {
                   fontColor: Theme.of(context).colorScheme.onBackground,
                   textOverflow: TextOverflow.ellipsis,
                 ),
+
+                SizedBox(height: 3.h),
+
                 MSTextWidget(
                   content,
                   fontWeight: FontWeight.w500,
