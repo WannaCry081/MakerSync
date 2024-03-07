@@ -31,8 +31,8 @@ class EmergencyView extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       shape: const CircleBorder(),
                       padding: EdgeInsets.symmetric(
-                        vertical: 70.h,
-                        horizontal: 70.w),
+                        vertical: 60.h,
+                        horizontal: 60.w),
                       backgroundColor: Colors.red[400],
                       foregroundColor: Colors.white,
                     ),
