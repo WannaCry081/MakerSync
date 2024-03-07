@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_barcode_scanner/flutter_barcode_scanner.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
 import "package:frontend/widgets/button_widget.dart";
@@ -15,8 +17,12 @@ class OverviewView extends StatefulWidget {
 
 class _OverviewViewState extends State<OverviewView> {
   bool _isConnected = false;
+  bool _isScanFail = false;
   double _progressValue = 0.4;
+  String _code = "D8yxV57U";
+  String _scanCodeResult = "";
 
+  
   @override
   Widget build(BuildContext context){
     return Scaffold( 
@@ -27,7 +33,7 @@ class _OverviewViewState extends State<OverviewView> {
   }
 
   Widget connectedView() {
-    return Padding(
+    return  Padding(
       padding: EdgeInsets.symmetric(
         vertical: 20.h,
       ),
@@ -82,6 +88,8 @@ class _OverviewViewState extends State<OverviewView> {
   Widget disconnectedView() {
     return Column(
       children: [
+        SizedBox(height: 30.h),
+        
         Padding(
           padding: EdgeInsets.symmetric(vertical: 25.w),
           child: Stack(
@@ -96,7 +104,7 @@ class _OverviewViewState extends State<OverviewView> {
               Positioned.fill(
                 child: Center(
                   child: SvgPicture.asset(
-                    "assets/svgs/Search.svg", 
+                    _isScanFail ? "assets/svgs/ErrorScan.svg" : "assets/svgs/Search.svg", 
                     height: 400.h
                   ),
                 ),
@@ -105,18 +113,26 @@ class _OverviewViewState extends State<OverviewView> {
           ),
         ),
         
-        SizedBox(height: 10.h),
+        SizedBox(height: 5.h),
 
         Column(
           children: [
             MSTextWidget(
-              "Oops! You are not yet connected :<",
+              _isScanFail 
+                ? "Oops! Your scanned code seems to be incorrect :>" 
+                : "Oops! You are not yet connected :<",
+              textAlign: TextAlign.center,
               fontSize: 16.sp,
               fontWeight: FontWeight.w500,
               fontColor: Theme.of(context).colorScheme.onBackground,
             ),
+
+            SizedBox(height: 2.h),
+
             MSTextWidget(
-              "Please scan the QR code found in the machine to proceed.",
+              _isScanFail 
+                ? "Please scan the QR code again to proceed."
+                : "Please scan the QR code found in the machine to proceed.",
               fontWeight: FontWeight.w500,
               fontColor: Colors.grey.shade600,
               fontHeight: 2.h,
@@ -127,9 +143,7 @@ class _OverviewViewState extends State<OverviewView> {
         const Spacer(),
 
         MSButtonWidget(
-          btnOnTap: (){
-            setState(() => _isConnected = true);
-          },
+          btnOnTap: scanQRCode,
           btnColor: Theme.of(context).colorScheme.primary,
           child: Center(
             child: MSTextWidget(
@@ -142,5 +156,32 @@ class _OverviewViewState extends State<OverviewView> {
         )
       ],
     );
+  }
+
+  Future<void> scanQRCode() async {
+    String scan;
+    try{
+      scan = await FlutterBarcodeScanner.scanBarcode(
+        "#ff6666",
+        "Cancel",
+        true,
+        ScanMode.QR
+      );
+      debugPrint(scan);
+    } on PlatformException {
+      scan = "Failed to get platform version";
+    }
+
+    if(!mounted) return;
+    setState(() => _scanCodeResult = scan);
+
+    if(_code == _scanCodeResult){
+      setState((){
+         _isConnected = true;
+         _isScanFail = false;
+      });
+    } else {
+      setState(() => _isScanFail = true);
+    }
   }
 }
