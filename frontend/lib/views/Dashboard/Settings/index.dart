@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/providers/settings_provider.dart';
 import 'package:frontend/views/Dashboard/Settings/change_password_view.dart';
 import 'package:frontend/views/Dashboard/Settings/dark_mode.dart';
 import 'package:frontend/views/Dashboard/Settings/profile_view.dart';
 import 'package:frontend/widgets/button_widget.dart';
 import 'package:frontend/widgets/text_widget.dart';
 import 'package:frontend/widgets/wrapper_widget.dart';
+import 'package:provider/provider.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
@@ -135,11 +137,14 @@ class _SettingsViewState extends State<SettingsView> {
         const Spacer(),
 
         MSButtonWidget(
-          btnOnTap: (){},
+          btnOnTap: (){
+            final SettingsProvider settings = Provider.of<SettingsProvider>(context);
+            settings.setBool("isConnected", false);
+          },
           btnColor: Colors.red.shade300,
           child: Center(
             child: MSTextWidget(
-              "Disconect from Device",
+              "Disconnect from Device",
               fontColor: Colors.white,
               fontSize: 16.sp,
               fontWeight: FontWeight.w600
