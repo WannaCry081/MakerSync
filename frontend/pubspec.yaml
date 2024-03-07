@@ -76,6 +76,7 @@ flutter:
     - assets/svgs/Blob2.svg
     - assets/svgs/Meeting.svg
     - assets/svgs/Search.svg
+    - assets/svgs/ErrorScan.svg
     - assets/svgs/Thermometer.svg
     - assets/icons/Google.svg
     - assets/icons/LeftArrow.svg
