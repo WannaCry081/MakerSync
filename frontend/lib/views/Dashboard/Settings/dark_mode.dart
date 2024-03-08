@@ -15,7 +15,7 @@ class DarkModeView extends StatefulWidget {
 }
 
 class _DarkModeViewState extends State<DarkModeView> {
-  SwitchOptions? _option = SwitchOptions.DarkMode;
+  SwitchOptions? _option = SwitchOptions.system;
 
   @override
   Widget build(BuildContext context) {
@@ -78,15 +78,15 @@ class _DarkModeViewState extends State<DarkModeView> {
 
           switchOption(
             title: "On",
-            value: SwitchOptions.DarkMode
+            value: SwitchOptions.dark
           ),
           switchOption(
             title: "Off",
-            value: SwitchOptions.LightMode
+            value: SwitchOptions.light
           ),
           switchOption(
             title: "Use System Settings",
-            value: SwitchOptions.SystemSettings
+            value: SwitchOptions.system
           )
         ]
       );
@@ -114,22 +114,20 @@ class _DarkModeViewState extends State<DarkModeView> {
     );
   }
 
-  void updateTheme(String theme){
-    final settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
-    settingsProvider.setString("theme", theme);
-  }
-  
-  onChangedHandler(SwitchOptions? value){
+  void onChangedHandler(SwitchOptions? value){
+    final SettingsProvider settings = Provider.of<SettingsProvider>(context, listen: false);
+
     setState(() =>  _option = value);
+
     if(value != null) {
-      String theme;
-      switch(value){
-        case SwitchOptions.DarkMode: theme = "dark"; break;
-        case SwitchOptions.LightMode: theme = "light"; break;
-        case SwitchOptions.SystemSettings: theme = "system"; break;
-        default: theme = "light";
-      }
-      updateTheme(theme);
+      final Map<SwitchOptions, String> themeMap = {
+        SwitchOptions.dark: "dark",
+        SwitchOptions.light: "light",
+        SwitchOptions.system: "system"
+      };
+
+      String theme = themeMap[value] ?? "system";
+      settings.setString("theme", theme);
     }
   }
 
@@ -144,7 +142,7 @@ class _DarkModeViewState extends State<DarkModeView> {
 }
 
 enum SwitchOptions {
-  DarkMode, 
-  LightMode, 
-  SystemSettings,
+  dark, 
+  light, 
+  system,
 }
