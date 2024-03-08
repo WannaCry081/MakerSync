@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/providers/settings_provider.dart';
+import 'package:frontend/views/Dashboard/Home/index.dart';
 import 'package:frontend/views/Dashboard/Settings/change_password_view.dart';
 import 'package:frontend/views/Dashboard/Settings/dark_mode.dart';
 import 'package:frontend/views/Dashboard/Settings/profile_view.dart';
+import 'package:frontend/views/Login/index.dart';
 import 'package:frontend/widgets/button_widget.dart';
+import 'package:frontend/widgets/snackbar_widget.dart';
 import 'package:frontend/widgets/text_widget.dart';
 import 'package:frontend/widgets/wrapper_widget.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +23,16 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsViewState extends State<SettingsView> {
+  late final SettingsProvider settings;
+  bool _showDisconnectButton = false;
   bool _isNotifications = false;
+
+  @override
+  void initState(){
+    super.initState();
+    settings = Provider.of<SettingsProvider>(context, listen: false);
+    setState(() => _showDisconnectButton = settings.getBool("isConnected"));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,23 +150,24 @@ class _SettingsViewState extends State<SettingsView> {
         
         const Spacer(),
 
-        MSButtonWidget(
-          btnOnTap: disconnectFromDevice,
-          btnColor: Colors.red.shade300,
-          child: Center(
-            child: MSTextWidget(
-              "Disconnect from Device",
-              fontColor: Colors.white,
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w600
+        if(_showDisconnectButton)
+          MSButtonWidget(
+            btnOnTap: disconnectFromDevice,
+            btnColor: Colors.red.shade300,
+            child: Center(
+              child: MSTextWidget(
+                "Disconnect from Device",
+                fontColor: Colors.white,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600
+              )
             )
-          )
-        ),
+          ),
         
         SizedBox(height: 15.h),
 
         MSButtonWidget(
-          btnOnTap: (){},
+          btnOnTap: navigateToLogin,
           btnColor: Theme.of(context).colorScheme.primary,
           child: Center(
             child: MSTextWidget(
@@ -262,41 +277,33 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 
-  void showSnackbar({
-    required BuildContext context,
-    required String content
-  }){
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: MSTextWidget(content), 
-        duration: const Duration(milliseconds: 1500),
-        closeIconColor: Theme.of(context).colorScheme.primary,
-        showCloseIcon: true,
-        padding: EdgeInsets.symmetric(
-          horizontal: 10.w),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.r)
-        ),
+  void navigateToHome(){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const HomeView()
+      )
+    );
+  }
+
+  void navigateToLogin(){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const LoginView()
       )
     );
   }
 
   Future<void> disconnectFromDevice() async {
-    final SettingsProvider settings = Provider.of<SettingsProvider>(context, listen: false);
-      bool _isConnected = settings.getBool("isConnected");
+    settings.setBool("isConnected", false);
 
-      if(_isConnected){
-        settings.setBool("isConnected", false);
-        showSnackbar(
-          context: context,
-          content: "Successfully disconnected from device!"
-        );
-      } else {
-        showSnackbar(
-          context: context,
-          content: "Oops! You are still not connected to a device."
-        );
-      }
+    const MSSnackbarWidget(
+      message: "Successfully disconnected from device!",
+    ).showSnackbar(context);
+
+    setState(() => _showDisconnectButton = false);
+
+    Timer(const Duration(seconds: 2), () {
+      navigateToHome();
+    });
   }
 }
