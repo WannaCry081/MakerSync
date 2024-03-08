@@ -5,6 +5,7 @@ import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
 import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/widgets/button_widget.dart";
+import "package:frontend/widgets/snackbar_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
 import "package:percent_indicator/circular_percent_indicator.dart";
 import "package:provider/provider.dart";
@@ -44,6 +45,9 @@ class _OverviewViewState extends State<OverviewView> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          
+          SizedBox(height: 15.h),
+
           CircularPercentIndicator(
             radius: 120.r,
             lineWidth: 35,
@@ -182,6 +186,11 @@ class _OverviewViewState extends State<OverviewView> {
         setState((){
           settingsProvider.setBool("isConnected", true);
         });
+
+        const MSSnackbarWidget(
+          message: "Successfully connected to device!",
+        ).showSnackbar(context);
+
       } else {
         setState(() => _isScanFail = true);
       }
