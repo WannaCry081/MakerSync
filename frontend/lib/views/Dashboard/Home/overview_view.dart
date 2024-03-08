@@ -171,21 +171,22 @@ class _OverviewViewState extends State<OverviewView> {
         true,
         ScanMode.QR
       );
-      debugPrint(scan);
-    } on PlatformException {
-      scan = "Failed to get platform version";
-    }
 
-    if(!mounted) return;
-    final SettingsProvider settings = Provider.of<SettingsProvider>(context);
-    setState(() {
-      _scanCodeResult = scan;
+      debugPrint(scan);
+      setState(() => _scanCodeResult = scan);
+
+      if(!mounted) return;
+      final SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
+
       if(_code == _scanCodeResult){
-        settings.setBool("isConnected", true);
-        _isScanFail = false;
+        setState((){
+          settingsProvider.setBool("isConnected", true);
+        });
       } else {
-        _isScanFail = true;
+        setState(() => _isScanFail = true);
       }
-    });
+    } on PlatformException catch(e) {
+       debugPrint("Failed to scan barcode: $e");
+    }    
   }
 }
