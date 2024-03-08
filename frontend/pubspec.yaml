@@ -43,7 +43,6 @@ dependencies:
   flutter_screenutil: ^5.9.0
   percent_indicator: ^4.2.3
   flutter_barcode_scanner: ^2.0.0
-  flutter_advanced_segment: ^3.0.2
   persistent_bottom_nav_bar: ^5.0.2
 
 dev_dependencies:
