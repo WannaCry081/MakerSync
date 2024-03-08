@@ -55,7 +55,7 @@ class _HomeViewState extends State<HomeView> {
                 fontColor: Theme.of(context).colorScheme.primary
               ),
 
-              SizedBox(height : 5.h),
+              SizedBox(height : 3.h),
 
               const MSTextWidget(
                 "Let's start tracking your progress!")
