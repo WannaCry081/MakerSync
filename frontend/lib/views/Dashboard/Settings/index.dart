@@ -137,10 +137,7 @@ class _SettingsViewState extends State<SettingsView> {
         const Spacer(),
 
         MSButtonWidget(
-          btnOnTap: (){
-            final SettingsProvider settings = Provider.of<SettingsProvider>(context);
-            settings.setBool("isConnected", false);
-          },
+          btnOnTap: disconnectFromDevice,
           btnColor: Colors.red.shade300,
           child: Center(
             child: MSTextWidget(
@@ -186,7 +183,10 @@ class _SettingsViewState extends State<SettingsView> {
           Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 10, left: 15, right: 10),
+                padding: EdgeInsets.only(
+                  top: 10.h, 
+                  left: 15.w, 
+                  right: 10.w),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children:[
@@ -260,5 +260,43 @@ class _SettingsViewState extends State<SettingsView> {
         builder: (context) => const DarkModeView()
       )
     );
+  }
+
+  void showSnackbar({
+    required BuildContext context,
+    required String content
+  }){
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: MSTextWidget(content), 
+        duration: const Duration(milliseconds: 1500),
+        closeIconColor: Theme.of(context).colorScheme.primary,
+        showCloseIcon: true,
+        padding: EdgeInsets.symmetric(
+          horizontal: 10.w),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.r)
+        ),
+      )
+    );
+  }
+
+  Future<void> disconnectFromDevice() async {
+    final SettingsProvider settings = Provider.of<SettingsProvider>(context, listen: false);
+      bool _isConnected = settings.getBool("isConnected");
+
+      if(_isConnected){
+        settings.setBool("isConnected", false);
+        showSnackbar(
+          context: context,
+          content: "Successfully disconnected from device!"
+        );
+      } else {
+        showSnackbar(
+          context: context,
+          content: "Oops! You are still not connected to a device."
+        );
+      }
   }
 }
