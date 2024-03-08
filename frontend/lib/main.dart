@@ -63,7 +63,8 @@ class MyApp extends StatelessWidget {
         return ThemeMode.light;
       case "dark":
         return ThemeMode.dark;
+      default: 
+        return ThemeMode.system;
     }
-    return ThemeMode.system;
   }
 }
