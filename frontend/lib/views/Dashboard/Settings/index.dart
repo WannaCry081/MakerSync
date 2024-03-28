@@ -13,6 +13,7 @@ import 'package:frontend/widgets/button_widget.dart';
 import 'package:frontend/widgets/snackbar_widget.dart';
 import 'package:frontend/widgets/text_widget.dart';
 import 'package:frontend/widgets/wrapper_widget.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
 
 class SettingsView extends StatefulWidget {
@@ -285,15 +286,16 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 
-  void navigateToLogin(){
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const LoginView()
-      )
+  void navigateToLogin() {
+     PersistentNavBarNavigator.pushNewScreen(
+        context,
+        screen: const LoginView(),
+        withNavBar: false,
+        pageTransitionAnimation: PageTransitionAnimation.cupertino,
     );
   }
 
-  Future<void> disconnectFromDevice() async {
+  void disconnectFromDevice() async {
     settings.setBool("isConnected", false);
 
     const MSSnackbarWidget(
