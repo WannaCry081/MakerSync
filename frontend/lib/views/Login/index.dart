@@ -188,7 +188,7 @@ class _LoginViewState extends State<LoginView> {
   } 
 
   void navigateToDashboard() {
-    Navigator.of(context).push(
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => DashboardView()
       )
