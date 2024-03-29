@@ -1,12 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/providers/settings_provider.dart';
+import 'package:frontend/widgets/disconnected_view.dart';
 import 'package:frontend/widgets/text_widget.dart';
+import 'package:provider/provider.dart';
 
-class EmergencyView extends StatelessWidget {
+class EmergencyView extends StatefulWidget {
   const EmergencyView({super.key});
 
   @override
+  State<EmergencyView> createState() => _EmergencyViewState();
+}
+
+class _EmergencyViewState extends State<EmergencyView> {
+
+
+  @override
   Widget build(BuildContext context) {
+    final SettingsProvider settings =  Provider.of<SettingsProvider>(context);
+    final _isConnected = settings.getBool("isConnected");
+
+    return _isConnected
+      ? content(context: context)
+      : const DisconnectedViewWidget();
+  }
+
+  Widget content({
+    required BuildContext context
+  }) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
