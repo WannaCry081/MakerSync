@@ -77,6 +77,10 @@ flutter:
     - assets/svgs/Search.svg
     - assets/svgs/ErrorScan.svg
     - assets/svgs/Thermometer.svg
+    - assets/svgs/Bottle_500ml.svg
+    - assets/svgs/Bottle_1000ml.svg
+    - assets/svgs/Bottle_1500ml.svg
+    - assets/svgs/Bottle_2000ml.svg
     - assets/icons/Google.svg
     - assets/icons/LeftArrow.svg
 
