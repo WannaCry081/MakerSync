@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/providers/settings_provider.dart';
+import 'package:frontend/widgets/disconnected_view.dart';
 import 'package:frontend/widgets/text_widget.dart';
 import 'package:frontend/widgets/wrapper_widget.dart';
+import 'package:provider/provider.dart';
 
 class NotificationsView extends StatefulWidget {
   const NotificationsView({super.key});
@@ -12,8 +15,12 @@ class NotificationsView extends StatefulWidget {
 }
 
 class _NotificationsViewState extends State<NotificationsView> {
+
   @override
   Widget build(BuildContext context) {
+    final SettingsProvider settings = Provider.of<SettingsProvider>(context);
+    final _isConnected = settings.getBool("isConnected");
+  
     return Scaffold(
       body: MSWrapperWidget(
         child: Padding(
@@ -22,13 +29,13 @@ class _NotificationsViewState extends State<NotificationsView> {
             vertical: 22.h,
           ),
           
-          child: content(),
+          child: content(_isConnected)
         )
       )
     );
   }
 
-  Widget content(){
+  Widget content(_isConnected){
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,21 +50,23 @@ class _NotificationsViewState extends State<NotificationsView> {
           ),
       
           SizedBox(height: 15.h),
-      
+
           Expanded(
-            child: SizedBox(
-              child: ListView.builder(
-                itemCount: 10,
-                itemBuilder: (context, index){
-                  return notificationCard(
-                    context: context,
-                    name: "Shiela Mae Lepon", 
-                    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam feugiat, quam et sollicitudin pharetra",
-                    date: "Feb 15"
-                  );
-                }
+            child: _isConnected
+              ? SizedBox(
+                child: ListView.builder(
+                  itemCount: 10,
+                  itemBuilder: (context, index){
+                    return notificationCard(
+                      context: context,
+                      name: "Shiela Mae Lepon", 
+                      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam feugiat, quam et sollicitudin pharetra",
+                      date: "Feb 15"
+                    );
+                  }
+                )
               )
-            ),
+            : const DisconnectedViewWidget()
           )
         ],
       ),
