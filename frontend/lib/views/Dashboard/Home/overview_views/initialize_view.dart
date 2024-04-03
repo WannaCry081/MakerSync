@@ -76,8 +76,6 @@ class _InitializeViewState extends State<InitializeView> {
                   setState(() {
                     _clickedOption = index;
                   });
-
-                  print("Clicked index: $_clickedOption");
                 },
                 child: Column(
                   children: [
@@ -96,6 +94,10 @@ class _InitializeViewState extends State<InitializeView> {
           ),
         ),
 
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.02,
+        ),
+        
         MSButtonWidget(
           btnOnTap: (){},
           btnColor: Theme.of(context).colorScheme.primary,
@@ -125,7 +127,7 @@ class _InitializeViewState extends State<InitializeView> {
       alignment: Alignment.center,
       children: [
         Container(
-          height: 270,
+          height: 280,
           width: MediaQuery.of(context).size.width * 0.5,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.tertiary,
@@ -148,7 +150,7 @@ class _InitializeViewState extends State<InitializeView> {
             top: -50,
             child: SvgPicture.asset(
               image,
-              height: 220.h,
+              height: 200.h,
             ),
           ),
 
