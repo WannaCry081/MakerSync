@@ -1,31 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/providers/settings_provider.dart';
+import 'package:frontend/widgets/disconnected_view.dart';
 import 'package:frontend/widgets/text_widget.dart';
+import 'package:provider/provider.dart';
 
-class MembersView extends StatelessWidget {
+class MembersView extends StatefulWidget {
   const MembersView({super.key});
 
   @override
+  State<MembersView> createState() => _MembersViewState();
+}
+
+class _MembersViewState extends State<MembersView> {
+
+  @override
   Widget build(BuildContext context) {
+    final SettingsProvider settings = Provider.of<SettingsProvider>(context);
+    final bool _isConnected = settings.getBool("isConnected");
+
     return Scaffold(
       body: Center(
         child: Container(
           padding: EdgeInsets.only(top: 15.h),
-          child: ListView.builder(
-            itemCount: 10,
-            itemBuilder: (context, index){
-              return memberCard(
-                context: context, 
-                name: "John Doe", 
-                email: "johndoe@gmail.com"
-              );
-            }
-          ),
+          child: _isConnected
+            ? ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, index){
+                return memberCard(
+                  context: context, 
+                  name: "John Doe", 
+                  email: "johndoe@gmail.com"
+                );
+              }
+            )
+            : const DisconnectedViewWidget()
         )
       )
     );
   }
+
+  
 
   Widget memberCard({
     required BuildContext context,

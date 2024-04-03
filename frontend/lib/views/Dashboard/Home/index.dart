@@ -44,7 +44,7 @@ class _HomeViewState extends State<HomeView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
       
-                SizedBox(height: 15.h),
+                SizedBox(height: 10.h),
       
                 MSTextWidget(
                   "Hello, Shiela!",
@@ -105,7 +105,7 @@ class _HomeViewState extends State<HomeView> {
           ),
           
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.6,
+            height: MediaQuery.of(context).size.height * 0.62,
             child:  const TabBarView(
               children: [
                 Center(child: OverviewView()),
