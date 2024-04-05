@@ -25,4 +25,8 @@ class Sensor {
       isStop: json['isStop'] as bool? ?? false,              
     );
   }
+
+  Object? toJson() {
+    return null;
+  }
 }
