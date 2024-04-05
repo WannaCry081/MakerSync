@@ -27,9 +27,10 @@ class UserService {
   Future<UserModel> updateUser({
     required String email,
     String? name,
-    bool? isConnected
+    bool? isConnected,
+    bool? isActive
   }) async {
-    final response = await http.get(Uri.parse("$USER_URL/$MACHINE_CODE"));
+    final response = await http.get(Uri.parse("$USER_URL/$MACHINE_CODE/$email"));
 
     if (response.statusCode != 200) { throw Exception("Failed to fetch user data."); }
 
@@ -38,7 +39,8 @@ class UserService {
     final updatedUserData = UserModel(
       email: email,
       name: name ?? userData.name,
-      isConnected: isConnected ?? userData.isConnected
+      isConnected: isConnected ?? !userData.isConnected,
+      isActive: isActive ?? !userData.isActive,
     );
 
     final updatedResponse = await http.put(
