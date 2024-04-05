@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/models/sensor_model.dart';
 import 'package:frontend/providers/settings_provider.dart';
+import 'package:frontend/services/sensor_service.dart';
 import 'package:frontend/widgets/disconnected_view.dart';
 import 'package:frontend/widgets/text_widget.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +16,8 @@ class EmergencyView extends StatefulWidget {
 
 class _EmergencyViewState extends State<EmergencyView> {
 
+  late Future<SensorModel> sensor;
+  final SensorService _sensorService = SensorService();
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +36,16 @@ class _EmergencyViewState extends State<EmergencyView> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
-          onTap: (){},
+          onTap: () async {
+            await _sensorService.updateSensor(
+              counter: 0,
+              timer: 0,
+              temperature: 0,
+              isInitialized: false,
+              isStart: false,
+              isStop: true
+            );
+          },
           child: Stack(
             children:[
               Container(
