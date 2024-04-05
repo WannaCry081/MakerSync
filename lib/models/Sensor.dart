@@ -19,7 +19,7 @@ class Sensor {
     return Sensor(
       counter: json['counter'] as int? ?? 0, 
       timer: json['timer'] as int? ?? 0,    
-      temperature: json['temperature'] as double? ?? 0,  
+      temperature: (json['temperature'] as num?)?.toDouble() ?? 0,
       isInitialized: json['isInitialized'] as bool? ?? false, 
       isStart: json['isStart'] as bool? ?? false,             
       isStop: json['isStop'] as bool? ?? false,              
