@@ -17,23 +17,23 @@ class SensorModel {
 
   factory SensorModel.fromJson(Map <String, dynamic> json) {
     return SensorModel(
-      counter: json['counter'] as int? ?? 0, 
-      timer: json['timer'] as int? ?? 0,    
-      temperature: (json['temperature'] as num?)?.toDouble() ?? 0.0,
-      isInitialized: json['isInitialized'] as bool? ?? false, 
-      isStart: json['isStart'] as bool? ?? false,             
-      isStop: json['isStop'] as bool? ?? false,              
+      counter: json["counter"] as int? ?? 0, 
+      timer: json["timer"] as int? ?? 0,    
+      temperature: (json["temperature"] as num?)?.toDouble() ?? 0.0,
+      isInitialized: json["isInitialized"] as bool? ?? false, 
+      isStart: json["isStart"] as bool? ?? false,             
+      isStop: json["isStop"] as bool? ?? false,              
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'counter': counter,
-      'timer': timer,
-      'temperature': temperature,
-      'isInitialized': isInitialized,
-      'isStart': isStart,
-      'isStop': isStop,
+      "counter": counter,
+      "timer": timer,
+      "temperature": temperature,
+      "isInitialized": isInitialized,
+      "isStart": isStart,
+      "isStop": isStop,
     };
   }
 
