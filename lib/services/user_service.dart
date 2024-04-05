@@ -21,6 +21,45 @@ class UserService {
       } else {
         throw Exception("Failed to fetch users.");
       }
+  }
+
+  
+  Future<UserModel> updateUser({
+    required String email,
+    String? name,
+    bool? isConnected
+  }) async {
+    final response = await http.get(Uri.parse("$USER_URL/$MACHINE_CODE"));
+
+    if (response.statusCode != 200) { throw Exception("Failed to fetch user data."); }
+
+    final userData = UserModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+
+    final updatedUserData = UserModel(
+      email: email,
+      name: name ?? userData.name,
+      isConnected: isConnected ?? userData.isConnected
+    );
+
+    final updatedResponse = await http.put(
+      Uri.parse("$USER_URL/$MACHINE_CODE/$email"),
+      body: jsonEncode(updatedUserData.toJson()),
+      headers: <String, String> {
+        "Content-Type" : "application/json; charset=UTF-8"
+      }
+    );
+
+    if (updatedResponse.statusCode == 200) {
+      return updatedUserData;
+    } else if (updatedResponse.statusCode == 400) {
+      throw Exception("Invalid user update request.");
+    } else if (updatedResponse.statusCode == 404) {
+      throw Exception("User not found.");
+    } else if (updatedResponse.statusCode == 500) {
+      throw Exception("Internal Server Error.");
+    } else {
+      throw Exception("Failed to update user.");
+    }
 
   }
 }
