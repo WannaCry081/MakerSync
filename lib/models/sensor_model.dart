@@ -26,4 +26,15 @@ class SensorModel {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'counter': counter,
+      'timer': timer,
+      'temperature': temperature,
+      'isInitialized': isInitialized,
+      'isStart': isStart,
+      'isStop': isStop,
+    };
+  }
+
 }
