@@ -2,33 +2,31 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import 'package:frontend/models/Sensor.dart';
+import 'package:frontend/models/sensor_model.dart';
 import 'package:frontend/services/api_constants.dart';
 
 
 class SensorService {
 
-  Future<Sensor> fetchSensor() async {
+  Future<SensorModel> fetchSensor() async {
 
     final response = await http.get(Uri.parse("$SENSOR_URL/$MACHINE_CODE"));
 
-    switch (response.statusCode) {
-      case 200:
-        return Sensor.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
-      case 400:
+    if (response.statusCode == 200) {
+         return SensorModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      } else if (response.statusCode == 400) {
         throw Exception("Invalid sensor request.");
-      case 404:
+      } else if (response.statusCode == 404) {
         throw Exception("Sensor not found.");
-      case 500:
-        throw Exception("Internal server error");
-      default:
-        throw Exception("Failed to fetch sensor. Status code: ${response.statusCode}");
-    }
+      } else if (response.statusCode == 500) {
+        throw Exception("Internal Server Error.");
+      } else {
+        throw Exception("Failed to fetch sensor.");
+      }
   }
 
 
-
-  Future<Sensor> updateSensor({
+  Future<SensorModel> updateSensor({
     int? counter,
     int? timer,
     double? temperature,
@@ -36,14 +34,14 @@ class SensorService {
     bool? isStart,
     bool? isStop,
   }) async {
-    try {
+      
       final response = await http.get(Uri.parse("$SENSOR_URL/$MACHINE_CODE"));
 
-      if (response.statusCode != 200) throw Exception("Failed to fetch sensor data.");
+      if (response.statusCode != 200) { throw Exception("Failed to fetch sensor data."); }
 
-      final sensorData = Sensor.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      final sensorData = SensorModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
 
-      final updatedSensorData = Sensor(
+      final updatedSensorData = SensorModel(
         counter: counter ?? sensorData.counter,
         timer: timer ?? sensorData.timer,
         temperature: temperature ?? sensorData.temperature,
@@ -52,28 +50,25 @@ class SensorService {
         isStop: isStop ?? sensorData.isStop
       );
 
-      final updatedResponse = await http.put (
+      final updatedResponse = await http.put(
         Uri.parse("$SENSOR_URL/$MACHINE_CODE"),
         body: jsonEncode(updatedSensorData.toJson()),
-        headers: {
-          "Content-Type" : "application/json"
+        headers: <String, String> {
+          "Content-Type" : "application/json; charset=UTF-8"
         }
       );
 
-      switch (updatedResponse.statusCode) {
-        case 200:
-          return Sensor.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
-        case 400:
-          throw Exception("Invalid sensor request.");
-        case 404:
-          throw Exception("Sensor not found.");
-        case 500:
-          throw Exception("Internal server error");
-        default:
-          throw Exception("Failed to update sensor. Status code: ${response.statusCode}");
+      if (updatedResponse.statusCode == 200) {
+         return updatedSensorData;
+      } else if (updatedResponse.statusCode == 400) {
+        throw Exception("Invalid sensor request.");
+      } else if (updatedResponse.statusCode == 404) {
+        throw Exception("Sensor not found.");
+      } else if (updatedResponse.statusCode == 500) {
+        throw Exception("Internal Server Error.");
+      } else {
+        throw Exception("Failed to update sensor.");
       }
-    } catch (e) {
-      throw Exception("Error: $e");
-    }
+
   }
 }
