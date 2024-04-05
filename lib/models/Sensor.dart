@@ -16,25 +16,13 @@ class Sensor {
   });
 
   factory Sensor.fromJson(Map <String, dynamic> json) {
-    return switch (json){
-      {
-        "counter" : int counter,
-        "timer" : int timer,
-        // "temperature" : double temperature,
-        "isInitialized" : bool isInitialized,
-        "isStart" : bool isStart,
-        "isStop" : bool isStop
-      } =>
-        Sensor (
-          counter: counter,
-          timer: timer,
-          // temperature: temperature,
-          isInitialized: isInitialized,
-          isStart: isStart,
-          isStop: isStop
-        ),
-        _ => throw const FormatException("Failed to load sensor.")
-      
-    };
+    return Sensor(
+      counter: json['counter'] as int? ?? 0, 
+      timer: json['timer'] as int? ?? 0,    
+      // temperature: json['temperature'] as double?,  
+      isInitialized: json['isInitialized'] as bool? ?? false, 
+      isStart: json['isStart'] as bool? ?? false,             
+      isStop: json['isStop'] as bool? ?? false,              
+    );
   }
 }
