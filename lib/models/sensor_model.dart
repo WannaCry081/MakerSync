@@ -1,4 +1,4 @@
-class Sensor {
+class SensorModel {
   final int counter;
   final int timer;
   final double temperature;
@@ -6,7 +6,7 @@ class Sensor {
   final bool isStart;
   final bool isStop;
 
-  const Sensor({
+  const SensorModel({
     required this.counter,
     required this.timer,
     required this.temperature,
@@ -15,18 +15,15 @@ class Sensor {
     required this.isStop
   });
 
-  factory Sensor.fromJson(Map <String, dynamic> json) {
-    return Sensor(
+  factory SensorModel.fromJson(Map <String, dynamic> json) {
+    return SensorModel(
       counter: json['counter'] as int? ?? 0, 
       timer: json['timer'] as int? ?? 0,    
-      temperature: (json['temperature'] as num?)?.toDouble() ?? 0,
+      temperature: (json['temperature'] as num?)?.toDouble() ?? 0.0,
       isInitialized: json['isInitialized'] as bool? ?? false, 
       isStart: json['isStart'] as bool? ?? false,             
       isStop: json['isStop'] as bool? ?? false,              
     );
   }
 
-  Object? toJson() {
-    return null;
-  }
 }
