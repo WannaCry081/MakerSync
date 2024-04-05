@@ -20,9 +20,9 @@ class SensorModel {
       counter: json["counter"] as int? ?? 0, 
       timer: json["timer"] as int? ?? 0,    
       temperature: (json["temperature"] as num?)?.toDouble() ?? 0.0,
-      isInitialized: json["isInitialized"] as bool? ?? false, 
-      isStart: json["isStart"] as bool? ?? false,             
-      isStop: json["isStop"] as bool? ?? false,              
+      isInitialized: json["is_initialized"] as bool? ?? false, 
+      isStart: json["is_start"] as bool? ?? false,             
+      isStop: json["is_stop"] as bool? ?? false,              
     );
   }
 
@@ -31,9 +31,9 @@ class SensorModel {
       "counter": counter,
       "timer": timer,
       "temperature": temperature,
-      "isInitialized": isInitialized,
-      "isStart": isStart,
-      "isStop": isStop,
+      "is_initialized": isInitialized,
+      "is_start": isStart,
+      "is_stop": isStop,
     };
   }
 
