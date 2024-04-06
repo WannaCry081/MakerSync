@@ -27,8 +27,7 @@ class UserService {
   Future<UserModel> updateUser({
     required String email,
     String? name,
-    bool? isConnected,
-    bool? isActive
+    bool? isConnected
   }) async {
     final response = await http.get(Uri.parse("$USER_URL/$MACHINE_CODE/$email"));
 
@@ -39,8 +38,7 @@ class UserService {
     final updatedUserData = UserModel(
       email: email,
       name: name ?? userData.name,
-      isConnected: isConnected ?? !userData.isConnected,
-      isActive: isActive ?? !userData.isActive,
+      isConnected: isConnected ?? !userData.isConnected
     );
 
     final updatedResponse = await http.put(
