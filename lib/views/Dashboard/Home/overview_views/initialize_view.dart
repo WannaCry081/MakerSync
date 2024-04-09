@@ -1,6 +1,9 @@
+import "dart:html";
+
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
+import "package:frontend/services/sensor_service.dart";
 import "package:frontend/widgets/button_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
 
@@ -13,33 +16,40 @@ class InitializeView extends StatefulWidget {
 }
 
 class _InitializeViewState extends State<InitializeView> {
-  int _clickedOption = -1;
+  
+  final SensorService _sensorService = SensorService();
 
+  int _clickedOption = -1;
   final _options = [
     {
       "type" : "Default Option",
       "time" : "Selecting this option will not initiate a timer, and therefore, no notifications will be sent upon completion of the filament process.",
-      "image" : ""
+      "image" : "",
+      "timer" : 0
     },
     {
       "type" : "500 ml",
       "time" : "1 Hour",
-      "image" : "assets/svgs/Bottle_500ml.svg"
+      "image" : "assets/svgs/Bottle_500ml.svg",
+      "timer" : 60 // minutes
     },
     {
       "type" : "1000 ml",
       "time" : "1 Hour 30 Minutes",
-      "image" : "assets/svgs/Bottle_1000ml.svg"
+      "image" : "assets/svgs/Bottle_1000ml.svg",
+      "timer" : 90 // minutes
     },
     {
       "type" : "1500 ml",
       "time" : "2 Hours",
-      "image" : "assets/svgs/Bottle_1500ml.svg"
+      "image" : "assets/svgs/Bottle_1500ml.svg",
+      "timer" : 120 // minutes
     },
     {
       "type" : "2000 ml",
       "time" : "2 Hours 30 Minutes",
-      "image" : "assets/svgs/Bottle_2000ml.svg"
+      "image" : "assets/svgs/Bottle_2000ml.svg",
+      "timer" : 150 // minutes
     },
   ];
 
@@ -99,7 +109,10 @@ class _InitializeViewState extends State<InitializeView> {
         ),
         
         MSButtonWidget(
-          btnOnTap: (){},
+          btnOnTap: (){
+            print(_options[_clickedOption]["timer"]);
+
+          },
           btnColor: Theme.of(context).colorScheme.primary,
           child: Center(
             child: MSTextWidget(
