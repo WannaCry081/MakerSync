@@ -296,7 +296,7 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   void disconnectFromDevice() async {
-    settings.setBool("isConnected", false);
+    settings.setBool("isConnect", false);
 
     const MSSnackbarWidget(
       message: "Successfully disconnected from device!",
