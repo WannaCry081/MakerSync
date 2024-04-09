@@ -20,7 +20,7 @@ class MSSnackbarWidget extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: MSTextWidget(message),
-        duration: const Duration(milliseconds: 1500),
+        duration: const Duration(milliseconds: 2000),
         padding: EdgeInsets.symmetric(horizontal: 10.w),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
