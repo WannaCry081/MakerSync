@@ -111,16 +111,7 @@ class _InitializeViewState extends State<InitializeView> {
         ),
         
         MSButtonWidget(
-          btnOnTap: () async {
-            print(_options[_clickedOption]["timer"]);
-            final update = await _sensorService.updateSensor(
-              isInitialized: true,
-              isStart: true,
-              isStop: false,
-              timer: _options[_clickedOption]["timer"] as int
-            );
-            print(update);
-          },
+          btnOnTap: () => initializeMachine(settings: settings),
           btnColor: Theme.of(context).colorScheme.primary,
           child: Center(
             child: MSTextWidget(
@@ -218,6 +209,7 @@ class _InitializeViewState extends State<InitializeView> {
       );
 
       settings.setBool("isInitialize", true);
+      settings.setBool("isConnect", true);
 
     } catch (e) {
       print("Error updating sensor: $e");
