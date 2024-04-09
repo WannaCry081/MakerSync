@@ -1,11 +1,11 @@
-import "dart:html";
-
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
+import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/services/sensor_service.dart";
 import "package:frontend/widgets/button_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
+import "package:provider/provider.dart";
 
 class InitializeView extends StatefulWidget {
 
@@ -56,6 +56,8 @@ class _InitializeViewState extends State<InitializeView> {
 
   @override
   Widget build(BuildContext context) {
+
+    final SettingsProvider settings = Provider.of<SettingsProvider>(context, listen: false);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -109,9 +111,15 @@ class _InitializeViewState extends State<InitializeView> {
         ),
         
         MSButtonWidget(
-          btnOnTap: (){
+          btnOnTap: () async {
             print(_options[_clickedOption]["timer"]);
-
+            final update = await _sensorService.updateSensor(
+              isInitialized: true,
+              isStart: true,
+              isStop: false,
+              timer: _options[_clickedOption]["timer"] as int
+            );
+            print(update);
           },
           btnColor: Theme.of(context).colorScheme.primary,
           child: Center(
@@ -152,8 +160,6 @@ class _InitializeViewState extends State<InitializeView> {
               width: (_clickedOption == index) 
                 ? 2.0
                 : 1.0
-              
-                
             )
           ),
         ),
@@ -199,5 +205,23 @@ class _InitializeViewState extends State<InitializeView> {
     ),
   );
 }
+
+  void initializeMachine({
+    required SettingsProvider settings
+  }) async {
+    try {
+      await _sensorService.updateSensor(
+          isInitialized: true,
+          isStart: true,
+          isStop: false,
+          timer: _options[_clickedOption]["timer"] as int
+      );
+
+      settings.setBool("isInitialize", true);
+
+    } catch (e) {
+      print("Error updating sensor: $e");
+    }
+  }
 
 }
