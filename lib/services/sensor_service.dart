@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:frontend/providers/settings_provider.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:frontend/models/sensor_model.dart';
@@ -7,6 +8,7 @@ import 'package:frontend/services/api_constants.dart';
 
 
 class SensorService {
+  late String MACHINE = "";
 
   Future<List<dynamic>> fetchSensors() async {
     final response = await http.get(Uri.parse(SENSOR_URL));
@@ -18,6 +20,22 @@ class SensorService {
     } else {
       throw Exception("Failed to fetch sensors.");
     }
+  }
+
+  Future<bool> isSensorExist() async {
+    final SettingsProvider settings = SettingsProvider();
+    final code = settings.getString("code");
+
+    List<dynamic> sensors = await fetchSensors();
+    print(sensors.contains(code));
+
+    if(sensors.contains(code)) {
+      MACHINE = code;
+    } else {
+      return false;
+    }
+
+    return true;
   }
 
   Future<SensorModel> fetchSensor() async {
