@@ -4,7 +4,7 @@ import "package:flutter_svg/svg.dart";
 import "package:frontend/widgets/text_widget.dart";
 import "package:percent_indicator/circular_percent_indicator.dart";
 
-class ConnectedView extends StatelessWidget {
+class ConnectedView extends StatefulWidget {
   final double progressValue;
 
   const ConnectedView({
@@ -12,6 +12,11 @@ class ConnectedView extends StatelessWidget {
     super.key
   });
 
+  @override
+  State<ConnectedView> createState() => _ConnectedViewState();
+}
+
+class _ConnectedViewState extends State<ConnectedView> {
   @override
   Widget build(BuildContext context) {
     return  Padding(
@@ -27,12 +32,12 @@ class ConnectedView extends StatelessWidget {
           CircularPercentIndicator(
             radius: 120.r,
             lineWidth: 35,
-            percent: progressValue,
+            percent: widget.progressValue,
             progressColor: Theme.of(context).colorScheme.primary,
             backgroundColor: Theme.of(context).colorScheme.tertiary,
             circularStrokeCap: CircularStrokeCap.round,
             center: MSTextWidget(
-                "${(progressValue * 100).toInt()}%",
+                "${(widget.progressValue * 100).toInt()}%",
                 fontColor : Theme.of(context).colorScheme.onBackground,
                 fontSize : 45.sp,
                 fontWeight: FontWeight.w500,
