@@ -8,11 +8,11 @@ import 'package:frontend/services/api_constants.dart';
 
 class SensorService {
 
-  Future<List> fetchSensors() async {
+  Future<List<dynamic>> fetchSensors() async {
     final response = await http.get(Uri.parse(SENSOR_URL));
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body) as List;
+      return jsonDecode(response.body).toList();
     } else if (response.statusCode == 500) {
       throw Exception("Internal Server Error.");
     } else {
