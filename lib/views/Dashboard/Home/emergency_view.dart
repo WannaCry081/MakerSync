@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:frontend/models/sensor_model.dart';
 import 'package:frontend/providers/settings_provider.dart';
 import 'package:frontend/services/sensor_service.dart';
 import 'package:frontend/widgets/disconnected_view.dart';
@@ -34,13 +33,11 @@ class _EmergencyViewState extends State<EmergencyView> {
     final _isInitialize = settings.getBool("isInitialize");
 
     return _isConnect && _isInitialize
-      ? content(context: context)
+      ? content()
       : const DisconnectedViewWidget();
   }
 
-  Widget content({
-    required BuildContext context
-  }) {
+  Widget content() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -59,7 +56,7 @@ class _EmergencyViewState extends State<EmergencyView> {
             Positioned.fill(
               child: Center(
                 child: ElevatedButton(
-                  onPressed: () => stopSensor(context),
+                  onPressed: () => stopSensor(),
                   style: ElevatedButton.styleFrom(
                     shape: const CircleBorder(),
                     padding: EdgeInsets.symmetric(
@@ -91,7 +88,7 @@ class _EmergencyViewState extends State<EmergencyView> {
   }
 
 
-  void stopSensor(context) async {
+  void stopSensor() async {
     try {
       await _sensorService.updateSensor(
         counter: 0,
@@ -101,6 +98,9 @@ class _EmergencyViewState extends State<EmergencyView> {
         isStart: false,
         isStop: true
       );
+
+      Provider.of<SettingsProvider>(context, listen: false)
+        .setBool("isInitialize", false);
 
       const MSSnackbarWidget(
         message: "You have stopped the machine operation.",
