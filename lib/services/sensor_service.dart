@@ -28,7 +28,7 @@ class SensorService {
     final String code = settings.getString("code");
 
     List<dynamic> sensors = await fetchSensors();
-    List<String> codes = sensors.map((sensor) => sensor.toString()).toList();
+    List<String> codes = sensors.map((sensor) => sensor.toString().trim()).toList();
 
     if(codes.contains(code)){
       MACHINE_CODE = code;
