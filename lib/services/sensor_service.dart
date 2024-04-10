@@ -8,7 +8,6 @@ import 'package:frontend/services/api_constants.dart';
 
 
 class SensorService {
-  late String MACHINE = "";
 
   Future<List<dynamic>> fetchSensors() async {
     final response = await http.get(Uri.parse(SENSOR_URL));
@@ -22,20 +21,22 @@ class SensorService {
     }
   }
 
-  Future<bool> isSensorExist() async {
-    final SettingsProvider settings = SettingsProvider();
-    final code = settings.getString("code");
+  Future<bool> isSensorExist({
+    required SettingsProvider settings
+  }) async {
+    
+    final String code = settings.getString("code");
 
     List<dynamic> sensors = await fetchSensors();
-    print(sensors.contains(code));
+    List<String> codes = sensors.map((sensor) => sensor.toString()).toList();
 
-    if(sensors.contains(code)) {
-      MACHINE = code;
+    if(codes.contains(code)){
+      MACHINE_CODE = code;
+      return true;
     } else {
       return false;
     }
 
-    return true;
   }
 
   Future<SensorModel> fetchSensor() async {
