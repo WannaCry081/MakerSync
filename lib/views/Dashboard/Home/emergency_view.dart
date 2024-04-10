@@ -30,9 +30,10 @@ class _EmergencyViewState extends State<EmergencyView> {
   @override
   Widget build(BuildContext context) {
     final SettingsProvider settings =  Provider.of<SettingsProvider>(context);
-    final _isConnected = settings.getBool("isConnected");
+    final _isConnect = settings.getBool("isConnect");
+    final _isInitialize = settings.getBool("isInitialize");
 
-    return _isConnected
+    return _isConnect && _isInitialize
       ? content(context: context)
       : const DisconnectedViewWidget();
   }
