@@ -7,6 +7,15 @@ import 'package:frontend/services/api_constants.dart';
 
 
 class SensorService {
+  late Timer _timer;
+
+  void startFetchingSensor({
+    required SettingsProvider settings
+  }) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setSensorValues(settings: settings);
+    });
+  }
   
   Future<List<dynamic>> fetchSensors() async {
     final response = await http.get(Uri.parse(SENSOR_URL));
@@ -35,7 +44,6 @@ class SensorService {
     } else {
       return false;
     }
-
   }
 
   Future<SensorModel> fetchSensor() async {
