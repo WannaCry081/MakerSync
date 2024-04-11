@@ -10,10 +10,26 @@ class MakerSyncAuthentication {
     String email,
     String password
   ) async {
+
     await _auth.signInWithEmailAndPassword(
       email: email,
       password: password
     );
+    return;
+  }
+
+  Future<void> authenticationSignUpEmailAndPassword (
+    String username,
+    String email,
+    String password
+  ) async {
+
+    await _auth.createUserWithEmailAndPassword(
+      email: email, 
+      password: password
+    );
+
+
     return;
   }
 }
