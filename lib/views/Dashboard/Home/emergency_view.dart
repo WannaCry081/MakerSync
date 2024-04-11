@@ -90,9 +90,6 @@ class _EmergencyViewState extends State<EmergencyView> {
         isStop: true
       );
 
-      Provider.of<SettingsProvider>(context, listen: false)
-        .setBool("isInitialize", false);
-
       const MSSnackbarWidget(
         message: "You have stopped the machine operation.",
       ).showSnackbar(context);
