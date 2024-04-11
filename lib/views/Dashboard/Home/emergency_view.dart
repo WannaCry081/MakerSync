@@ -16,15 +16,7 @@ class EmergencyView extends StatefulWidget {
 
 class _EmergencyViewState extends State<EmergencyView> {
 
-  late Future<List<dynamic>> sensor;
-  
   final SensorService _sensorService = SensorService();
-
-  @override
-  void initState() {
-    super.initState();
-    sensor = _sensorService.fetchSensors();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,9 +80,8 @@ class _EmergencyViewState extends State<EmergencyView> {
   }
 
 
-  void stopSensor() async {
-    try {
-      await _sensorService.updateSensor(
+  void stopSensor() async { 
+    await _sensorService.updateSensor(
         counter: 0,
         timer: 0,
         temperature: 0,
@@ -105,9 +96,5 @@ class _EmergencyViewState extends State<EmergencyView> {
       const MSSnackbarWidget(
         message: "You have stopped the machine operation.",
       ).showSnackbar(context);
-
-    } catch (e) {
-      print("Error: $e");
-    }
   }
 }
