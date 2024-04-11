@@ -39,6 +39,11 @@ class SettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> setDouble(String key, double value) async{
+    await _pref?.setDouble(key, value);
+    notifyListeners();
+  }
+
   Future<void> setString(String key, String value) async{
     await _pref?.setString(key, value);
     notifyListeners();
