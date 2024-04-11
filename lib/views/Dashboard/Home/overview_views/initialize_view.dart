@@ -1,8 +1,11 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
+import "package:frontend/providers/settings_provider.dart";
+import "package:frontend/services/sensor_service.dart";
 import "package:frontend/widgets/button_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
+import "package:provider/provider.dart";
 
 class InitializeView extends StatefulWidget {
 
@@ -13,39 +16,48 @@ class InitializeView extends StatefulWidget {
 }
 
 class _InitializeViewState extends State<InitializeView> {
-  int _clickedOption = -1;
+  
+  final SensorService _sensorService = SensorService();
 
+  int _clickedOption = -1;
   final _options = [
     {
       "type" : "Default Option",
       "time" : "Selecting this option will not initiate a timer, and therefore, no notifications will be sent upon completion of the filament process.",
-      "image" : ""
+      "image" : "",
+      "timer" : 0
     },
     {
       "type" : "500 ml",
       "time" : "1 Hour",
-      "image" : "assets/svgs/Bottle_500ml.svg"
+      "image" : "assets/svgs/Bottle_500ml.svg",
+      "timer" : 60 // minutes
     },
     {
       "type" : "1000 ml",
       "time" : "1 Hour 30 Minutes",
-      "image" : "assets/svgs/Bottle_1000ml.svg"
+      "image" : "assets/svgs/Bottle_1000ml.svg",
+      "timer" : 90 // minutes
     },
     {
       "type" : "1500 ml",
       "time" : "2 Hours",
-      "image" : "assets/svgs/Bottle_1500ml.svg"
+      "image" : "assets/svgs/Bottle_1500ml.svg",
+      "timer" : 120 // minutes
     },
     {
       "type" : "2000 ml",
       "time" : "2 Hours 30 Minutes",
-      "image" : "assets/svgs/Bottle_2000ml.svg"
+      "image" : "assets/svgs/Bottle_2000ml.svg",
+      "timer" : 150 // minutes
     },
   ];
 
 
   @override
   Widget build(BuildContext context) {
+
+    final SettingsProvider settings = Provider.of<SettingsProvider>(context, listen: false);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -99,7 +111,7 @@ class _InitializeViewState extends State<InitializeView> {
         ),
         
         MSButtonWidget(
-          btnOnTap: (){},
+          btnOnTap: () => initializeMachine(settings: settings),
           btnColor: Theme.of(context).colorScheme.primary,
           child: Center(
             child: MSTextWidget(
@@ -139,8 +151,6 @@ class _InitializeViewState extends State<InitializeView> {
               width: (_clickedOption == index) 
                 ? 2.0
                 : 1.0
-              
-                
             )
           ),
         ),
@@ -186,5 +196,24 @@ class _InitializeViewState extends State<InitializeView> {
     ),
   );
 }
+
+  void initializeMachine({
+    required SettingsProvider settings
+  }) async {
+    try {
+      await _sensorService.updateSensor(
+          isInitialized: true,
+          isStart: true,
+          isStop: false,
+          timer: _options[_clickedOption]["timer"] as int
+      );
+
+      settings.setBool("isInitialize", true);
+      settings.setBool("isConnect", true);
+
+    } catch (e) {
+      print("Error updating sensor: $e");
+    }
+  }
 
 }

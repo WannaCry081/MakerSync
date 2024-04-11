@@ -13,12 +13,16 @@ class SettingsProvider with ChangeNotifier {
     _pref = await SharedPreferences.getInstance();
   }
 
-  bool getBool(String key) {
+  bool getBool(String key){
     return _pref?.getBool(key) ?? false; 
   }
 
   int getInt(String key){
     return _pref?.getInt(key) ?? -1;
+  }
+
+  double getDouble(String key){
+    return _pref?.getDouble(key) ?? -1;
   }
 
   String getString(String key){
@@ -32,6 +36,11 @@ class SettingsProvider with ChangeNotifier {
 
   Future<void> setInt(String key, int value) async{
     await _pref?.setInt(key, value);
+    notifyListeners();
+  }
+
+  Future<void> setDouble(String key, double value) async{
+    await _pref?.setDouble(key, value);
     notifyListeners();
   }
 

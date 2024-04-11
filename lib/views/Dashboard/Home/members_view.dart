@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/models/user_model.dart';
 import 'package:frontend/providers/settings_provider.dart';
+import 'package:frontend/services/user_service.dart';
 import 'package:frontend/widgets/disconnected_view.dart';
 import 'package:frontend/widgets/text_widget.dart';
 import 'package:provider/provider.dart';
@@ -14,29 +16,53 @@ class MembersView extends StatefulWidget {
 }
 
 class _MembersViewState extends State<MembersView> {
+  late Future<List<UserModel>> users;
+  
+  final UserService _userService = UserService();
+
+  @override
+  void initState() {
+    super.initState();
+    users = _userService.fetchUsers();
+  }
 
   @override
   Widget build(BuildContext context) {
     final SettingsProvider settings = Provider.of<SettingsProvider>(context);
-    final bool _isConnected = settings.getBool("isConnected");
+    final bool _isConnect = settings.getBool("isConnect");
+    final bool _isInitialize = settings.getBool("isInitialize");
 
     return Scaffold(
       body: Center(
-        child: Container(
-          padding: EdgeInsets.only(top: 15.h),
-          child: _isConnected
-            ? ListView.builder(
-              itemCount: 10,
-              itemBuilder: (context, index){
-                return memberCard(
-                  context: context, 
-                  name: "John Doe", 
-                  email: "johndoe@gmail.com"
-                );
-              }
-            )
-            : const DisconnectedViewWidget()
-        )
+        child: _isConnect && _isInitialize
+          ? Container(
+              padding: EdgeInsets.only(top: 15.h),
+              child: FutureBuilder<List<UserModel>> (
+                  future: users,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final List<UserModel> users = snapshot.data!;
+
+                      return ListView.builder(
+                        itemCount: users.length,
+                        itemBuilder: (context, index) {
+                          final UserModel user = users[index];
+                          return memberCard(
+                            context: context,
+                            email: user.email,
+                            name: user.name,
+                          );
+                        },
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                    }
+
+                    return const CircularProgressIndicator();
+                  },
+                )
+              )
+          : const DisconnectedViewWidget()
       )
     );
   }

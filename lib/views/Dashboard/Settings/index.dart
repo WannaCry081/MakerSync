@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,19 +22,17 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsViewState extends State<SettingsView> {
-  late final SettingsProvider settings;
+  late SettingsProvider settings;
   bool _showDisconnectButton = false;
   bool _isNotifications = false;
 
-  @override
-  void initState(){
-    super.initState();
-    settings = Provider.of<SettingsProvider>(context, listen: false);
-    setState(() => _showDisconnectButton = settings.getBool("isConnected"));
-  }
-
+  
   @override
   Widget build(BuildContext context) {
+
+    settings = Provider.of<SettingsProvider>(context);
+    setState(() => _showDisconnectButton = settings.getBool("isConnect"));
+
     return Scaffold(
       backgroundColor: Theme.of(context).brightness == Brightness.dark
         ? Theme.of(context).colorScheme.background
@@ -279,7 +275,7 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   void navigateToHome(){
-    Navigator.of(context).push(
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => const HomeView()
       )
@@ -296,16 +292,12 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   void disconnectFromDevice() async {
-    settings.setBool("isConnected", false);
+    settings.setBool("isConnect", false);
 
     const MSSnackbarWidget(
       message: "Successfully disconnected from device!",
     ).showSnackbar(context);
 
-    setState(() => _showDisconnectButton = false);
-
-    Timer(const Duration(seconds: 2), () {
-      navigateToHome();
-    });
+    setState(() => _showDisconnectButton = settings.getBool("isConnect"));
   }
 }

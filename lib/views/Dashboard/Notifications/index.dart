@@ -19,8 +19,9 @@ class _NotificationsViewState extends State<NotificationsView> {
   @override
   Widget build(BuildContext context) {
     final SettingsProvider settings = Provider.of<SettingsProvider>(context);
-    final _isConnected = settings.getBool("isConnected");
-  
+    final _isConnect = settings.getBool("isConnect");
+    final _isInitialize = settings.getBool("isInitialize");
+
     return Scaffold(
       body: MSWrapperWidget(
         child: Padding(
@@ -29,13 +30,14 @@ class _NotificationsViewState extends State<NotificationsView> {
             vertical: 22.h,
           ),
           
-          child: content(_isConnected)
+          child: content(_isConnect, _isInitialize),
         )
       )
     );
   }
 
-  Widget content(_isConnected){
+
+  Widget content(_isConnect, _isInitialize){
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +54,7 @@ class _NotificationsViewState extends State<NotificationsView> {
           SizedBox(height: 15.h),
 
           Expanded(
-            child: _isConnected
+            child: _isConnect && _isInitialize
               ? SizedBox(
                 child: ListView.builder(
                   itemCount: 10,
@@ -72,6 +74,8 @@ class _NotificationsViewState extends State<NotificationsView> {
       ),
     );
   }
+
+
 
   Widget notificationCard({
     required BuildContext context, 
