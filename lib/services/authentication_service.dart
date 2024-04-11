@@ -4,4 +4,16 @@ import "package:firebase_core/firebase_core.dart";
 
 class MakerSyncAuthentication {
   
+  final _auth = FirebaseAuth.instance;
+
+  Future<void> authenticationSignInEmailAndPassword (
+    String email,
+    String password
+  ) async {
+    await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password
+    );
+    return;
+  }
 }
