@@ -2,13 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:frontend/providers/settings_provider.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:frontend/models/sensor_model.dart';
 import 'package:frontend/services/api_constants.dart';
 
 
 class SensorService {
-
+  
   Future<List<dynamic>> fetchSensors() async {
     final response = await http.get(Uri.parse(SENSOR_URL));
 
@@ -42,18 +41,41 @@ class SensorService {
   Future<SensorModel> fetchSensor() async {
 
     final response = await http.get(Uri.parse("$SENSOR_URL/$MACHINE_CODE"));
-
+    
     if (response.statusCode == 200) {
          return SensorModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
       } else if (response.statusCode == 400) {
         throw Exception("Invalid sensor request.");
       } else if (response.statusCode == 404) {
         throw Exception("Sensor not found.");
-      } else if (response.statusCode == 500) {
+      } else if (response.statusCode == 500) { 
         throw Exception("Internal Server Error.");
       } else {
         throw Exception("Failed to fetch sensor.");
       }
+  }
+
+  Future<void> setSensorValues({
+    required SettingsProvider settings
+  }) async {
+    late SensorModel sensor;
+
+    try {
+      sensor = await fetchSensor();
+      
+      settings.setBool("isInitialize", sensor.isInitialized);
+      settings.setDouble("temperature", sensor.temperature);
+      settings.setInt("timer", sensor.timer);
+
+      print("-----------");
+      print("isInitialize: ${settings.getBool("isInitialize")}");
+      print("temperature: ${settings.getDouble("temperature")}");
+      print("isInitialize: ${settings.getInt("timer")}");
+      print("------------");
+
+    } catch (e) {
+      print("Error setting sensor values: $e");
+    }
   }
 
 
@@ -65,13 +87,14 @@ class SensorService {
     bool? isStart,
     bool? isStop,
   }) async {
-      
+      // fetch existing sensor data
       final response = await http.get(Uri.parse("$SENSOR_URL/$MACHINE_CODE"));
 
       if (response.statusCode != 200) { throw Exception("Failed to fetch sensor data."); }
 
       final sensorData = SensorModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
 
+      // update sensor values 
       final updatedSensorData = SensorModel(
         counter: counter ?? sensorData.counter,
         timer: timer ?? sensorData.timer,
