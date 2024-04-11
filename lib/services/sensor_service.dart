@@ -46,22 +46,22 @@ class SensorService {
     }
   }
 
-  Future<SensorModel> fetchSensor() async {
+    Future<SensorModel> fetchSensor() async {
 
-    final response = await http.get(Uri.parse("$SENSOR_URL/$MACHINE_CODE"));
-    
-    if (response.statusCode == 200) {
-         return SensorModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
-      } else if (response.statusCode == 400) {
-        throw Exception("Invalid sensor request.");
-      } else if (response.statusCode == 404) {
-        throw Exception("Sensor not found.");
-      } else if (response.statusCode == 500) { 
-        throw Exception("Internal Server Error.");
-      } else {
-        throw Exception("Failed to fetch sensor.");
-      }
-  }
+      final response = await http.get(Uri.parse("$SENSOR_URL/$MACHINE_CODE"));
+      
+      if (response.statusCode == 200) {
+          return SensorModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+        } else if (response.statusCode == 400) {
+          throw Exception("Invalid sensor request.");
+        } else if (response.statusCode == 404) {
+          throw Exception("Sensor not found.");
+        } else if (response.statusCode == 500) { 
+          throw Exception("Internal Server Error.");
+        } else {
+          throw Exception("Failed to fetch sensor.S");
+        }
+    }
 
   Future<void> setSensorValues({
     required SettingsProvider settings
