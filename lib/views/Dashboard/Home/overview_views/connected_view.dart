@@ -1,8 +1,10 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
+import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/widgets/text_widget.dart";
 import "package:percent_indicator/circular_percent_indicator.dart";
+import "package:provider/provider.dart";
 
 class ConnectedView extends StatefulWidget {
   final double progressValue;
@@ -17,8 +19,12 @@ class ConnectedView extends StatefulWidget {
 }
 
 class _ConnectedViewState extends State<ConnectedView> {
+
   @override
   Widget build(BuildContext context) {
+    final SettingsProvider settings = Provider.of<SettingsProvider>(context);
+    final double temperature = settings.getDouble("temperature");
+    
     return  Padding(
       padding: EdgeInsets.symmetric(
         vertical: 20.h,
@@ -62,7 +68,7 @@ class _ConnectedViewState extends State<ConnectedView> {
                   SizedBox(width: 10.w),
                   
                   MSTextWidget(
-                    "230°C",
+                    "$temperature°C",
                     fontColor: Theme.of(context).colorScheme.onBackground,
                     fontSize: 50.sp,
                     fontWeight: FontWeight.bold,
