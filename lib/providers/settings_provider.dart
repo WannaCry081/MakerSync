@@ -13,12 +13,16 @@ class SettingsProvider with ChangeNotifier {
     _pref = await SharedPreferences.getInstance();
   }
 
-  bool getBool(String key) {
+  bool getBool(String key){
     return _pref?.getBool(key) ?? false; 
   }
 
   int getInt(String key){
     return _pref?.getInt(key) ?? -1;
+  }
+
+  double getDouble(String key){
+    return _pref?.getDouble(key) ?? -1;
   }
 
   String getString(String key){
