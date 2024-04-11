@@ -29,7 +29,14 @@ class MakerSyncAuthentication {
       password: password
     );
 
-
     return;
   }
+
+  Future<void> authenticationLogout() async {
+    await _auth.signOut();
+    return;
+  }
+
+  String get getUserEmail => _auth.currentUser?.email ?? "";
+  String get getUserDisplayName => _auth.currentUser?.displayName ?? "";
 }
