@@ -33,7 +33,7 @@ class MakerSyncAuthentication {
     return;
   }
 
-  Future<dynamic> signInWithGoogle() async {
+  Future<dynamic> authenticationSignInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -45,21 +45,12 @@ class MakerSyncAuthentication {
         idToken: googleAuth?.idToken,
       );
 
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      return await _auth.signInWithCredential(credential);
     } on Exception catch (e) {
-      // TODO
       print('exception->$e');
     }
   }
 
-   Future<bool> signOutFromGoogle() async {
-    try {
-      await FirebaseAuth.instance.signOut();
-      return true;
-    } on Exception catch (_) {
-      return false;
-    }
-  }
 
 
   Future<void> authenticationLogout() async {
