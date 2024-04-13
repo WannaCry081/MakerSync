@@ -23,7 +23,7 @@ class _MembersViewState extends State<MembersView> {
   @override
   void initState() {
     super.initState();
-    users = _userService.fetchConnectedUsers();
+    users = _userService.fetchUsers();
   }
 
   @override
