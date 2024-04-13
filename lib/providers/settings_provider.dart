@@ -18,8 +18,9 @@ class SettingsProvider with ChangeNotifier {
   }
 
   Future<void> _initConnectivity() async {
-    List<ConnectivityResult> results = await Connectivity().checkConnectivity();
-    _conn = results.isNotEmpty ? results[0] : null;
+    ConnectivityResult result = await Connectivity().checkConnectivity();
+    _conn = result;
+
     notifyListeners();
     return;
   }
@@ -62,6 +63,6 @@ class SettingsProvider with ChangeNotifier {
   }
 
   bool getHasWifi() => _conn == ConnectivityResult.none;  
-  Stream<List<ConnectivityResult>> getConnectivityResult() => Connectivity().onConnectivityChanged;
+  Stream<ConnectivityResult> getConnectivityResult() => Connectivity().onConnectivityChanged;
 
 }
