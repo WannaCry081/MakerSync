@@ -19,11 +19,13 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  late SettingsProvider _settingsProvider;
+  late UserProvider _userProvider;
 
   @override
   Widget build(BuildContext context) {
-    final SettingsProvider _settingsProvider = Provider.of<SettingsProvider>(context);
-    final UserProvider _userProvider = Provider.of<UserProvider>(context);
+    _settingsProvider = Provider.of<SettingsProvider>(context);
+    _userProvider = Provider.of<UserProvider>(context);
     
     final _user = _userProvider.getUserData();
 
@@ -35,15 +37,14 @@ class _HomeViewState extends State<HomeView> {
             vertical: 22.h
           ),
 
-          child: content(_user, _settingsProvider)
+          child: content(_user)
         ),
       )
     );
   }
 
   Widget content(
-    UserModel? user, 
-    SettingsProvider settingsProvider
+    UserModel? user
   ) {
     return DefaultTabController(
       length: 3,
@@ -59,7 +60,7 @@ class _HomeViewState extends State<HomeView> {
       
                 SizedBox(height: 10.h),
 
-                settingsProvider.getBool("isConnect")
+                _settingsProvider.getBool("isConnect")
                 ?  MSTextWidget(
                     "Hello, ${user?.name.split(' ').first ?? ""}!",
                     fontSize: 26.sp,
