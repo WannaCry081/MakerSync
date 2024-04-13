@@ -7,6 +7,24 @@ import 'package:frontend/services/api_constants.dart';
 
 class UserService {
 
+  Future<UserModel> createUser({
+    required String email,
+    required String name
+  }) async {
+    
+    final response = await http.post(Uri.parse("$USER_URL/$MACHINE_CODE"));
+
+    if (response.statusCode == 200) {
+        return UserModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      } else if (response.statusCode == 400) {
+        throw Exception("User already exists.");
+      } else if (response.statusCode == 500) {
+        throw Exception("Internal Server Error.");
+      } else {
+        throw Exception("Failed to fetch users.");
+      }
+  }
+
   Future<List<UserModel>> fetchUsers() async {
     
     final response = await http.get(Uri.parse("$USER_URL/$MACHINE_CODE"));
