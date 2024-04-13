@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/models/user_model.dart';
+import 'package:frontend/providers/settings_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/views/Dashboard/Home/emergency_view.dart';
 import 'package:frontend/views/Dashboard/Home/members_view.dart';
@@ -17,11 +19,13 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+
   @override
   Widget build(BuildContext context) {
+    final SettingsProvider _settingsProvider = Provider.of<SettingsProvider>(context);
     final UserProvider _userProvider = Provider.of<UserProvider>(context);
-    final _user = _userProvider.getUserData();
     
+    final _user = _userProvider.getUserData();
 
      return Scaffold(
       body: MSWrapperWidget(
@@ -31,13 +35,16 @@ class _HomeViewState extends State<HomeView> {
             vertical: 22.h
           ),
 
-          child: content(_user)
+          child: content(_user, _settingsProvider)
         ),
       )
     );
   }
 
-  Widget content(_user) {
+  Widget content(
+    UserModel? user, 
+    SettingsProvider settingsProvider
+  ) {
     return DefaultTabController(
       length: 3,
       child: Column(
@@ -51,14 +58,21 @@ class _HomeViewState extends State<HomeView> {
                 children: [
       
                 SizedBox(height: 10.h),
-      
-                MSTextWidget(
-                  "Hello, ${_user?.name.split(' ').first ?? ""}!",
-                  fontSize: 26.sp,
-                  fontWeight: FontWeight.bold,
-                  fontColor: Theme.of(context).colorScheme.primary
-                ),
-      
+
+                settingsProvider.getBool("isConnect")
+                ?  MSTextWidget(
+                    "Hello, ${user?.name.split(' ').first ?? ""}!",
+                    fontSize: 26.sp,
+                    fontWeight: FontWeight.bold,
+                    fontColor: Theme.of(context).colorScheme.primary
+                  )
+                :  MSTextWidget(
+                    "Hello, there!",
+                    fontSize: 26.sp,
+                    fontWeight: FontWeight.bold,
+                    fontColor: Theme.of(context).colorScheme.primary
+                  ),
+        
                 SizedBox(height : 3.h),
       
                 const MSTextWidget(
