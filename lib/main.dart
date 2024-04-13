@@ -65,7 +65,9 @@ class MyApp extends StatelessWidget {
             theme : lightTheme,
             darkTheme : darkTheme,
             themeMode: getCurrentTheme(theme),
-            home : getCurrentView()
+            home : (settings.getHasWifi())
+              ? const NoConnectionView()
+              : _homeBuilder(settings: settings)
           )
         );
       },
@@ -84,10 +86,10 @@ class MyApp extends StatelessWidget {
   }
 
   Widget _homeBuilder({
-    required SettingsProvider settingsProvider
+    required SettingsProvider settings
   }) {
     return StreamBuilder<List<ConnectivityResult>>(
-      stream: settingsProvider.getConnectivityResult(),
+      stream: settings.getConnectivityResult(),
       builder: (context, snapshot){
 
         if (snapshot.data!.contains(ConnectivityResult.none)) {
