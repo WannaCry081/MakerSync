@@ -52,6 +52,15 @@ class MakerSyncAuthentication {
     }
   }
 
+   Future<bool> signOutFromGoogle() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      return true;
+    } on Exception catch (_) {
+      return false;
+    }
+  }
+
 
   Future<void> authenticationLogout() async {
     await _auth.signOut();
