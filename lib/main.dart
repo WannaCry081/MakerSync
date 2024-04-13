@@ -1,7 +1,12 @@
+import "package:connectivity_plus/connectivity_plus.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:frontend/providers/user_provider.dart";
+import "package:frontend/views/Authentication/index.dart";
 import "package:frontend/views/Dashboard/index.dart";
+import "package:frontend/views/Error/index.dart";
+import "package:frontend/views/Loading/index.dart";
+import "package:frontend/views/NoConnection/index.dart";
 import "package:provider/provider.dart";
 import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/constants/light_theme_const.dart";
@@ -62,21 +67,13 @@ class MyApp extends StatelessWidget {
             theme : lightTheme,
             darkTheme : darkTheme,
             themeMode: getCurrentTheme(theme),
-            home : getCurrentView()
+            home : (settings.getHasWifi())
+              ? const NoConnectionView()
+              : _homeBuilder(settings: settings)
           )
         );
       },
     );
-  }
-
-  Widget getCurrentView(){
-    // return const OnboardingView();
-
-    if (FirebaseAuth.instance.currentUser != null){
-      return DashboardView();
-    } else {
-      return const OnboardingView();
-    }
   }
 
   ThemeMode? getCurrentTheme(String theme){
@@ -88,5 +85,35 @@ class MyApp extends StatelessWidget {
       default: 
         return ThemeMode.system;
     }
+  }
+
+  Widget _homeBuilder({
+    required SettingsProvider settings
+  }) {
+    return StreamBuilder<ConnectivityResult>(
+      stream: settings.getConnectivityResult(),
+      builder: (context, snapshot){
+
+        if (snapshot.data == ConnectivityResult.none) {
+          return const NoConnectionView();
+        }
+
+        else if (snapshot.hasData){
+          if (FirebaseAuth.instance.currentUser != null) {
+            return DashboardView();
+          } else {
+            return const AuthViewBuilder();
+          }
+        }
+
+        else if (snapshot.hasError){
+          return const ErrorView();
+        }
+
+        else {
+          return const LoadingView();
+        }
+      }
+    );
   }
 }

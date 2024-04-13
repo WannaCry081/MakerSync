@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/providers/settings_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
+import 'package:frontend/services/authentication_service.dart';
 import 'package:frontend/views/Dashboard/Settings/change_password_view.dart';
 import 'package:frontend/views/Dashboard/Settings/dark_mode.dart';
 import 'package:frontend/views/Dashboard/Settings/profile_view.dart';
@@ -171,7 +172,7 @@ class _SettingsViewState extends State<SettingsView> {
         SizedBox(height: 15.h),
 
         MSButtonWidget(
-          btnOnTap: navigateToOnboarding,
+          btnOnTap: authenticationLogout,
           btnColor: Theme.of(context).colorScheme.primary,
           child: Center(
             child: MSTextWidget(
@@ -281,13 +282,9 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 
-  void navigateToOnboarding() {
-     PersistentNavBarNavigator.pushNewScreen(
-        context,
-        screen: const OnboardingView(),
-        withNavBar: false,
-        pageTransitionAnimation: PageTransitionAnimation.cupertino,
-    );
+  Future<void> authenticationLogout() async {
+    await MakerSyncAuthentication().authenticationLogout();
+    return;
   }
 
   Future<void> disconnectFromDevice() async {

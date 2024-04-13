@@ -19,14 +19,14 @@ class DisconnectedViewWidget extends StatelessWidget {
             fontColor: Theme.of(context).colorScheme.onBackground,
           ),
 
-          SizedBox(height: 4.h),
+          SizedBox(height: 5.h),
 
           MSTextWidget(
             "Please connect to the device and finish initializing the machine.",
             textAlign: TextAlign.center,
             fontWeight: FontWeight.w500,
             fontColor: Colors.grey.shade600,
-            fontHeight: 2.h,
+            fontHeight: 1.5.h,
           ),
         ]
       ),

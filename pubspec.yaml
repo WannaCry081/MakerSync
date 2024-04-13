@@ -48,6 +48,8 @@ dependencies:
   firebase_core: ^2.29.0
   firebase_auth: ^4.19.1
   google_sign_in: ^6.2.1
+  connectivity_plus: ^5.0.2
+  flutter_spinkit: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +87,8 @@ flutter:
     - assets/svgs/Bottle_1000ml.svg
     - assets/svgs/Bottle_1500ml.svg
     - assets/svgs/Bottle_2000ml.svg
+    - assets/svgs/NoConnection.svg
+    - assets/svgs/ErrorView.svg
     - assets/icons/Google.svg
     - assets/icons/LeftArrow.svg
 
