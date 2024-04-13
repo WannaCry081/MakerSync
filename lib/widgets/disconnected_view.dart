@@ -26,7 +26,7 @@ class DisconnectedViewWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             fontWeight: FontWeight.w500,
             fontColor: Colors.grey.shade600,
-            fontHeight: 2.h,
+            fontHeight: 1.5.h,
           ),
         ]
       ),
