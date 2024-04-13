@@ -90,11 +90,11 @@ class MyApp extends StatelessWidget {
   Widget _homeBuilder({
     required SettingsProvider settings
   }) {
-    return StreamBuilder<List<ConnectivityResult>>(
+    return StreamBuilder<ConnectivityResult>(
       stream: settings.getConnectivityResult(),
       builder: (context, snapshot){
 
-        if (snapshot.data!.contains(ConnectivityResult.none)) {
+        if (snapshot.data == ConnectivityResult.none) {
           return const NoConnectionView();
         }
 
