@@ -15,7 +15,9 @@ class UserProvider with ChangeNotifier {
 
   UserProvider() {
     _user = null;
-    notifyListeners();
+    fetchUserCredential().then((_) {
+      notifyListeners();
+    });
   }
 
 
@@ -26,6 +28,7 @@ class UserProvider with ChangeNotifier {
 
   Future<void> fetchUserCredential() async {
     try {
+      
       final UserModel user = await _userService.fetchUser(
         email: _email
       );
@@ -38,6 +41,7 @@ class UserProvider with ChangeNotifier {
     }
   }
 
+
   Future<void> addUserCredential({
     required String email,
     required String name
@@ -46,6 +50,20 @@ class UserProvider with ChangeNotifier {
     await _userService.createUser(
       name: name, 
       email: email
+    );
+
+    await fetchUserCredential();
+  }
+
+
+  Future<void> updateUserCredential({
+    required String email,
+    String? name,
+    bool? isConnected
+  }) async {
+
+    await _userService.updateUser(
+      email: _email
     );
 
     await fetchUserCredential();
