@@ -37,27 +37,6 @@ class UserService {
       }
   }
 
-  Future<List<UserModel>> fetchConnectedUsers() async {
-    
-    final response = await http.get(Uri.parse("$USER_URL/$MACHINE_CODE"));
-
-    if (response.statusCode == 200) {
-        final List<dynamic> users = json.decode(response.body);
-
-        final connectedUsers = users
-          .where((user) => user["is_connect"] == true)
-          .map((user) => UserModel.fromJson(user as Map<String, dynamic>)).toList();
-
-        return connectedUsers;
-      } else if (response.statusCode == 404) {
-        throw Exception("Users not found.");
-      } else if (response.statusCode == 500) {
-        throw Exception("Internal Server Error.");
-      } else {
-        throw Exception("Failed to fetch users.");
-      }
-  }
-
   Future<List<UserModel>> fetchUsers() async {
     
     final response = await http.get(Uri.parse("$USER_URL/$MACHINE_CODE"));
@@ -77,6 +56,8 @@ class UserService {
   Future<UserModel> fetchUser({
     required String email
   }) async {
+
+    print("Email in fetchUser: $email");
     final response = await http.get(Uri.parse("$USER_URL/$MACHINE_CODE/$email"));
 
     if (response.statusCode == 200) {
