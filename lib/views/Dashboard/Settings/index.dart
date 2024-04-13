@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/models/user_model.dart';
 import 'package:frontend/providers/settings_provider.dart';
-import 'package:frontend/views/Dashboard/Home/index.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/views/Dashboard/Settings/change_password_view.dart';
 import 'package:frontend/views/Dashboard/Settings/dark_mode.dart';
 import 'package:frontend/views/Dashboard/Settings/profile_view.dart';
-import 'package:frontend/views/Login/index.dart';
+import 'package:frontend/views/Onboarding/index.dart';
 import 'package:frontend/widgets/button_widget.dart';
 import 'package:frontend/widgets/snackbar_widget.dart';
 import 'package:frontend/widgets/text_widget.dart';
@@ -23,14 +24,20 @@ class SettingsView extends StatefulWidget {
 
 class _SettingsViewState extends State<SettingsView> {
   late SettingsProvider settings;
+  late UserProvider userProvider;
+
   bool _showDisconnectButton = false;
   bool _isNotifications = false;
+
+  UserModel? _user;
 
   
   @override
   Widget build(BuildContext context) {
 
     settings = Provider.of<SettingsProvider>(context);
+    userProvider = Provider.of<UserProvider>(context);
+
     setState(() => _showDisconnectButton = settings.getBool("isConnect"));
 
     return Scaffold(
@@ -164,7 +171,7 @@ class _SettingsViewState extends State<SettingsView> {
         SizedBox(height: 15.h),
 
         MSButtonWidget(
-          btnOnTap: navigateToLogin,
+          btnOnTap: navigateToOnboarding,
           btnColor: Theme.of(context).colorScheme.primary,
           child: Center(
             child: MSTextWidget(
@@ -274,25 +281,22 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 
-  void navigateToHome(){
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const HomeView()
-      )
-    );
-  }
-
-  void navigateToLogin() {
+  void navigateToOnboarding() {
      PersistentNavBarNavigator.pushNewScreen(
         context,
-        screen: const LoginView(),
+        screen: const OnboardingView(),
         withNavBar: false,
         pageTransitionAnimation: PageTransitionAnimation.cupertino,
     );
   }
 
-  void disconnectFromDevice() async {
+  Future<void> disconnectFromDevice() async {
+    
     settings.setBool("isConnect", false);
+
+    await userProvider.deleteUserCredential(
+      email: _user?.email ?? ""
+    );
 
     const MSSnackbarWidget(
       message: "Successfully disconnected from device!",

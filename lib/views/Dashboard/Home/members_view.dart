@@ -43,6 +43,17 @@ class _MembersViewState extends State<MembersView> {
                     if (snapshot.hasData) {
                       final List<UserModel> users = snapshot.data!;
 
+                      if(users.isEmpty){
+                        return Center(
+                          child: MSTextWidget(
+                            "No connected users",
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
+                            fontColor: Theme.of(context).colorScheme.onBackground,
+                          ),
+                        );
+                      }
+
                       return ListView.builder(
                         itemCount: users.length,
                         itemBuilder: (context, index) {

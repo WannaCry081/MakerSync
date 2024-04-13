@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "38658931369",
+    "project_id": "makersync-ad34f",
+    "storage_bucket": "makersync-ad34f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:38658931369:android:3104ac3e472bf3fb3087b8",
+        "android_client_info": {
+          "package_name": "com.example.frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "38658931369-54841dg937jgdh09hb96g56p8085i1r0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.frontend",
+            "certificate_hash": "228dc61f1ba94ae67a046c72c5f9384f8e0a94b0"
+          }
+        },
+        {
+          "client_id": "38658931369-i1a3j8knclkl22iv966t1nd9t7aj7n66.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXPW_Nx0h4kZlZ3jLfCH3s_HQYjF6UcDY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "38658931369-i1a3j8knclkl22iv966t1nd9t7aj7n66.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
