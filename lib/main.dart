@@ -1,7 +1,10 @@
+import "package:connectivity_plus/connectivity_plus.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:frontend/providers/user_provider.dart";
 import "package:frontend/views/Dashboard/index.dart";
+import "package:frontend/views/Loading/index.dart";
+import "package:frontend/views/NoConnection/index.dart";
 import "package:provider/provider.dart";
 import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/constants/light_theme_const.dart";
@@ -88,5 +91,31 @@ class MyApp extends StatelessWidget {
       default: 
         return ThemeMode.system;
     }
+  }
+
+  Widget _homeBuilder({
+    required SettingsProvider settingsProvider
+  }) {
+    return StreamBuilder<List<ConnectivityResult>>(
+      stream: settingsProvider.getConnectivityResult(),
+      builder: (context, snapshot){
+
+        if (snapshot.data!.contains(ConnectivityResult.none)) {
+          return const NoConnectionView();
+        }
+
+        else if (snapshot.hasData){
+          if (FirebaseAuth.instance.currentUser != null) {
+            return DashboardView();
+          } else {
+            return const OnboardingView();
+          }
+        }
+
+        else {
+          return const LoadingView();
+        }
+      }
+    );
   }
 }
