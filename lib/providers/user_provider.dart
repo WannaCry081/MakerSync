@@ -24,6 +24,8 @@ class UserProvider with ChangeNotifier {
         email: MakerSyncAuthentication().getUserEmail
       );
 
+      setUserData(user);
+
       notifyListeners();
     } catch (error) {
       print('Failed to fetch user: $error');
