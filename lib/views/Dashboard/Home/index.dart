@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/views/Dashboard/Home/emergency_view.dart';
 import 'package:frontend/views/Dashboard/Home/members_view.dart';
 import 'package:frontend/views/Dashboard/Home/overview_view.dart';
 import 'package:frontend/widgets/text_widget.dart';
 import 'package:frontend/widgets/wrapper_widget.dart';
+import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -17,6 +19,10 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
+    final UserProvider _userProvider = Provider.of<UserProvider>(context);
+    final _user = _userProvider.getUserData();
+    
+
      return Scaffold(
       body: MSWrapperWidget(
         child: Padding(
@@ -25,13 +31,13 @@ class _HomeViewState extends State<HomeView> {
             vertical: 22.h
           ),
 
-          child: content()
+          child: content(_user)
         ),
       )
     );
   }
 
-  Widget content() {
+  Widget content(_user) {
     return DefaultTabController(
       length: 3,
       child: Column(
@@ -47,7 +53,7 @@ class _HomeViewState extends State<HomeView> {
                 SizedBox(height: 10.h),
       
                 MSTextWidget(
-                  "Hello, Shiela!",
+                  "Hello, ${_user?.name.split(' ').first ?? ""}!",
                   fontSize: 26.sp,
                   fontWeight: FontWeight.bold,
                   fontColor: Theme.of(context).colorScheme.primary
