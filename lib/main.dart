@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:frontend/providers/user_provider.dart";
 import "package:provider/provider.dart";
 import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/constants/light_theme_const.dart";
@@ -22,7 +23,11 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create :(context) => SettingsProvider(),
+          create: (context) => SettingsProvider(),
+        ),
+
+        ChangeNotifierProvider(
+          create: (context) => UserProvider()
         )
       ],
       child : const MyApp()
