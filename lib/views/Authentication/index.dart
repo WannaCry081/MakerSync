@@ -10,6 +10,21 @@ class AuthViewBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Placeholder();
+    return Scaffold(
+      body: StreamBuilder<User?> (
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const LoadingView();
+          } else if (snapshot.hasData) {
+            return DashboardView();
+          } else if (snapshot.hasError) {
+            return const ErrorView();
+          } else {
+            return const OnboardingView();
+          }
+        }
+      )
+    );
   }
 }
