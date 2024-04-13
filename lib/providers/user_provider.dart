@@ -12,6 +12,12 @@ class UserProvider with ChangeNotifier {
     _user = null;
   }
 
+
+  void setUserData(UserModel data) {
+    _user = data;
+    return;
+  }
+
   Future<void> fetchUserCredential() async {
     try {
       final UserModel user = await _userService.fetchUser(
