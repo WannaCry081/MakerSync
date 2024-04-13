@@ -32,4 +32,7 @@ class UserProvider with ChangeNotifier {
     }
   }
   
+  UserModel? getUserData() {
+    return _user;
+  }
 }
