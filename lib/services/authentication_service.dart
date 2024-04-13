@@ -1,5 +1,4 @@
 import "package:firebase_auth/firebase_auth.dart";
-import "package:firebase_core/firebase_core.dart";
 import "package:google_sign_in/google_sign_in.dart";
 
 
@@ -33,25 +32,22 @@ class MakerSyncAuthentication {
     return;
   }
 
-  Future<dynamic> authenticationSignInWithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  Future<List<String>> authenticationSignInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
 
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
+    await _auth.signInWithCredential(credential);
 
-      return await _auth.signInWithCredential(credential);
-    } on Exception catch (e) {
-      print('exception->$e');
-    }
+    return [
+      googleUser?.email ?? "",
+      googleUser?.displayName ?? ""
+    ];
   }
-
-
 
   Future<void> authenticationLogout() async {
     await _auth.signOut();
@@ -60,4 +56,6 @@ class MakerSyncAuthentication {
 
   String get getUserEmail => _auth.currentUser?.email ?? "";
   String get getUserDisplayName => _auth.currentUser?.displayName ?? "";
+
+
 }
