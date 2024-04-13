@@ -33,7 +33,7 @@ class UserService {
       } else if (response.statusCode == 500) {
         throw Exception("Internal Server Error.");
       } else {
-        throw Exception("Failed to create user: ${response.statusCode}");
+        throw Exception("Failed to create user.");
       }
   }
 
@@ -42,34 +42,33 @@ class UserService {
     final response = await http.get(Uri.parse("$USER_URL/$MACHINE_CODE"));
 
     if (response.statusCode == 200) {
-        final List<dynamic> users = json.decode(response.body);
-        return users.map((user) => UserModel.fromJson(user as Map<String, dynamic>)).toList();
-      } else if (response.statusCode == 404) {
-        throw Exception("Users not found.");
-      } else if (response.statusCode == 500) {
-        throw Exception("Internal Server Error.");
-      } else {
-        throw Exception("Failed to fetch users.");
-      }
+      final List<dynamic> users = json.decode(response.body);
+      return users.map((user) => UserModel.fromJson(user as Map<String, dynamic>)).toList();
+    } else if (response.statusCode == 404) {
+      throw Exception("Users not found.");
+    } else if (response.statusCode == 500) {
+      throw Exception("Internal Server Error.");
+    } else {
+      throw Exception("Failed to fetch users.");
+    }
   }
 
   Future<UserModel> fetchUser({
     required String email
   }) async {
 
-    print("Email in fetchUser: $email");
     final response = await http.get(Uri.parse("$USER_URL/$MACHINE_CODE/$email"));
 
     if (response.statusCode == 200) {
         return UserModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
       } else if (response.statusCode == 400) {
         throw Exception("Invalid user email.");
-      } else if (response.statusCode == 400) {
-        throw Exception("User does not exist.");
+      } else if (response.statusCode == 404) {
+        throw Exception("User not found.");
       } else if (response.statusCode == 500) {
         throw Exception("Internal Server Error.");
       } else {
-        throw Exception("Failed to fetch users.");
+        throw Exception("Failed to fetch user.");
       }
   }
 
@@ -111,5 +110,23 @@ class UserService {
       throw Exception("Failed to update user.");
     }
 
+  }
+
+
+  Future<void> deleteUser({
+    required String email
+  }) async {
+
+    final response = await http.delete(Uri.parse("$USER_URL/$MACHINE_CODE"));
+
+    if (response.statusCode == 204) {
+      return;
+    } else if (response.statusCode == 404) {
+      throw Exception("User not found.");
+    } else if (response.statusCode == 500) {
+      throw Exception("Internal Server Error.");
+    } else {
+      throw Exception("Failed to delete user.");
+    }
   }
 }
