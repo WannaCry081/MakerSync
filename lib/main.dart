@@ -72,16 +72,6 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  Widget getCurrentView(){
-    // return const OnboardingView();
-
-    if (FirebaseAuth.instance.currentUser != null){
-      return DashboardView();
-    } else {
-      return const OnboardingView();
-    }
-  }
-
   ThemeMode? getCurrentTheme(String theme){
     switch (theme){
       case "light" : 
