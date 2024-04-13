@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:frontend/services/authentication_service.dart";
-import "package:frontend/services/user_service.dart";
 import "package:frontend/views/Login/index.dart";
 import "package:frontend/widgets/button_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
@@ -117,7 +116,7 @@ class OnboardingView extends StatelessWidget {
               SizedBox(height : 10.h),
         
               MSButtonWidget(
-                btnOnTap: _signInGoogleAuth,
+                btnOnTap: signInGoogleAuth,
                 btnColor : Theme.of(context).colorScheme.tertiary,
                 child :  Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -179,7 +178,7 @@ class OnboardingView extends StatelessWidget {
     );
   }
 
-  Future<void> _signInGoogleAuth() async {
+  Future<void> signInGoogleAuth() async {
     await MakerSyncAuthentication().authenticationSignInWithGoogle();
     return; 
   }
