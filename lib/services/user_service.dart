@@ -26,7 +26,7 @@ class UserService {
       }
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
         return UserModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
       } else if (response.statusCode == 400) {
         throw Exception("User already exists.");
@@ -34,6 +34,27 @@ class UserService {
         throw Exception("Internal Server Error.");
       } else {
         throw Exception("Failed to create user: ${response.statusCode}");
+      }
+  }
+
+  Future<List<UserModel>> fetchConnectedUsers() async {
+    
+    final response = await http.get(Uri.parse("$USER_URL/$MACHINE_CODE"));
+
+    if (response.statusCode == 200) {
+        final List<dynamic> users = json.decode(response.body);
+
+        final connectedUsers = users
+          .where((user) => user["is_connect"] == true)
+          .map((user) => UserModel.fromJson(user as Map<String, dynamic>)).toList();
+
+        return connectedUsers;
+      } else if (response.statusCode == 404) {
+        throw Exception("Users not found.");
+      } else if (response.statusCode == 500) {
+        throw Exception("Internal Server Error.");
+      } else {
+        throw Exception("Failed to fetch users.");
       }
   }
 
