@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:frontend/services/authentication_service.dart";
+import "package:frontend/services/user_service.dart";
 import "package:frontend/views/Login/index.dart";
 import "package:frontend/widgets/button_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
@@ -178,10 +179,17 @@ class OnboardingView extends StatelessWidget {
     );
   }
 
-  Future<void> _signInGoogleAuth() async {
-    final auth = MakerSyncAuthentication();
+   Future<void> _signInGoogleAuth() async {
+    final UserService userService = UserService();
+    
+    List<String> data = await MakerSyncAuthentication().authenticationSignInWithGoogle();
 
-    await auth.signInWithGoogle();
+    userService.createUser(
+      email: data[0], 
+      name: data[1]
+    );
+
+    return; 
   }
 
 
