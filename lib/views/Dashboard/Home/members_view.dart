@@ -23,7 +23,7 @@ class _MembersViewState extends State<MembersView> {
   @override
   void initState() {
     super.initState();
-    users = _userService.fetchUsers();
+    users = _userService.fetchConnectedUsers();
   }
 
   @override
@@ -42,6 +42,17 @@ class _MembersViewState extends State<MembersView> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       final List<UserModel> users = snapshot.data!;
+
+                      if(users.isEmpty){
+                        return Center(
+                          child: MSTextWidget(
+                            "No connected users",
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
+                            fontColor: Theme.of(context).colorScheme.onBackground,
+                          ),
+                        );
+                      }
 
                       return ListView.builder(
                         itemCount: users.length,
