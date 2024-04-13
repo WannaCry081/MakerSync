@@ -27,19 +27,21 @@ class NoConnectionView extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
-              "assets/svgs/NoConnection.svg"
+              "assets/svgs/NoConnection.svg",
+              height: 80.h,
             ),
 
-            SizedBox(height: 5.h),
+            SizedBox(height: 15.h),
 
             MSTextWidget(
               "Ooops!",
               textAlign: TextAlign.center,
-              fontSize: 16.sp,
+              fontSize: 26.sp,
               fontWeight: FontWeight.bold,
-              fontColor: Theme.of(context).colorScheme.onBackground,
+              fontColor: Theme.of(context).colorScheme.primary,
             ),
 
             SizedBox(height: 4.h),
@@ -48,8 +50,8 @@ class NoConnectionView extends StatelessWidget {
               "No internet connection found.\nPlease check your internet connection and try again.",
               textAlign: TextAlign.center,
               fontWeight: FontWeight.w500,
-              fontColor: Colors.grey.shade600,
-              fontHeight: 2.h,
+              fontColor: Colors.grey.shade700,
+              fontHeight: 1.5.h,
             ),
 
 
