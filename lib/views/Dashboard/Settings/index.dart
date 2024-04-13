@@ -172,7 +172,7 @@ class _SettingsViewState extends State<SettingsView> {
         SizedBox(height: 15.h),
 
         MSButtonWidget(
-          btnOnTap: navigateToOnboarding,
+          btnOnTap: authenticationLogout,
           btnColor: Theme.of(context).colorScheme.primary,
           child: Center(
             child: MSTextWidget(
@@ -279,15 +279,6 @@ class _SettingsViewState extends State<SettingsView> {
       MaterialPageRoute(
         builder: (context) => const DarkModeView()
       )
-    );
-  }
-
-  void navigateToOnboarding() {
-     PersistentNavBarNavigator.pushNewScreen(
-        context,
-        screen: const OnboardingView(),
-        withNavBar: false,
-        pageTransitionAnimation: PageTransitionAnimation.cupertino,
     );
   }
 
