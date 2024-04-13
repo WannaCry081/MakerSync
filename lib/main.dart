@@ -2,7 +2,9 @@ import "package:connectivity_plus/connectivity_plus.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:frontend/providers/user_provider.dart";
+import "package:frontend/views/Authentication/index.dart";
 import "package:frontend/views/Dashboard/index.dart";
+import "package:frontend/views/Error/index.dart";
 import "package:frontend/views/Loading/index.dart";
 import "package:frontend/views/NoConnection/index.dart";
 import "package:provider/provider.dart";
@@ -100,8 +102,12 @@ class MyApp extends StatelessWidget {
           if (FirebaseAuth.instance.currentUser != null) {
             return DashboardView();
           } else {
-            return const OnboardingView();
+            return const AuthViewBuilder();
           }
+        }
+
+        else if (snapshot.hasError){
+          return const ErrorView();
         }
 
         else {
