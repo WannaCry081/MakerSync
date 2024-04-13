@@ -61,4 +61,7 @@ class SettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool getHasWifi() => _conn == ConnectivityResult.none;  
+  Stream<List<ConnectivityResult>> getConnectivityResult() => Connectivity().onConnectivityChanged;
+
 }
