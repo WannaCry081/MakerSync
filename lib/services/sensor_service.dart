@@ -12,7 +12,7 @@ class SensorService {
   void startFetchingSensor({
     required SettingsProvider settings
   }) {
-    _timer = Timer.periodic(const Duration(seconds: 200), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 500), (timer) {
       setSensorValues(settings: settings);
     });
   }
