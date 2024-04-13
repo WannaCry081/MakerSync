@@ -87,6 +87,7 @@ flutter:
     - assets/svgs/Bottle_2000ml.svg
     - assets/icons/Google.svg
     - assets/icons/LeftArrow.svg
+    - assets/icons/NoConnection.svg
 
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
