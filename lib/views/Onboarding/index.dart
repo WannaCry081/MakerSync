@@ -179,18 +179,9 @@ class OnboardingView extends StatelessWidget {
     );
   }
 
-   Future<void> _signInGoogleAuth() async {
-    final UserService userService = UserService();
-    
-    List<String> data = await MakerSyncAuthentication().authenticationSignInWithGoogle();
-
-    userService.createUser(
-      email: data[0], 
-      name: data[1]
-    );
-
+  Future<void> _signInGoogleAuth() async {
+    await MakerSyncAuthentication().authenticationSignInWithGoogle();
     return; 
   }
-
 
 }
