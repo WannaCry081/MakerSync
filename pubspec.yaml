@@ -88,6 +88,7 @@ flutter:
     - assets/svgs/Bottle_1500ml.svg
     - assets/svgs/Bottle_2000ml.svg
     - assets/svgs/NoConnection.svg
+    - assets/svgs/ErrorView.svg
     - assets/icons/Google.svg
     - assets/icons/LeftArrow.svg
 
