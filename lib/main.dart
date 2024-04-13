@@ -1,5 +1,7 @@
+import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:frontend/providers/user_provider.dart";
+import "package:frontend/views/Dashboard/index.dart";
 import "package:provider/provider.dart";
 import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/constants/light_theme_const.dart";
@@ -68,7 +70,13 @@ class MyApp extends StatelessWidget {
   }
 
   Widget getCurrentView(){
-    return const OnboardingView();
+    // return const OnboardingView();
+
+    if (FirebaseAuth.instance.currentUser != null){
+      return DashboardView();
+    } else {
+      return const OnboardingView();
+    }
   }
 
   ThemeMode? getCurrentTheme(String theme){
