@@ -7,8 +7,6 @@ import 'package:frontend/services/api_constants.dart';
 
 
 class SensorService {
-  late Timer _timer;
- 
   Future<List<dynamic>> fetchSensors() async {
     final response = await http.get(Uri.parse(SENSOR_URL));
 
@@ -45,6 +43,10 @@ class SensorService {
     final response = await http.get(Uri.parse("$SENSOR_URL/$MACHINE_CODE"));
     
     if (response.statusCode == 200) {
+
+        final sensor = SensorModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+        settings.setBool("isInitialize", sensor.isInitialized);
+
         return SensorModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
 
       } else if (response.statusCode == 400) {
