@@ -1,15 +1,19 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
+import "package:frontend/providers/sensor_provider.dart";
 import "package:frontend/providers/settings_provider.dart";
-import "package:frontend/services/sensor_service.dart";
 import "package:frontend/widgets/button_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
 import "package:provider/provider.dart";
 
 class InitializeView extends StatefulWidget {
+  final SensorProvider sensorProvider;
 
-  const InitializeView({super.key,});
+  const InitializeView({
+    required this.sensorProvider,
+    super.key
+  });
 
   @override
   State<InitializeView> createState() => _InitializeViewState();
@@ -17,8 +21,6 @@ class InitializeView extends StatefulWidget {
 
 class _InitializeViewState extends State<InitializeView> {
   
-  final SensorService _sensorService = SensorService();
-
   int _clickedOption = -1;
   final _options = [
     {
@@ -201,14 +203,13 @@ class _InitializeViewState extends State<InitializeView> {
     required SettingsProvider settings
   }) async {
     try {
-      await _sensorService.updateSensor(
+      await widget.sensorProvider.updateSensor(
           isInitialized: true,
           isStart: true,
           isStop: false,
           timer: _options[_clickedOption]["timer"] as int
       );
 
-      settings.setBool("isInitialize", true);
       settings.setBool("isConnect", true);
 
     } catch (e) {
