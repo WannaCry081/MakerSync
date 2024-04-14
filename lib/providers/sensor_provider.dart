@@ -47,5 +47,9 @@ class SensorProvider with ChangeNotifier {
     await fetchSensor();
   }
 
+  SensorModel? getSensorData(){
+    return _sensor;
+  }
+
 
 }
