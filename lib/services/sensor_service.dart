@@ -58,30 +58,6 @@ class SensorService {
       }
   }
 
-  // Future<void> setSensorValues({
-  //   required SettingsProvider settings
-  // }) async {
-  //   late SensorModel sensor;
-
-  //   try {
-  //     sensor = await fetchSensor();
-      
-  //     settings.setBool("isInitialize", sensor.isInitialized);
-  //     settings.setDouble("temperature", sensor.temperature);
-  //     settings.setInt("timer", sensor.timer);
-
-  //     print("-----------");
-  //     print("isInitialize: ${settings.getBool("isInitialize")}");
-  //     print("temperature: ${settings.getDouble("temperature")}");
-  //     print("isInitialize: ${settings.getInt("timer")}");
-  //     print("------------");
-
-  //   } catch (e) {
-  //     print("Error setting sensor values: $e");
-  //   }
-  // }
-
-
   Future<SensorModel> updateSensor({
     int? counter,
     int? timer,
