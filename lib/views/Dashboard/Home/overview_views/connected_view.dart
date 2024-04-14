@@ -1,18 +1,20 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
+import "package:frontend/providers/sensor_provider.dart";
 import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/widgets/text_widget.dart";
 import "package:percent_indicator/circular_percent_indicator.dart";
-import "package:provider/provider.dart";
 
 class ConnectedView extends StatefulWidget {
-  final double progressValue;
+  final SettingsProvider settingsProvider;
+  final SensorProvider sensorProvider;
 
   const ConnectedView({
-    required this.progressValue,
-    super.key
-  });
+    Key? key,
+    required this.settingsProvider,
+    required this.sensorProvider,
+  }) : super(key: key);
 
   @override
   State<ConnectedView> createState() => _ConnectedViewState();
@@ -20,10 +22,16 @@ class ConnectedView extends StatefulWidget {
 
 class _ConnectedViewState extends State<ConnectedView> {
 
+  
+
   @override
   Widget build(BuildContext context) {
-    final SettingsProvider settings = Provider.of<SettingsProvider>(context);
-    final double temperature = settings.getDouble("temperature");
+
+    final sensor = widget.sensorProvider.getSensorData();
+
+    if (sensor == null) {
+      return const CircularProgressIndicator(); 
+    }
     
     return  Padding(
       padding: EdgeInsets.symmetric(
@@ -38,12 +46,14 @@ class _ConnectedViewState extends State<ConnectedView> {
           CircularPercentIndicator(
             radius: 120.r,
             lineWidth: 35,
-            percent: widget.progressValue,
+            percent: 0,
+            // percent: sensor.timer.toDouble(),
             progressColor: Theme.of(context).colorScheme.primary,
             backgroundColor: Theme.of(context).colorScheme.tertiary,
             circularStrokeCap: CircularStrokeCap.round,
             center: MSTextWidget(
-                "${(widget.progressValue * 100).toInt()}%",
+                "0%",
+                // "${(_sensor.timer * 100).toInt()}%",
                 fontColor : Theme.of(context).colorScheme.onBackground,
                 fontSize : 45.sp,
                 fontWeight: FontWeight.w500,
@@ -68,7 +78,8 @@ class _ConnectedViewState extends State<ConnectedView> {
                   SizedBox(width: 10.w),
                   
                   MSTextWidget(
-                    "$temperature°C",
+                    // "0°C",
+                    "${sensor.temperature}°C",
                     fontColor: Theme.of(context).colorScheme.onBackground,
                     fontSize: 50.sp,
                     fontWeight: FontWeight.bold,
