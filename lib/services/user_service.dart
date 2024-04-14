@@ -74,8 +74,7 @@ class UserService {
   
   Future<UserModel> updateUser({
     required String email,
-    String? name,
-    bool? isConnected
+    String? name
   }) async {
     final response = await http.get(Uri.parse("$USER_URL/$MACHINE_CODE/$email"));
 
