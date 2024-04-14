@@ -23,6 +23,12 @@ class SensorProvider with ChangeNotifier {
     _sensor = data;
   }
 
+  Future<bool> isSensorExist() async {
+    return await _sensorService.isSensorExist(
+      settings: _settingsProvider
+    );
+  }
+
   
   Future<void> fetchSensor() async {
     final SensorModel sensor = await _sensorService.fetchSensor(
