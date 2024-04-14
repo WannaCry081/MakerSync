@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/providers/sensor_provider.dart';
 import 'package:frontend/providers/settings_provider.dart';
-import 'package:frontend/services/sensor_service.dart';
 import 'package:frontend/widgets/disconnected_view.dart';
 import 'package:frontend/widgets/snackbar_widget.dart';
 import 'package:frontend/widgets/text_widget.dart';
@@ -16,7 +16,13 @@ class EmergencyView extends StatefulWidget {
 
 class _EmergencyViewState extends State<EmergencyView> {
 
-  final SensorService _sensorService = SensorService();
+  late SensorProvider _sensorProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    _sensorProvider = Provider.of<SensorProvider>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +87,7 @@ class _EmergencyViewState extends State<EmergencyView> {
 
 
   void stopSensor() async { 
-    await _sensorService.updateSensor(
+    await _sensorProvider.updateSensor(
         counter: 0,
         timer: 0,
         temperature: 0,
