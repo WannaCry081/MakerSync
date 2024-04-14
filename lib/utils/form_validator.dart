@@ -40,5 +40,21 @@ class FormValidator {
     return null;
   }
 
+  String? validateInput(String? value, String name, int minLength, int maxLength) {
+    if (value == null || value.isEmpty) {
+      return "$name is Required";
+    }
+
+    if (value.length < minLength) {
+      return "$name must at least be $minLength characters long.";
+    }
+
+    if (value.length > maxLength) {
+      return "$name must at least be $maxLength characters long.";
+    }
+
+    return null;
+  }
+
 
 }
