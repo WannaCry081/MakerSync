@@ -45,7 +45,8 @@ class MakerSyncAuthentication {
 
     return [
       googleUser?.email ?? "",
-      googleUser?.displayName ?? ""
+      googleUser?.displayName ?? "",
+      googleUser?.photoUrl ?? ""
     ];
   }
 
@@ -57,6 +58,6 @@ class MakerSyncAuthentication {
 
   String get getUserEmail => _auth.currentUser?.email ?? "";
   String get getUserDisplayName => _auth.currentUser?.displayName ?? "";
-
+  String get getUserPhotoUrl => _auth.currentUser?.photoURL ?? "";
 
 }
