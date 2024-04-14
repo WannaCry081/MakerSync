@@ -25,6 +25,10 @@ class SensorProvider with ChangeNotifier {
 
   
   Future<void> fetchSensor() async {
+    final SensorModel sensor = await _sensorService.fetchSensor(
+      settings: _settingsProvider
+    );
+
     setSensorData(sensor);
     notifyListeners();
   }
