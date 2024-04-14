@@ -7,16 +7,6 @@ import 'package:frontend/services/api_constants.dart';
 
 
 class SensorService {
-  late Timer _timer;
-
-  void startFetchingSensor({
-    required SettingsProvider settings
-  }) {
-    _timer = Timer.periodic(const Duration(seconds: 500), (timer) {
-      setSensorValues(settings: settings);
-    });
-  }
-  
   Future<List<dynamic>> fetchSensors() async {
     final response = await http.get(Uri.parse(SENSOR_URL));
 
@@ -46,12 +36,19 @@ class SensorService {
     }
   }
 
-  Future<SensorModel> fetchSensor() async {
+  Future<SensorModel> fetchSensor({
+    required SettingsProvider settings
+  }) async {
 
     final response = await http.get(Uri.parse("$SENSOR_URL/$MACHINE_CODE"));
     
     if (response.statusCode == 200) {
+
+        final sensor = SensorModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+        settings.setBool("isInitialize", sensor.isInitialized);
+
         return SensorModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+
       } else if (response.statusCode == 400) {
         throw Exception("Invalid sensor request.");
       } else if (response.statusCode == 404) {
@@ -62,30 +59,6 @@ class SensorService {
         throw Exception("Failed to fetch sensor.S");
       }
   }
-
-  Future<void> setSensorValues({
-    required SettingsProvider settings
-  }) async {
-    late SensorModel sensor;
-
-    try {
-      sensor = await fetchSensor();
-      
-      settings.setBool("isInitialize", sensor.isInitialized);
-      settings.setDouble("temperature", sensor.temperature);
-      settings.setInt("timer", sensor.timer);
-
-      print("-----------");
-      print("isInitialize: ${settings.getBool("isInitialize")}");
-      print("temperature: ${settings.getDouble("temperature")}");
-      print("isInitialize: ${settings.getInt("timer")}");
-      print("------------");
-
-    } catch (e) {
-      print("Error setting sensor values: $e");
-    }
-  }
-
 
   Future<SensorModel> updateSensor({
     int? counter,

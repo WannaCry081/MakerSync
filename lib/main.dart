@@ -1,6 +1,7 @@
 import "package:connectivity_plus/connectivity_plus.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
+import "package:frontend/providers/sensor_provider.dart";
 import "package:frontend/providers/user_provider.dart";
 import "package:frontend/views/Authentication/index.dart";
 import "package:frontend/views/Dashboard/index.dart";
@@ -12,9 +13,6 @@ import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/constants/light_theme_const.dart";
 import "package:frontend/constants/dark_theme_const.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-
-import "package:frontend/views/Onboarding/index.dart";
-
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -26,6 +24,8 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform
   );
 
+  final SettingsProvider settingsProvider = SettingsProvider();
+
    runApp(
     MultiProvider(
       providers: [
@@ -35,6 +35,10 @@ Future<void> main() async {
 
         ChangeNotifierProvider(
           create: (context) => UserProvider()
+        ),
+
+        ChangeNotifierProvider(
+          create: (context) => SensorProvider(settingsProvider)
         )
       ],
       child : const MyApp()

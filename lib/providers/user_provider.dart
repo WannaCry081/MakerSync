@@ -23,20 +23,15 @@ class UserProvider with ChangeNotifier {
 
   void setUserData(UserModel data) {
     _user = data;
-    return;
   }
 
   Future<void> fetchUserCredential() async {
-    try {
-      final UserModel user = await _userService.fetchUser(
-        email: _email
-      );
+    final UserModel user = await _userService.fetchUser(
+      email: _email
+    );
 
-      setUserData(user);
-      notifyListeners();
-    } catch (error) {
-      print('Failed to fetch user: $error');
-    }
+    setUserData(user);
+    notifyListeners();
   }
 
 
