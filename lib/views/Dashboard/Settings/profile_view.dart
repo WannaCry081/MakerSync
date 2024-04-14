@@ -100,12 +100,6 @@ class _ProfileViewState extends State<ProfileView> {
               alignment: Alignment.center,
               child: Stack(
                 children:[
-                  SvgPicture.asset(
-                    Theme.of(context).brightness == Brightness.dark
-                    ? "assets/svgs/Logo_DarkMode.svg"
-                    : "assets/svgs/Logo_LightMode.svg",
-                    height: 150.h
-                  ),
 
                   CircleAvatar(
                     radius: 75.r,
