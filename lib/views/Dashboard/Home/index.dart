@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/providers/settings_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
+import 'package:frontend/services/authentication_service.dart';
 import 'package:frontend/views/Dashboard/Home/emergency_view.dart';
 import 'package:frontend/views/Dashboard/Home/members_view.dart';
 import 'package:frontend/views/Dashboard/Home/overview_view.dart';
@@ -46,6 +46,9 @@ class _HomeViewState extends State<HomeView> {
   Widget content(
     UserModel? user
   ) {
+
+    final _auth = MakerSyncAuthentication();
+
     return DefaultTabController(
       length: 3,
       child: Column(
@@ -81,12 +84,20 @@ class _HomeViewState extends State<HomeView> {
               ],
             ),
       
-            SvgPicture.asset(
-                Theme.of(context).brightness == Brightness.dark
-                ? "assets/svgs/Logo_DarkMode.svg"
-                : "assets/svgs/Logo_LightMode.svg",
-                height: 48.h
-              )
+            // SvgPicture.asset(
+            //     Theme.of(context).brightness == Brightness.dark
+            //     ? "assets/svgs/Logo_DarkMode.svg"
+            //     : "assets/svgs/Logo_LightMode.svg",
+            //     height: 48.h
+            //   )
+            
+            CircleAvatar(
+              radius: 24.r,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              backgroundImage: NetworkImage(_auth.getUserPhotoUrl)
+            )
+
+
             ],
           ),
       
