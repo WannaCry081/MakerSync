@@ -23,7 +23,6 @@ class UserProvider with ChangeNotifier {
 
   void setUserData(UserModel data) {
     _user = data;
-    return;
   }
 
   Future<void> fetchUserCredential() async {
