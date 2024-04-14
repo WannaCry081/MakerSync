@@ -18,5 +18,9 @@ class SensorProvider with ChangeNotifier {
     _sensor = data;
   }
 
+  
+  Future<void> fetchSensor() async {
+    
+  }
 
 }
