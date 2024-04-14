@@ -9,9 +9,9 @@ class SensorProvider with ChangeNotifier {
 
   SensorProvider() {
     _sensor = null;
-  
-    notifyListeners();
-    return;
+    fetchSensor().then((_) {
+      notifyListeners();
+    });
   }
 
   void setSensorData(SensorModel data) {
