@@ -16,4 +16,16 @@ class FormValidator {
     return null;
   }
 
+  String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Password is Required";
+    }
+
+    if (value.length < 8) {
+      return "Password must at least be 8 characters long.";
+    }
+
+    return null;
+  }
+
 }
