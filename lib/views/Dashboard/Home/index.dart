@@ -83,13 +83,6 @@ class _HomeViewState extends State<HomeView> {
                   "Let's start tracking your progress!")
               ],
             ),
-      
-            // SvgPicture.asset(
-            //     Theme.of(context).brightness == Brightness.dark
-            //     ? "assets/svgs/Logo_DarkMode.svg"
-            //     : "assets/svgs/Logo_LightMode.svg",
-            //     height: 48.h
-            //   )
             
             CircleAvatar(
               radius: 24.r,
