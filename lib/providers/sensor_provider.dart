@@ -35,7 +35,16 @@ class SensorProvider with ChangeNotifier {
     bool? isStop,
   }) async {
 
-  
+    await _sensorService.updateSensor(
+      counter: counter,
+      timer: timer,
+      temperature: temperature,
+      isInitialized: isInitialized,
+      isStart: isStart,
+      isStop: isStop
+    );
+
+    await fetchSensor();
   }
 
 
