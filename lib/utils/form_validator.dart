@@ -28,4 +28,17 @@ class FormValidator {
     return null;
   }
 
+  String? validateConfirmPassword(String?value, String password) {
+    if (value == null || value.isEmpty) {
+      return "Confirm Password is Required";
+    }
+
+    if (password != value) {
+      return "Password does not match";
+    }
+
+    return null;
+  }
+
+
 }
