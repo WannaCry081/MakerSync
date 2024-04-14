@@ -1,12 +1,10 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_barcode_scanner/flutter_barcode_scanner.dart";
-import "package:frontend/models/sensor_model.dart";
 import "package:frontend/providers/sensor_provider.dart";
 import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/providers/user_provider.dart";
 import "package:frontend/services/authentication_service.dart";
-import "package:frontend/services/sensor_service.dart";
 import "package:frontend/views/Dashboard/Home/overview_views/connected_view.dart";
 import "package:frontend/views/Dashboard/Home/overview_views/disconnected_view.dart";
 import "package:frontend/views/Dashboard/Home/overview_views/initialize_view.dart";
@@ -24,25 +22,12 @@ class OverviewView extends StatefulWidget {
 class _OverviewViewState extends State<OverviewView> {
 
   bool _isScanFail = false;
-  double _progressValue = 0.4;
-
-  // late SensorProvider _sensorProvider;
-  // late SettingsProvider _settingsProvider;
-
   late String _email;
   late String _name;
 
   @override
   void initState() {
     super.initState();
-    // _settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
-    // _sensorProvider =  Provider.of<SensorProvider>(context, listen: false);
-
-    // _sensorProvider.fetchSensor();
-
-    // _sensorService = SensorService();
-    // _sensorService.fetchSensor(settings: _settingsProvider);
-
     _email = MakerSyncAuthentication().getUserEmail;
     _name = MakerSyncAuthentication().getUserDisplayName;
   }
@@ -103,14 +88,11 @@ class _OverviewViewState extends State<OverviewView> {
 
       if(!mounted) return;
       
-      // if(await _sensorService.isSensorExist(settings: settings)){
       if(await sensorProvider.isSensorExist()){
         setState((){
           settings.setBool("isConnect", true);
         });
 
-        // _sensorService.startFetchingSensor(settings: settings);
-        // _sensorService.fetchSensor(settings: settings);
         sensorProvider.fetchSensor();
         sensorProvider.startFetchingSensorValues();
 
