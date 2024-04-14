@@ -1,17 +1,22 @@
+import "dart:async";
 import "package:flutter/material.dart";
 import "package:frontend/models/sensor_model.dart";
+import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/services/sensor_service.dart";
 
 class SensorProvider with ChangeNotifier {
   final SensorService _sensorService = SensorService();
+  final SettingsProvider _settingsProvider;
 
+  late Timer? _timer;
   SensorModel? _sensor;
 
-  SensorProvider() {
+  SensorProvider(this._settingsProvider) {
     _sensor = null;
     fetchSensor().then((_) {
       notifyListeners();
     });
+    // notifyListeners();
   }
 
   void setSensorData(SensorModel data) {
@@ -20,8 +25,6 @@ class SensorProvider with ChangeNotifier {
 
   
   Future<void> fetchSensor() async {
-    final SensorModel sensor = await _sensorService.fetchSensor();
-
     setSensorData(sensor);
     notifyListeners();
   }
@@ -45,6 +48,12 @@ class SensorProvider with ChangeNotifier {
     );
 
     await fetchSensor();
+  }
+
+  Future<void> startFetchingSensorValues() async {
+    _timer = Timer.periodic(const Duration(seconds: 500), (timer) async {
+      await fetchSensor();
+    });
   }
 
   SensorModel? getSensorData(){
