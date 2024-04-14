@@ -26,4 +26,17 @@ class SensorProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updateSensor({
+    int? counter,
+    int? timer,
+    double? temperature,
+    bool? isInitialized,
+    bool? isStart,
+    bool? isStop,
+  }) async {
+
+  
+  }
+
+
 }
