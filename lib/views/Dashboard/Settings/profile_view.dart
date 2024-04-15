@@ -231,6 +231,12 @@ class _ProfileViewState extends State<ProfileView> {
     const Duration(seconds: 2),
       () => setState(() => _isLoading = false)
   );
+
+  const MSSnackbarWidget(
+    message: "Successfully updated your display name!",
+  ).showSnackbar(context);
+
+  Navigator.of(context).pop();
 }
 
 }
