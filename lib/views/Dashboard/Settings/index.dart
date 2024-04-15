@@ -159,7 +159,6 @@ class _SettingsViewState extends State<SettingsView> {
         if(_showDisconnectButton)
           MSButtonWidget(
             btnOnTap: disconnectFromDevice,
-            btnIsLoading: _isLoading,
             btnColor: Colors.red.shade300,
             child: Center(
               child: MSTextWidget(
@@ -174,7 +173,8 @@ class _SettingsViewState extends State<SettingsView> {
         SizedBox(height: 15.h),
 
         MSButtonWidget(
-          btnOnTap: authenticationLogout,
+          btnOnTap: () => authenticationLogout(),
+          btnIsLoading: _isLoading,
           btnColor: Theme.of(context).colorScheme.primary,
           child: Center(
             child: MSTextWidget(
@@ -285,8 +285,14 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   Future<void> authenticationLogout() async {
+    setState(() => _isLoading = true);
+
     await MakerSyncAuthentication().authenticationLogout();
-    return;
+    
+    Future.delayed(
+      const Duration(seconds: 2),
+        () => setState(() => _isLoading = false),
+    );
   }
 
   Future<void> disconnectFromDevice() async {
