@@ -29,6 +29,8 @@ class _ProfileViewState extends State<ProfileView> {
   late TextEditingController _currentDisplayName;
   late TextEditingController _newDisplayName;
 
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -192,6 +194,7 @@ class _ProfileViewState extends State<ProfileView> {
                 print("Error!");
               }
             },
+            btnIsLoading: _isLoading,
             btnColor: Theme.of(context).colorScheme.primary,
             child: Center(
               child: MSTextWidget(
