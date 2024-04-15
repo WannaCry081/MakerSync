@@ -189,7 +189,6 @@ class _ProfileViewState extends State<ProfileView> {
           MSButtonWidget(
             btnOnTap: () async {
               if (_form.currentState!.validate()){
-                print("validate!");
                 await updateUser();
               } else {
                 print("Error!");
@@ -210,14 +209,7 @@ class _ProfileViewState extends State<ProfileView> {
       ),
     );
   }
-
-  void navigateToSettings(){
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const SettingsView()
-      )
-    );
-  }
+  
 
  Future<void> updateUser() async {
   setState(() => _isLoading = true);
