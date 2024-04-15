@@ -220,7 +220,7 @@ class _ProfileViewState extends State<ProfileView> {
   );
 
   Future.delayed(
-    const Duration(seconds: 2),
+    const Duration(seconds: 1),
       () => setState(() => _isLoading = false)
   );
 
@@ -228,6 +228,7 @@ class _ProfileViewState extends State<ProfileView> {
     message: "Successfully updated your display name!",
   ).showSnackbar(context);
 
+  await Future.delayed(const Duration(seconds: 2));
   Navigator.of(context).pop();
 }
 
