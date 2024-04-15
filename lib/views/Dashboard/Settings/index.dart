@@ -29,6 +29,7 @@ class _SettingsViewState extends State<SettingsView> {
 
   bool _showDisconnectButton = false;
   bool _isNotifications = false;
+  bool _isLoading = false;
 
   UserModel? _user;
 
@@ -158,6 +159,7 @@ class _SettingsViewState extends State<SettingsView> {
         if(_showDisconnectButton)
           MSButtonWidget(
             btnOnTap: disconnectFromDevice,
+            btnIsLoading: _isLoading,
             btnColor: Colors.red.shade300,
             child: Center(
               child: MSTextWidget(
