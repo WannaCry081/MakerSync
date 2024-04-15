@@ -8,6 +8,7 @@ import "package:frontend/utils/form_validator.dart";
 import "package:frontend/views/Dashboard/Settings/index.dart";
 import "package:frontend/widgets/back_button_widget.dart";
 import "package:frontend/widgets/button_widget.dart";
+import "package:frontend/widgets/snackbar_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
 import "package:frontend/widgets/textfield_widget.dart";
 import "package:frontend/widgets/wrapper_widget.dart";
@@ -219,15 +220,17 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
  Future<void> updateUser() async {
-  try {
-    await _userProvider.updateUserCredential(
-      email: _user?.email ?? "",
-      name: _newDisplayName.text.trim()
-    );
-    print("Success name update!");
-  } catch (e) {
-    print("Failed to update name: $e");
-  }
+  setState(() => _isLoading = true);
+
+  await _userProvider.updateUserCredential(
+    email: _user?.email ?? "",
+    name: _newDisplayName.text.trim()
+  );
+
+  Future.delayed(
+    const Duration(seconds: 2),
+      () => setState(() => _isLoading = false)
+  );
 }
 
 }
