@@ -1,14 +1,17 @@
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:flutter_svg/svg.dart";
+import "package:frontend/models/user_model.dart";
+import "package:frontend/providers/user_provider.dart";
 import "package:frontend/services/authentication_service.dart";
+import "package:frontend/utils/form_validator.dart";
 import "package:frontend/views/Dashboard/Settings/index.dart";
 import "package:frontend/widgets/back_button_widget.dart";
 import "package:frontend/widgets/button_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
 import "package:frontend/widgets/textfield_widget.dart";
 import "package:frontend/widgets/wrapper_widget.dart";
+import "package:provider/provider.dart";
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -19,14 +22,26 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
 
+  late UserModel? _user;
+  late UserProvider _userProvider;
+
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
-  final TextEditingController _currentDisplayName = TextEditingController(text: "Shiela Mae");
-  final TextEditingController _newDisplayName = TextEditingController(text: "");
+  late TextEditingController _currentDisplayName;
+  late TextEditingController _newDisplayName;
+
+  @override
+  void initState() {
+    super.initState();
+    _userProvider = Provider.of<UserProvider>(context, listen: false);
+    _user = context.read<UserProvider>().getUserData();
+    _currentDisplayName = TextEditingController(text: _user?.name);
+    _newDisplayName = TextEditingController(text: "");
+  }
 
   @override
   void dispose(){
     super.dispose();
-
+    _currentDisplayName.dispose();
     _newDisplayName.dispose();
   }
   
@@ -68,7 +83,7 @@ class _ProfileViewState extends State<ProfileView> {
 
   Widget content(){
 
-    final _auth = MakerSyncAuthentication();
+    final auth = MakerSyncAuthentication();
 
     return Form(
       key: _form,
@@ -78,7 +93,8 @@ class _ProfileViewState extends State<ProfileView> {
           Row(
             children: [
               MSBackButtonWidget(
-                btnOnTap: navigateToSettings
+                btnOnTap: () => Navigator.of(context).pop()
+                // btnOnTap: navigateToSettings
               ),
 
               SizedBox(width: 15.w),
@@ -104,7 +120,7 @@ class _ProfileViewState extends State<ProfileView> {
                   CircleAvatar(
                     radius: 75.r,
                     backgroundColor: Theme.of(context).colorScheme.primary,
-                    backgroundImage: NetworkImage(_auth.getUserPhotoUrl),
+                    backgroundImage: NetworkImage(auth.getUserPhotoUrl),
                   ),
                   
                   Positioned(
@@ -150,6 +166,8 @@ class _ProfileViewState extends State<ProfileView> {
            MSTextFieldWidget(
             controller : _newDisplayName,
             fieldLabelText: "New Display Name",
+            fieldValidator: (value) => FormValidator()
+              .validateInput(value, "Name", 2, 20),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
@@ -166,7 +184,14 @@ class _ProfileViewState extends State<ProfileView> {
           SizedBox(height : 15.h),
 
           MSButtonWidget(
-            btnOnTap: (){},
+            btnOnTap: () async {
+              if (_form.currentState!.validate()){
+                print("validate!");
+                await updateUser();
+              } else {
+                print("Error!");
+              }
+            },
             btnColor: Theme.of(context).colorScheme.primary,
             child: Center(
               child: MSTextWidget(
@@ -189,4 +214,17 @@ class _ProfileViewState extends State<ProfileView> {
       )
     );
   }
+
+ Future<void> updateUser() async {
+  try {
+    await _userProvider.updateUserCredential(
+      email: _user?.email ?? "",
+      name: _newDisplayName.text.trim()
+    );
+    print("Success name update!");
+  } catch (e) {
+    print("Failed to update name: $e");
+  }
+}
+
 }
