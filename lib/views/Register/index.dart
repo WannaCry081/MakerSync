@@ -29,6 +29,7 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController _password = TextEditingController(text : "");
   final TextEditingController _rePassword = TextEditingController(text : "");
 
+  bool _isLoading = false;
   bool _isValid = true;
 
   @override
@@ -168,8 +169,15 @@ class _RegisterViewState extends State<RegisterView> {
           
           MSButtonWidget(
             btnOnTap: () async {
-                signUpWithEmail(userProvider);
+              if(_form.currentState!.validate()){
+                _form.currentState!.save();
+                await signUpWithEmail(userProvider);
+              } else {
+                setState(() => _isLoading = false);
+                print("Error!");
+              }
             },
+            btnIsLoading: _isLoading,
             btnColor : Theme.of(context).colorScheme.primary,
             child : Center(
               child : MSTextWidget(
