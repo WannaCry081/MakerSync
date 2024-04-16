@@ -52,8 +52,12 @@ class MakerSyncAuthentication {
   }
 
   Future<void> authenticationLogout() async {
-    await GoogleSignIn().signOut();
+    if (_googleUser != null) {
+      await GoogleSignIn().signOut();
+    }
+
     await _auth.signOut();
+    _googleUser = null;
     return;
   }
 
