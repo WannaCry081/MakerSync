@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:frontend/providers/user_provider.dart";
 import "package:frontend/services/authentication_service.dart";
+import "package:frontend/utils/form_validator.dart";
 import "package:frontend/views/Login/index.dart";
 import "package:frontend/views/Onboarding/index.dart";
 import "package:frontend/widgets/back_button_widget.dart";
@@ -53,14 +54,14 @@ class _RegisterViewState extends State<RegisterView> {
           ),
 
           child : Center(
-            child : content()
+            child : content(_userProvider)
           )
         )
       ) 
     );
   }
 
-  Widget content(){
+  Widget content(UserProvider userProvider){
     return Form(
       key: _form,
       child: Column(
@@ -91,6 +92,8 @@ class _RegisterViewState extends State<RegisterView> {
             controller : _name,
             fieldLabelText: "Full Name",
             fieldIsValid: true,
+            fieldValidator: (value) => FormValidator()
+              .validateInput(value, "Name", 2, 50),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
@@ -108,6 +111,8 @@ class _RegisterViewState extends State<RegisterView> {
             controller : _email,
             fieldIsValid: _isValid,
             fieldLabelText: "Email Address",
+            fieldValidator: (value) => FormValidator()
+              .validateEmail(value),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
@@ -126,6 +131,8 @@ class _RegisterViewState extends State<RegisterView> {
             fieldIsObsecure: true,
             fieldLabelText: "Password",
             fieldIsValid: _isValid,
+            fieldValidator: (value) => FormValidator()
+              .validatePassword(value),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
@@ -144,6 +151,8 @@ class _RegisterViewState extends State<RegisterView> {
             fieldIsObsecure: true,
             fieldLabelText: "Confirm Password",
             fieldIsValid: _isValid,
+            fieldValidator: (value) => FormValidator()
+              .validateConfirmPassword(value, _password.text.trim()),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
@@ -158,7 +167,9 @@ class _RegisterViewState extends State<RegisterView> {
           SizedBox(height : 30.h),
           
           MSButtonWidget(
-            btnOnTap: (){},
+            btnOnTap: () async {
+                signUpWithEmail(userProvider);
+            },
             btnColor : Theme.of(context).colorScheme.primary,
             child : Center(
               child : MSTextWidget(
@@ -211,18 +222,17 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  Future<void> signUpWithEmail({
-    required UserProvider userProvider,
-    required String name,
-    required String email,
-    required String password
-  }) async {
+  Future<void> signUpWithEmail(UserProvider userProvider) async {
     try {
-      await MakerSyncAuthentication().signUpWithEmail(name, email, password);
+      await MakerSyncAuthentication().signUpWithEmail(
+        _email.text.trim(),
+        _name.text.trim(),
+        _password.text.trim()
+      );
 
       await userProvider.addUserCredential(
-        email: email,
-        name: name
+        email: _email.text.trim(),
+        name: _name.text.trim()
       );
 
       const MSSnackbarWidget(
