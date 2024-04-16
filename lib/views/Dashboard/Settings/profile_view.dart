@@ -31,6 +31,7 @@ class _ProfileViewState extends State<ProfileView> {
   late TextEditingController _newDisplayName;
 
   bool _isLoading = false;
+  late bool _isValid = true;
 
   @override
   void initState() {
@@ -126,22 +127,22 @@ class _ProfileViewState extends State<ProfileView> {
                     backgroundImage: NetworkImage(auth.getUserPhotoUrl),
                   ),
                   
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      height: 45.h,
-                      width: 45.w,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      child: Icon(
-                        FeatherIcons.camera,
-                        color: Theme.of(context).colorScheme.background
-                      ),
-                    )
-                  )
+                  // Positioned(
+                  //   bottom: 0,
+                  //   right: 0,
+                  //   child: Container(
+                  //     height: 45.h,
+                  //     width: 45.w,
+                  //     decoration: BoxDecoration(
+                  //       shape: BoxShape.circle,
+                  //       color: Theme.of(context).colorScheme.secondary,
+                  //     ),
+                  //     child: Icon(
+                  //       FeatherIcons.camera,
+                  //       color: Theme.of(context).colorScheme.background
+                  //     ),
+                  //   )
+                  // )
                 ]
               )
             ),
@@ -152,6 +153,7 @@ class _ProfileViewState extends State<ProfileView> {
           MSTextFieldWidget(
             controller : _currentDisplayName,
             fieldIsReadOnly: true,
+            fieldIsValid: true,
             fieldLabelText: "Current Display Name",
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
@@ -166,21 +168,22 @@ class _ProfileViewState extends State<ProfileView> {
 
           SizedBox(height : 15.h),
 
-           MSTextFieldWidget(
-            controller : _newDisplayName,
-            fieldLabelText: "New Display Name",
-            fieldValidator: (value) => FormValidator()
-              .validateInput(value, "Name", 2, 20),
-            fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
-              ? Theme.of(context).colorScheme.tertiary
-              : Colors.grey.shade50,
-            fieldBorderColor: (Theme.of(context).brightness == Brightness.dark)
-              ? Colors.grey.shade600
-              : Colors.grey.shade300,
-            fieldLabelColor: (Theme.of(context).brightness == Brightness.dark) 
-              ? Colors.grey.shade400 
-              : Colors.grey.shade600
-          ),
+            MSTextFieldWidget(
+              controller : _newDisplayName,
+              fieldLabelText: "New Display Name",
+              fieldValidator: (value) => FormValidator()
+                .validateInput(value, "Name", 2, 20),
+              fieldIsValid: _isValid,
+              fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
+                ? Theme.of(context).colorScheme.tertiary
+                : Colors.grey.shade50,
+              fieldBorderColor: (Theme.of(context).brightness == Brightness.dark)
+                ? Colors.grey.shade600
+                : Colors.grey.shade300,
+              fieldLabelColor: (Theme.of(context).brightness == Brightness.dark) 
+                ? Colors.grey.shade400 
+                : Colors.grey.shade600
+            ),
 
           const Spacer(),
 
@@ -191,6 +194,7 @@ class _ProfileViewState extends State<ProfileView> {
               if (_form.currentState!.validate()){
                 await updateUser();
               } else {
+                setState(() => _isValid = false);
                 print("Error!");
               }
             },
