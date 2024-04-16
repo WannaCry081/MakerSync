@@ -56,13 +56,15 @@ class _MSTextFieldWidgetState extends State<MSTextFieldWidget> {
         left: 15.w,
         right: (widget.fieldIsObsecure)
           ? 10.w
-          : 15.w
+          : 15.w,
       ),
       decoration: BoxDecoration(
         color : widget.fieldBackground,
         borderRadius: BorderRadius.circular(widget.fieldRadius ?? 10.r),
         border : Border.all(
-          color : widget.fieldBorderColor ?? Colors.transparent,
+          color : widget.fieldIsValid 
+            ? widget.fieldBorderColor ?? Colors.transparent
+            : Colors.red,
           width : widget.fieldBorderWidth ?? 1.4.w
         )
       ),
@@ -78,7 +80,7 @@ class _MSTextFieldWidgetState extends State<MSTextFieldWidget> {
                 obscureText: (widget.fieldIsObsecure && !_showPassword),
                 style: TextStyle(
                   fontFamily : "Inter",
-                  fontSize : 16.sp
+                  fontSize : 16.sp,
                 ),     
                 decoration: InputDecoration(
                   labelText: widget.fieldLabelText,
@@ -87,7 +89,7 @@ class _MSTextFieldWidgetState extends State<MSTextFieldWidget> {
                     fontSize : 10.sp,
                     color : widget.fieldLabelColor
                   ),
-                  border : InputBorder.none
+                  border : InputBorder.none,
                 ),
               ),
             ),
@@ -100,7 +102,6 @@ class _MSTextFieldWidgetState extends State<MSTextFieldWidget> {
                 onPressed: () => setState(
                   () => _showPassword = !_showPassword),
               ),
-
           ],
         ),
       ),
