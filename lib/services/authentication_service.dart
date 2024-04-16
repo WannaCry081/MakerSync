@@ -5,6 +5,7 @@ import "package:google_sign_in/google_sign_in.dart";
 class MakerSyncAuthentication {
   
   final _auth = FirebaseAuth.instance;
+  GoogleSignInAccount? _googleUser;
 
   Future<void> authenticationSignInEmailAndPassword (
     String email,
@@ -33,8 +34,8 @@ class MakerSyncAuthentication {
   }
 
   Future<List<String>> authenticationSignInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    _googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication? googleAuth = await _googleUser?.authentication;
 
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
@@ -44,9 +45,9 @@ class MakerSyncAuthentication {
     await _auth.signInWithCredential(credential);
 
     return [
-      googleUser?.email ?? "",
-      googleUser?.displayName ?? "",
-      googleUser?.photoUrl ?? ""
+      _googleUser?.email ?? "",
+      _googleUser?.displayName ?? "",
+      _googleUser?.photoUrl ?? ""
     ];
   }
 
