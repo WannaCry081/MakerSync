@@ -13,24 +13,35 @@ class MakerSyncAuthentication {
         email: email,
         password: password
       );
+      
+      print("sign in success!");
       return true;
     } on FirebaseAuthException catch (_) {
+      print("sign in failed!");
       return false;
     }
   }
 
-  Future<void> authenticationSignUpEmailAndPassword (
-    String username,
+  Future<bool> signUpWithEmail (
+    String name,
     String email,
     String password
   ) async {
+    try {
+        UserCredential credential = await _auth.createUserWithEmailAndPassword(
+        email: email, 
+        password: password
+      );
 
-    await _auth.createUserWithEmailAndPassword(
-      email: email, 
-      password: password
-    );
+      credential.user?.updateDisplayName(name);
+      // credential.user?.updatePhotoURL();
 
-    return;
+      print("sign up success!");
+      return true;
+    } on FirebaseAuthException catch (_) {
+      print("sign up failed!");
+      return false;
+    }
   }
 
   Future<List<String>> signInWithGoogle() async {
