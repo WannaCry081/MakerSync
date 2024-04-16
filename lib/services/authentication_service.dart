@@ -7,16 +7,16 @@ class MakerSyncAuthentication {
   final _auth = FirebaseAuth.instance;
   GoogleSignInAccount? _googleUser;
 
-  Future<void> authenticationSignInEmailAndPassword (
-    String email,
-    String password
-  ) async {
-
-    await _auth.signInWithEmailAndPassword(
-      email: email,
-      password: password
-    );
-    return;
+  Future<bool> signInWithEmail (String email, String password) async {
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password
+      );
+      return true;
+    } on FirebaseAuthException catch (_) {
+      return false;
+    }
   }
 
   Future<void> authenticationSignUpEmailAndPassword (
@@ -33,7 +33,7 @@ class MakerSyncAuthentication {
     return;
   }
 
-  Future<List<String>> authenticationSignInWithGoogle() async {
+  Future<List<String>> signInWithGoogle() async {
     _googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication? googleAuth = await _googleUser?.authentication;
 
