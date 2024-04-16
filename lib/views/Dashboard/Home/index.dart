@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/providers/settings_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
@@ -87,10 +88,12 @@ class _HomeViewState extends State<HomeView> {
             CircleAvatar(
               radius: 24.r,
               backgroundColor: Theme.of(context).colorScheme.primary,
-              backgroundImage: NetworkImage(_auth.getUserPhotoUrl)
+              backgroundImage: _auth.getUserPhotoUrl == ""
+                ? const Image(
+                    image: AssetImage("assets/svgs/Logo_LightMode.svg"),
+                  ).image
+                : NetworkImage(_auth.getUserPhotoUrl)
             )
-
-
             ],
           ),
       
