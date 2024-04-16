@@ -1,12 +1,16 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:frontend/providers/user_provider.dart";
+import "package:frontend/services/authentication_service.dart";
 import "package:frontend/views/Login/index.dart";
 import "package:frontend/views/Onboarding/index.dart";
 import "package:frontend/widgets/back_button_widget.dart";
 import "package:frontend/widgets/button_widget.dart";
+import "package:frontend/widgets/snackbar_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
 import "package:frontend/widgets/textfield_widget.dart";
 import "package:frontend/widgets/wrapper_widget.dart";
+import "package:provider/provider.dart";
 
 class RegisterView extends StatefulWidget {
   const RegisterView({ super.key });
@@ -24,6 +28,8 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController _password = TextEditingController(text : "");
   final TextEditingController _rePassword = TextEditingController(text : "");
 
+  bool _isValid = true;
+
   @override
   void dispose(){
     super.dispose();
@@ -36,6 +42,8 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context){
+    final UserProvider _userProvider = Provider.of<UserProvider>(context);
+
     return Scaffold(
       body : MSWrapperWidget(
         child : Padding(
@@ -82,6 +90,7 @@ class _RegisterViewState extends State<RegisterView> {
           MSTextFieldWidget(
             controller : _name,
             fieldLabelText: "Full Name",
+            fieldIsValid: true,
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
@@ -97,6 +106,7 @@ class _RegisterViewState extends State<RegisterView> {
 
           MSTextFieldWidget(
             controller : _email,
+            fieldIsValid: _isValid,
             fieldLabelText: "Email Address",
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
@@ -115,6 +125,7 @@ class _RegisterViewState extends State<RegisterView> {
             controller : _password,
             fieldIsObsecure: true,
             fieldLabelText: "Password",
+            fieldIsValid: _isValid,
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
@@ -132,6 +143,7 @@ class _RegisterViewState extends State<RegisterView> {
             controller : _rePassword,
             fieldIsObsecure: true,
             fieldLabelText: "Confirm Password",
+            fieldIsValid: _isValid,
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
@@ -197,5 +209,30 @@ class _RegisterViewState extends State<RegisterView> {
         builder : (context) => const LoginView(),
       )
     );
+  }
+
+  Future<void> signUpWithEmail({
+    required UserProvider userProvider,
+    required String name,
+    required String email,
+    required String password
+  }) async {
+    try {
+      await MakerSyncAuthentication().signUpWithEmail(name, email, password);
+
+      await userProvider.addUserCredential(
+        email: email,
+        name: name
+      );
+
+      const MSSnackbarWidget(
+        message: "Successfully created an account!",
+      ).showSnackbar(context);
+
+      print("Sign up success!");
+
+    } catch (e) {
+      print("Sign up failed!: $e");
+    }
   }
 }
