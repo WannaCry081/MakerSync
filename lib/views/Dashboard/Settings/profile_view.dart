@@ -1,11 +1,9 @@
 import "package:flutter/material.dart";
-import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:frontend/models/user_model.dart";
 import "package:frontend/providers/user_provider.dart";
 import "package:frontend/services/authentication_service.dart";
 import "package:frontend/utils/form_validator.dart";
-import "package:frontend/views/Dashboard/Settings/index.dart";
 import "package:frontend/widgets/back_button_widget.dart";
 import "package:frontend/widgets/button_widget.dart";
 import "package:frontend/widgets/snackbar_widget.dart";
@@ -31,7 +29,6 @@ class _ProfileViewState extends State<ProfileView> {
   late TextEditingController _newDisplayName;
 
   bool _isLoading = false;
-  late bool _isValid = true;
 
   @override
   void initState() {
@@ -45,6 +42,7 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   void dispose(){
     super.dispose();
+    
     _currentDisplayName.dispose();
     _newDisplayName.dispose();
   }
@@ -168,22 +166,23 @@ class _ProfileViewState extends State<ProfileView> {
 
           SizedBox(height : 15.h),
 
-            MSTextFieldWidget(
-              controller : _newDisplayName,
-              fieldLabelText: "New Display Name",
-              fieldValidator: (value) => FormValidator()
-                .validateInput(value, "Name", 2, 20),
-              fieldIsValid: _isValid,
-              fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
-                ? Theme.of(context).colorScheme.tertiary
-                : Colors.grey.shade50,
-              fieldBorderColor: (Theme.of(context).brightness == Brightness.dark)
-                ? Colors.grey.shade600
-                : Colors.grey.shade300,
-              fieldLabelColor: (Theme.of(context).brightness == Brightness.dark) 
-                ? Colors.grey.shade400 
-                : Colors.grey.shade600
-            ),
+          MSTextFieldWidget(
+            controller : _newDisplayName,
+            fieldLabelText: "New Display Name",
+            fieldValidator: (value) => FormValidator()
+              .validateInput(value, "Name", 2, 20),
+            fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
+              ? Theme.of(context).colorScheme.tertiary
+              : Colors.grey.shade50,
+            fieldBorderColor: (Theme.of(context).brightness == Brightness.dark)
+              ? Colors.grey.shade600
+              : Colors.grey.shade300,
+            fieldLabelColor: (Theme.of(context).brightness == Brightness.dark) 
+              ? Colors.grey.shade400 
+              : Colors.grey.shade600
+          ),
+
+          SizedBox(height : 15.h),
 
           const Spacer(),
 
@@ -192,11 +191,9 @@ class _ProfileViewState extends State<ProfileView> {
           MSButtonWidget(
             btnOnTap: () async {
               if (_form.currentState!.validate()){
+                _form.currentState!.save();
                 await updateUser();
-              } else {
-                setState(() => _isValid = false);
-                print("Error!");
-              }
+              } 
             },
             btnIsLoading: _isLoading,
             btnColor: Theme.of(context).colorScheme.primary,
