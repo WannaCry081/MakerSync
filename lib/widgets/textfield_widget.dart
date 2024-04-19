@@ -77,7 +77,7 @@ class _MSTextFieldWidgetState extends State<MSTextFieldWidget> {
               () => _showPassword = !_showPassword)
             )
           : null,
-        border: OutlineInputBorder(
+        border: UnderlineInputBorder(
           borderRadius: BorderRadius.circular(widget.fieldRadius ?? 10.r),
           borderSide: BorderSide(
             color: widget.fieldBorderColor!,
