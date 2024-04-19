@@ -232,20 +232,23 @@ class _RegisterViewState extends State<RegisterView> {
 
   Future<void> signUpWithEmail(UserProvider userProvider) async {
     try {
-      await MakerSyncAuthentication().signUpWithEmail(
-        _email.text.trim(),
-        _name.text.trim(),
-        _password.text.trim()
-      );
+      setState(() => _isLoading = true);
 
-      await userProvider.addUserCredential(
-        email: _email.text.trim(),
-        name: _name.text.trim()
+      await MakerSyncAuthentication().signUpWithEmail(
+        _name.text.trim(),
+        _email.text.trim(),
+        _password.text.trim(),
+        context
       );
 
       const MSSnackbarWidget(
         message: "Successfully created an account!",
       ).showSnackbar(context);
+
+       Future.delayed(
+          const Duration(seconds: 1),
+            () => setState(() => _isLoading = false)
+        );
 
       print("Sign up success!");
 
