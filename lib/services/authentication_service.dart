@@ -1,4 +1,6 @@
 import "package:firebase_auth/firebase_auth.dart";
+import "package:flutter/material.dart";
+import "package:frontend/views/Dashboard/index.dart";
 import "package:google_sign_in/google_sign_in.dart";
 
 
@@ -7,7 +9,7 @@ class MakerSyncAuthentication {
   final _auth = FirebaseAuth.instance;
   GoogleSignInAccount? _googleUser;
 
-  Future<bool> signInWithEmail (String email, String password) async {
+  Future<bool> signInWithEmail(String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(
         email: email,
@@ -22,13 +24,14 @@ class MakerSyncAuthentication {
     }
   }
 
-  Future<bool> signUpWithEmail (
+  Future<void> signUpWithEmail (
     String name,
     String email,
-    String password
+    String password,
+    BuildContext context
   ) async {
     try {
-        UserCredential credential = await _auth.createUserWithEmailAndPassword(
+      UserCredential credential = await _auth.createUserWithEmailAndPassword(
         email: email, 
         password: password
       );
@@ -36,11 +39,15 @@ class MakerSyncAuthentication {
       credential.user?.updateDisplayName(name);
       // credential.user?.updatePhotoURL();
 
-      print("sign up success!");
-      return true;
+      FirebaseAuth.instance.authStateChanges().listen((User? user) {
+        if (user != null) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => DashboardView()));
+        }
+    });
+
     } on FirebaseAuthException catch (_) {
       print("sign up failed!");
-      return false;
     }
   }
 
