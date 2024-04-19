@@ -1,6 +1,7 @@
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:frontend/views/Dashboard/index.dart";
+import "package:frontend/views/Onboarding/index.dart";
 import "package:google_sign_in/google_sign_in.dart";
 
 
@@ -44,7 +45,7 @@ class MakerSyncAuthentication {
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => DashboardView()));
         }
-    });
+      });
 
     } on FirebaseAuthException catch (_) {
       print("sign up failed!");
@@ -69,13 +70,18 @@ class MakerSyncAuthentication {
     ];
   }
 
-  Future<void> authenticationLogout() async {
-    if (_googleUser != null) {
-      await GoogleSignIn().signOut();
-    }
-
+  Future<void> authenticationLogout(BuildContext context) async {
+    await GoogleSignIn().signOut();
     await _auth.signOut();
     _googleUser = null;
+
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+        if (user == null) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const OnboardingView()));
+        }
+      });
+
     return;
   }
 
