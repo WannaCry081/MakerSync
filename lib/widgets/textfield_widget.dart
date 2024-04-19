@@ -49,62 +49,55 @@ class _MSTextFieldWidgetState extends State<MSTextFieldWidget> {
   
   @override
   Widget build(BuildContext context){
-    return Container(
-      height : widget.fieldHeight ?? 50.h,
-      width : widget.fieldWidth,
-      padding: EdgeInsets.only(
-        left: 15.w,
-        right: (widget.fieldIsObsecure)
-          ? 10.w
-          : 15.w,
-      ),
-      decoration: BoxDecoration(
-        color : widget.fieldBackground,
-        borderRadius: BorderRadius.circular(widget.fieldRadius ?? 10.r),
-        border : Border.all(
-          color : widget.fieldIsValid 
-            ? widget.fieldBorderColor ?? Colors.transparent
-            : Colors.red,
-          width : widget.fieldBorderWidth ?? 1.4.w
-        )
-      ),
-      child: Center(
-        child: Row(
-          children: [
-            Flexible(
-              child: TextFormField(
-                controller: widget.controller,
-                onChanged: widget.fieldOnChanged,
-                validator: widget.fieldValidator,
-                readOnly: widget.fieldIsReadOnly!,
-                obscureText: (widget.fieldIsObsecure && !_showPassword),
-                style: TextStyle(
-                  fontFamily : "Inter",
-                  fontSize : 16.sp,
-                ),     
-                decoration: InputDecoration(
-                  labelText: widget.fieldLabelText,
-                  labelStyle: TextStyle(
-                    fontFamily: "Inter",
-                    fontSize : 10.sp,
-                    color : widget.fieldLabelColor
-                  ),
-                  border : InputBorder.none,
-                ),
-              ),
-            ),
-
-            if (widget.fieldIsObsecure)
-              IconButton(
-                icon : (_showPassword) 
-                  ? const Icon(FeatherIcons.eyeOff) 
-                  : const Icon(FeatherIcons.eye),
-                onPressed: () => setState(
-                  () => _showPassword = !_showPassword),
-              ),
-          ],
+    return TextFormField(
+      controller: widget.controller,
+      onChanged: widget.fieldOnChanged,
+      validator: widget.fieldValidator,
+      readOnly: widget.fieldIsReadOnly!,
+      obscureText: (widget.fieldIsObsecure && !_showPassword),
+      style: TextStyle(
+        fontFamily : "Inter",
+        fontSize : 16.sp,
+      ),     
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: widget.fieldBackground,
+        labelText: widget.fieldLabelText,
+        labelStyle: TextStyle(
+          fontFamily: "Inter",
+          fontSize : 10.sp,
+          color : widget.fieldLabelColor
         ),
-      ),
+        suffixIcon: (widget.fieldIsObsecure)
+          ? IconButton(
+            icon: (_showPassword)
+              ? const Icon(FeatherIcons.eyeOff)
+              : const Icon(FeatherIcons.eye),
+            onPressed: () => setState(
+              () => _showPassword = !_showPassword)
+            )
+          : null,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(widget.fieldRadius ?? 10.r),
+          borderSide: BorderSide(
+            color: widget.fieldBorderColor!,
+            width : widget.fieldBorderWidth ?? 1.4.w
+          )
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(widget.fieldRadius ?? 10.r),
+          borderSide: BorderSide(
+            color: widget.fieldBorderColor!,
+            width : widget.fieldBorderWidth ?? 1.4.w
+          )
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: Colors.red.shade200,
+            width : widget.fieldBorderWidth ?? 1.4.w
+          )),
+        ),
     );
   }
 }
