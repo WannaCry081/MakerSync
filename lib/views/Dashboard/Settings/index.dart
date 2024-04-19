@@ -287,7 +287,7 @@ class _SettingsViewState extends State<SettingsView> {
   Future<void> authenticationLogout() async {
     setState(() => _isLoading = true);
 
-    await MakerSyncAuthentication().authenticationLogout();
+    await MakerSyncAuthentication().authenticationLogout(context);
     
     Future.delayed(
       const Duration(seconds: 2),
