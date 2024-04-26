@@ -135,7 +135,15 @@ class _LoginViewState extends State<LoginView> {
           SizedBox(height : 30.h),
           
           MSButtonWidget(
-            btnOnTap: navigateToDashboard,
+            btnOnTap: () async {
+              if (_form.currentState!.validate()){
+                _form.currentState!.save();
+                await signInWithEmail();
+              } else {
+                setState(() => _isLoading = false);
+                print("Error logging in!");
+              }
+            },
             btnColor : Theme.of(context).colorScheme.primary,
             child : Center(
               child : MSTextWidget(
