@@ -74,7 +74,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           MSBackButtonWidget(
-            btnOnTap: navigateToSettings
+            btnOnTap: () => Navigator.of(context).pop()
           ),
       
           SizedBox(height: 20.h),
@@ -170,11 +170,4 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
     );
   }
 
-  void navigateToSettings(){
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const SettingsView()
-      )
-    );
-  }
 }
