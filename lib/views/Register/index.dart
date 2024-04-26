@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:frontend/providers/user_provider.dart";
 import "package:frontend/services/authentication_service.dart";
 import "package:frontend/utils/form_validator.dart";
 import "package:frontend/views/Login/index.dart";
@@ -11,7 +10,6 @@ import "package:frontend/widgets/snackbar_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
 import "package:frontend/widgets/textfield_widget.dart";
 import "package:frontend/widgets/wrapper_widget.dart";
-import "package:provider/provider.dart";
 
 class RegisterView extends StatefulWidget {
   const RegisterView({ super.key });
@@ -43,7 +41,6 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context){
-    final UserProvider _userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
       body : MSWrapperWidget(
@@ -54,14 +51,14 @@ class _RegisterViewState extends State<RegisterView> {
           ),
 
           child : Center(
-            child : content(_userProvider)
+            child : content()
           )
         )
       ) 
     );
   }
 
-  Widget content(UserProvider userProvider){
+  Widget content(){
     return Form(
       key: _form,
       child: Column(
@@ -166,7 +163,7 @@ class _RegisterViewState extends State<RegisterView> {
             btnOnTap: () async {
               if(_form.currentState!.validate()){
                 _form.currentState!.save();
-                await signUpWithEmail(userProvider);
+                await signUpWithEmail();
               } else {
                 setState(() => _isLoading = false);
                 print("Error!");
@@ -225,7 +222,7 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  Future<void> signUpWithEmail(UserProvider userProvider) async {
+  Future<void> signUpWithEmail() async {
     try {
       setState(() => _isLoading = true);
 
