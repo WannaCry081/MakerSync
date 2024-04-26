@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:frontend/utils/form_validator.dart";
 import "package:frontend/views/Dashboard/Settings/index.dart";
 import "package:frontend/widgets/back_button_widget.dart";
 import "package:frontend/widgets/button_widget.dart";
@@ -97,6 +98,8 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
             controller : _currentPassword,
             fieldIsObsecure: true,
             fieldLabelText: "Current Password",
+            fieldValidator: (value) => FormValidator()
+              .validatePassword(value),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
@@ -114,6 +117,8 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
             controller : _newPassword,
             fieldLabelText: "New Password",
             fieldIsObsecure: true,
+            fieldValidator: (value) => FormValidator()
+              .validatePassword(value),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
@@ -131,6 +136,8 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
             controller : _confirmNewPassword,
             fieldLabelText: "Confirm New Password",
             fieldIsObsecure: true,
+            fieldValidator: (value) => FormValidator()
+              .validateConfirmPassword(value, _newPassword.text),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
