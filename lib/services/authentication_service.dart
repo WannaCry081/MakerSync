@@ -10,7 +10,7 @@ class MakerSyncAuthentication {
   final _auth = FirebaseAuth.instance;
   GoogleSignInAccount? _googleUser;
 
-  Future<bool> signInWithEmail(String email, String password) async {
+  Future<void> signInWithEmail(String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(
         email: email,
@@ -18,10 +18,8 @@ class MakerSyncAuthentication {
       );
       
       print("sign in success!");
-      return true;
     } on FirebaseAuthException catch (_) {
       print("sign in failed!");
-      return false;
     }
   }
 
