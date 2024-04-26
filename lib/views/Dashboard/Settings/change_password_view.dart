@@ -1,9 +1,11 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:frontend/services/authentication_service.dart";
 import "package:frontend/utils/form_validator.dart";
 import "package:frontend/views/Dashboard/Settings/index.dart";
 import "package:frontend/widgets/back_button_widget.dart";
 import "package:frontend/widgets/button_widget.dart";
+import "package:frontend/widgets/snackbar_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
 import "package:frontend/widgets/textfield_widget.dart";
 import "package:frontend/widgets/wrapper_widget.dart";
@@ -16,11 +18,14 @@ class ChangePasswordView extends StatefulWidget {
 }
 
 class _ChangePasswordViewState extends State<ChangePasswordView> {
+  late
 
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
   final TextEditingController _currentPassword = TextEditingController(text: "");
   final TextEditingController _newPassword = TextEditingController(text: "");
   final TextEditingController _confirmNewPassword = TextEditingController(text: "");
+
+  bool _isLoading = false;
 
   @override
   void dispose(){
@@ -154,7 +159,12 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
           SizedBox(height : 15.h),
 
           MSButtonWidget(
-            btnOnTap: (){},
+            btnOnTap: () async {
+              if(_form.currentState!.validate()) {
+                _form.currentState!.save();
+                await authenticationChangePassword();
+              }
+            },
             btnColor: Theme.of(context).colorScheme.primary,
             child: Center(
               child: MSTextWidget(
@@ -168,6 +178,29 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
         ]
       ),
     );
+  }
+
+  Future<void> authenticationChangePassword() async {
+    setState(() => _isLoading = true);
+
+    await MakerSyncAuthentication().authenticationChangePassword(
+      _currentPassword.text.trim(),
+      _newPassword.text.trim()
+    );
+
+    Future.delayed(
+      const Duration(seconds: 1),
+        () => setState(() => _isLoading = false)
+    );
+
+    const MSSnackbarWidget(
+      message: "Successfully updated your password!",
+    ).showSnackbar(context);
+
+    await Future.delayed(const Duration(seconds: 2));
+    Navigator.of(context).pop();
+
+
   }
 
 }
