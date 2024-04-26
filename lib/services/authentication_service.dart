@@ -85,6 +85,21 @@ class MakerSyncAuthentication {
     return;
   }
 
+  Future<void> authenticationChangePassword(
+    String oldPassword, 
+    String newPassword
+  ) async {
+    final currentUser = _auth.currentUser!;
+
+    final credential = EmailAuthProvider.credential(
+      email: currentUser.email!,
+      password: oldPassword
+    );
+
+    await currentUser.reauthenticateWithCredential(credential);
+    await currentUser.updatePassword(newPassword);
+  }
+
   String get getUserEmail => _auth.currentUser?.email ?? "";
   String get getUserDisplayName => _auth.currentUser?.displayName ?? "";
   String get getUserPhotoUrl => _auth.currentUser?.photoURL ?? "";
