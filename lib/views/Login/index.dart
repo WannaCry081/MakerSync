@@ -144,6 +144,7 @@ class _LoginViewState extends State<LoginView> {
                 print("Error logging in!");
               }
             },
+            btnIsLoading: _isLoading,
             btnColor : Theme.of(context).colorScheme.primary,
             child : Center(
               child : MSTextWidget(
@@ -218,7 +219,8 @@ class _LoginViewState extends State<LoginView> {
 
       await MakerSyncAuthentication().signInWithEmail(
         _email.text.trim(),
-        _password.text.trim()
+        _password.text.trim(),
+        context
       );
 
       const MSSnackbarWidget(
