@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:frontend/views/Dashboard/index.dart";
 import "package:frontend/views/Onboarding/index.dart";
 import "package:google_sign_in/google_sign_in.dart";
+import "package:persistent_bottom_nav_bar/persistent_tab_view.dart";
 
 
 class MakerSyncAuthentication {
@@ -10,12 +11,23 @@ class MakerSyncAuthentication {
   final _auth = FirebaseAuth.instance;
   GoogleSignInAccount? _googleUser;
 
-  Future<void> signInWithEmail(String email, String password) async {
+  Future<void> signInWithEmail(
+    String email,
+    String password,
+    BuildContext context
+  ) async {
     try {
       await _auth.signInWithEmailAndPassword(
         email: email,
         password: password
       );
+
+      FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => DashboardView()));
+      }
+    });
       
       print("sign in success!");
     } on FirebaseAuthException catch (_) {
@@ -75,8 +87,12 @@ class MakerSyncAuthentication {
 
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
         if (user == null) {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const OnboardingView()));
+        PersistentNavBarNavigator.pushNewScreen(
+            context,
+            screen: const OnboardingView(),
+            withNavBar: false,
+            pageTransitionAnimation: PageTransitionAnimation.cupertino,
+          );
         }
       });
 
