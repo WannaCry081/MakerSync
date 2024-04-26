@@ -30,7 +30,6 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController _rePassword = TextEditingController(text : "");
 
   bool _isLoading = false;
-  bool _isValid = true;
 
   @override
   void dispose(){
@@ -92,7 +91,6 @@ class _RegisterViewState extends State<RegisterView> {
           MSTextFieldWidget(
             controller : _name,
             fieldLabelText: "Full Name",
-            fieldIsValid: true,
             fieldValidator: (value) => FormValidator()
               .validateInput(value, "Name", 2, 50),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
@@ -110,7 +108,6 @@ class _RegisterViewState extends State<RegisterView> {
 
           MSTextFieldWidget(
             controller : _email,
-            fieldIsValid: _isValid,
             fieldLabelText: "Email Address",
             fieldValidator: (value) => FormValidator()
               .validateEmail(value),
@@ -131,7 +128,6 @@ class _RegisterViewState extends State<RegisterView> {
             controller : _password,
             fieldIsObsecure: true,
             fieldLabelText: "Password",
-            fieldIsValid: _isValid,
             fieldValidator: (value) => FormValidator()
               .validatePassword(value),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
@@ -151,7 +147,6 @@ class _RegisterViewState extends State<RegisterView> {
             controller : _rePassword,
             fieldIsObsecure: true,
             fieldLabelText: "Confirm Password",
-            fieldIsValid: _isValid,
             fieldValidator: (value) => FormValidator()
               .validateConfirmPassword(value, _password.text.trim()),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
