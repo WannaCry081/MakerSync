@@ -129,5 +129,11 @@ class _EmergencyViewState extends State<EmergencyView> {
       isInitialized: false,
     );
   }
+
+  void continueProgress() async { 
+    await _sensorProvider.updateSensor(
+        isInitialized: true,
+      );
+  }
   
 }
