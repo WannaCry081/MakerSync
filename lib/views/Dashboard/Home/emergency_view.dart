@@ -121,5 +121,13 @@ class _EmergencyViewState extends State<EmergencyView> {
     ).showSnackbar(context);
   }
 
+   void resetMachine() async { 
+    await _sensorProvider.updateSensor(
+      counter: 0,
+      timer: 0,
+      temperature: 0,
+      isInitialized: false,
+    );
+  }
   
 }
