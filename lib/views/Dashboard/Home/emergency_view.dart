@@ -110,5 +110,16 @@ class _EmergencyViewState extends State<EmergencyView> {
     );
   }
 
+  void stopMachine() async {
+    await _sensorProvider.updateSensor(
+      isStart: false,
+      isStop: true
+    );
+
+    const MSSnackbarWidget(
+      message: "You have stopped the machine operation.",
+    ).showSnackbar(context);
+  }
+
   
 }
