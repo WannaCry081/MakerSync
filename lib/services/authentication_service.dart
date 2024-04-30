@@ -25,8 +25,7 @@ class MakerSyncAuthentication {
   Future<void> signUpWithEmail (
     String name,
     String email,
-    String password,
-    BuildContext context
+    String password
   ) async {
     try {
       UserCredential credential = await _auth.createUserWithEmailAndPassword(
@@ -36,13 +35,6 @@ class MakerSyncAuthentication {
 
       credential.user?.updateDisplayName(name);
       // credential.user?.updatePhotoURL();
-
-      FirebaseAuth.instance.authStateChanges().listen((User? user) {
-        if (user != null) {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => DashboardView()));
-        }
-      });
 
     } on FirebaseAuthException catch (_) {
       print("sign up failed!");
