@@ -6,11 +6,11 @@ class FormValidator {
         caseSensitive: false);
 
     if (value == null || value.isEmpty) {
-      return "Email Address is Required";
+      return "Email address is required";
     }
 
     if (!expression.hasMatch(value)) {
-      return "Invalid Email Address. Please try again.";
+      return "Invalid email address. Please try again.";
     }
 
     return null;
