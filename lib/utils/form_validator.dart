@@ -18,7 +18,7 @@ class FormValidator {
 
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return "Password is Required";
+      return "Password is required";
     }
 
     if (value.length < 8) {
