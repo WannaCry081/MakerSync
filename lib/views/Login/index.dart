@@ -227,10 +227,21 @@ class _LoginViewState extends State<LoginView> {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => DashboardView()));
 
-      print("Sign in success in login view!");
     } on FirebaseAuthException catch (e) {
 
-      print("Sign in failed in login view!: ${e.code}");
+      print("Sign in failed!: ${e.code}");
+
+      MSSnackbarWidget(
+        message: (e.code == "invalid-credential") 
+          ? "Invalid email or password." 
+          : (e.code == "user-not-found") 
+          ? "User does not exist." 
+          : (e.code == "wrong-password") 
+          ? "Wrong Password" : 
+              "System Error",
+      ).showSnackbar(context);
+
+       setState(() => _isLoading = false);
     }
   }
 }
