@@ -141,10 +141,13 @@ class _EmergencyViewState extends State<EmergencyView> {
   }
 
   void continueProgress() async { 
-    print("continue progress!");
     await _sensorProvider.updateSensor(
       isInitialized: true,
     );
+
+    if (widget.navigateToOverview != null) {
+      widget.navigateToOverview!(); 
+    }
   }
   
 }
