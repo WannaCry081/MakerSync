@@ -128,13 +128,16 @@ class _EmergencyViewState extends State<EmergencyView> {
   }
 
    void resetMachine() async { 
-    print("reset machine!");
     await _sensorProvider.updateSensor(
       counter: 0,
       timer: 0,
       temperature: 0,
       isInitialized: false,
     );
+
+    if (widget.navigateToOverview != null) {
+      widget.navigateToOverview!(); 
+    }
   }
 
   void continueProgress() async { 
