@@ -20,6 +20,7 @@ class InitializeView extends StatefulWidget {
 }
 
 class _InitializeViewState extends State<InitializeView> {
+   bool _isLoading = false;
   
   int _clickedOption = -1;
   final _options = [
@@ -59,7 +60,7 @@ class _InitializeViewState extends State<InitializeView> {
   @override
   Widget build(BuildContext context) {
 
-    final SettingsProvider settings = Provider.of<SettingsProvider>(context, listen: false);
+    final SettingsProvider settings = Provider.of<SettingsProvider>(context, listen: false);;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -113,7 +114,10 @@ class _InitializeViewState extends State<InitializeView> {
         ),
         
         MSButtonWidget(
-          btnOnTap: () => initializeMachine(settings: settings),
+          btnOnTap: () => initializeMachine(
+            settings: settings
+          ),
+          btnIsLoading: _isLoading,
           btnColor: Theme.of(context).colorScheme.primary,
           child: Center(
             child: MSTextWidget(
@@ -199,10 +203,11 @@ class _InitializeViewState extends State<InitializeView> {
   );
 }
 
-  void initializeMachine({
+  Future<void> initializeMachine({
     required SettingsProvider settings
   }) async {
     try {
+      setState(() => _isLoading = true);
       await widget.sensorProvider.updateSensor(
           isInitialized: true,
           isStart: true,
@@ -211,6 +216,11 @@ class _InitializeViewState extends State<InitializeView> {
       );
 
       settings.setBool("isConnect", true);
+
+      Future.delayed(
+      const Duration(seconds: 2),
+        () => setState(() => _isLoading = false),
+      );
 
     } catch (e) {
       print("Error updating sensor: $e");

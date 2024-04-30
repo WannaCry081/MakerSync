@@ -179,7 +179,7 @@ class OnboardingView extends StatelessWidget {
   }
 
   Future<void> signInGoogleAuth() async {
-    await MakerSyncAuthentication().authenticationSignInWithGoogle();
+    await MakerSyncAuthentication().signInWithGoogle();
     return; 
   }
 

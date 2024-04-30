@@ -10,6 +10,7 @@ class MSButtonWidget extends StatefulWidget {
   final double? btnRadius;
   final Color? btnColor;
   final Color? btnBorderColor;
+  final bool? btnIsLoading;
   final void Function()? btnOnTap;
 
   const MSButtonWidget({
@@ -21,7 +22,8 @@ class MSButtonWidget extends StatefulWidget {
     this.btnRadius,
     this.btnColor,
     this.btnBorderColor,
-    this.btnOnTap,
+    this.btnIsLoading = false,
+    this.btnOnTap
   });
 
   @override
@@ -34,7 +36,7 @@ class _MSButtonWidgetState extends State<MSButtonWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.btnOnTap,
+      onTap: widget.btnIsLoading != null && widget.btnIsLoading! ? null : widget.btnOnTap,
       onTapDown: (_) {
         setState(() {
           _highlightColor = _calculateHighlightColor(widget.btnColor);
@@ -61,7 +63,19 @@ class _MSButtonWidgetState extends State<MSButtonWidget> {
           borderRadius: BorderRadius.circular(widget.btnRadius ?? 8.r),
           color: _highlightColor ?? widget.btnColor,
         ),
-        child: Center(child: widget.child),
+        child: Center(
+          child: widget.btnIsLoading != null && widget.btnIsLoading!
+            ? Container(
+                width: 25,
+                height: 25,
+                padding: const EdgeInsets.all(2.0),
+                child: const CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 3,
+                ),
+              )
+            : widget.child
+        ),
       ),
     );
   }

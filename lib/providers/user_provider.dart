@@ -56,7 +56,8 @@ class UserProvider with ChangeNotifier {
   }) async {
 
     await _userService.updateUser(
-      email: _email
+      email: _email,
+      name: name
     );
 
     await fetchUserCredential();

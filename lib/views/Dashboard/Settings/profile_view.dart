@@ -1,13 +1,16 @@
 import "package:flutter/material.dart";
-import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:flutter_svg/svg.dart";
-import "package:frontend/views/Dashboard/Settings/index.dart";
+import "package:frontend/models/user_model.dart";
+import "package:frontend/providers/user_provider.dart";
+import "package:frontend/services/authentication_service.dart";
+import "package:frontend/utils/form_validator.dart";
 import "package:frontend/widgets/back_button_widget.dart";
 import "package:frontend/widgets/button_widget.dart";
+import "package:frontend/widgets/snackbar_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
 import "package:frontend/widgets/textfield_widget.dart";
 import "package:frontend/widgets/wrapper_widget.dart";
+import "package:provider/provider.dart";
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -18,14 +21,29 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
 
+  late UserModel? _user;
+  late UserProvider _userProvider;
+
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
-  final TextEditingController _currentDisplayName = TextEditingController(text: "Shiela Mae");
-  final TextEditingController _newDisplayName = TextEditingController(text: "");
+  late TextEditingController _currentDisplayName;
+  late TextEditingController _newDisplayName;
+
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _userProvider = Provider.of<UserProvider>(context, listen: false);
+    _user = context.read<UserProvider>().getUserData();
+    _currentDisplayName = TextEditingController(text: _user?.name);
+    _newDisplayName = TextEditingController(text: "");
+  }
 
   @override
   void dispose(){
     super.dispose();
-
+    
+    _currentDisplayName.dispose();
     _newDisplayName.dispose();
   }
   
@@ -66,6 +84,9 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   Widget content(){
+
+    final auth = MakerSyncAuthentication();
+
     return Form(
       key: _form,
       child: Column(
@@ -74,7 +95,8 @@ class _ProfileViewState extends State<ProfileView> {
           Row(
             children: [
               MSBackButtonWidget(
-                btnOnTap: navigateToSettings
+                btnOnTap: () => Navigator.of(context).pop()
+                // btnOnTap: navigateToSettings
               ),
 
               SizedBox(width: 15.w),
@@ -96,29 +118,29 @@ class _ProfileViewState extends State<ProfileView> {
               alignment: Alignment.center,
               child: Stack(
                 children:[
-                  SvgPicture.asset(
-                    Theme.of(context).brightness == Brightness.dark
-                    ? "assets/svgs/Logo_DarkMode.svg"
-                    : "assets/svgs/Logo_LightMode.svg",
-                    height: 150.h
+
+                  CircleAvatar(
+                    radius: 75.r,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    backgroundImage: NetworkImage(auth.getUserPhotoUrl),
                   ),
                   
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      height: 45.h,
-                      width: 45.w,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      child: Icon(
-                        FeatherIcons.camera,
-                        color: Theme.of(context).colorScheme.background
-                      ),
-                    )
-                  )
+                  // Positioned(
+                  //   bottom: 0,
+                  //   right: 0,
+                  //   child: Container(
+                  //     height: 45.h,
+                  //     width: 45.w,
+                  //     decoration: BoxDecoration(
+                  //       shape: BoxShape.circle,
+                  //       color: Theme.of(context).colorScheme.secondary,
+                  //     ),
+                  //     child: Icon(
+                  //       FeatherIcons.camera,
+                  //       color: Theme.of(context).colorScheme.background
+                  //     ),
+                  //   )
+                  // )
                 ]
               )
             ),
@@ -129,6 +151,7 @@ class _ProfileViewState extends State<ProfileView> {
           MSTextFieldWidget(
             controller : _currentDisplayName,
             fieldIsReadOnly: true,
+            fieldIsValid: true,
             fieldLabelText: "Current Display Name",
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
@@ -143,9 +166,11 @@ class _ProfileViewState extends State<ProfileView> {
 
           SizedBox(height : 15.h),
 
-           MSTextFieldWidget(
+          MSTextFieldWidget(
             controller : _newDisplayName,
             fieldLabelText: "New Display Name",
+            fieldValidator: (value) => FormValidator()
+              .validateInput(value, "Name", 2, 20),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
@@ -157,12 +182,20 @@ class _ProfileViewState extends State<ProfileView> {
               : Colors.grey.shade600
           ),
 
+          SizedBox(height : 15.h),
+
           const Spacer(),
 
           SizedBox(height : 15.h),
 
           MSButtonWidget(
-            btnOnTap: (){},
+            btnOnTap: () async {
+              if (_form.currentState!.validate()){
+                _form.currentState!.save();
+                await updateUser();
+              } 
+            },
+            btnIsLoading: _isLoading,
             btnColor: Theme.of(context).colorScheme.primary,
             child: Center(
               child: MSTextWidget(
@@ -177,12 +210,27 @@ class _ProfileViewState extends State<ProfileView> {
       ),
     );
   }
+  
 
-  void navigateToSettings(){
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const SettingsView()
-      )
-    );
-  }
+ Future<void> updateUser() async {
+  setState(() => _isLoading = true);
+
+  await _userProvider.updateUserCredential(
+    email: _user?.email ?? "",
+    name: _newDisplayName.text.trim()
+  );
+
+  Future.delayed(
+    const Duration(seconds: 1),
+      () => setState(() => _isLoading = false)
+  );
+
+  const MSSnackbarWidget(
+    message: "Successfully updated your display name!",
+  ).showSnackbar(context);
+
+  await Future.delayed(const Duration(seconds: 2));
+  Navigator.of(context).pop();
+}
+
 }

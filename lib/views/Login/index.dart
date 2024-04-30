@@ -1,9 +1,13 @@
+import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:frontend/services/authentication_service.dart";
+import "package:frontend/utils/form_validator.dart";
 import "package:frontend/views/Dashboard/index.dart";
 import "package:frontend/views/Onboarding/index.dart";
 import "package:frontend/views/ForgotPassword/index.dart";
 import "package:frontend/views/Register/index.dart";
+import "package:frontend/widgets/snackbar_widget.dart";
 import "package:frontend/widgets/wrapper_widget.dart";
 import "package:frontend/widgets/button_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
@@ -24,6 +28,8 @@ class _LoginViewState extends State<LoginView> {
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
   final TextEditingController _email = TextEditingController(text : "");
   final TextEditingController _password = TextEditingController(text : "");
+
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -81,6 +87,8 @@ class _LoginViewState extends State<LoginView> {
           MSTextFieldWidget(
             controller : _email,
             fieldLabelText: "Email Address",
+            fieldValidator: (value) => FormValidator()
+              .validateEmail(value),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
@@ -98,6 +106,8 @@ class _LoginViewState extends State<LoginView> {
             controller : _password,
             fieldIsObsecure: true,
             fieldLabelText: "Password",
+            fieldValidator: (value) => FormValidator()
+              .validatePassword(value),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
@@ -126,7 +136,15 @@ class _LoginViewState extends State<LoginView> {
           SizedBox(height : 30.h),
           
           MSButtonWidget(
-            btnOnTap: navigateToDashboard,
+            btnOnTap: () async {
+              if (_form.currentState!.validate()){
+
+                _form.currentState!.save();
+                await signInWithEmail();
+
+              }
+            },
+            btnIsLoading: _isLoading,
             btnColor : Theme.of(context).colorScheme.primary,
             child : Center(
               child : MSTextWidget(
@@ -187,11 +205,42 @@ class _LoginViewState extends State<LoginView> {
     );
   } 
 
-  void navigateToDashboard() {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => DashboardView()
-      )
-    );
+  Future<void> signInWithEmail() async {
+    try {
+      setState(() => _isLoading = true);
+
+      await MakerSyncAuthentication().signInWithEmail(
+        _email.text.trim(),
+        _password.text.trim(),
+      );
+
+      const MSSnackbarWidget(
+        message: "Successfully signed in into account!",
+      ).showSnackbar(context);
+
+      Future.delayed(
+        const Duration(seconds: 1),
+          () => setState(() => _isLoading = false)
+      );
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => DashboardView()));
+
+    } on FirebaseAuthException catch (e) {
+
+      print("Sign in failed!: ${e.code}");
+
+      MSSnackbarWidget(
+        message: (e.code == "invalid-credential") 
+          ? "Invalid email or password." 
+          : (e.code == "user-not-found") 
+          ? "User does not exist." 
+          : (e.code == "wrong-password") 
+          ? "Wrong Password" : 
+              "System Error",
+      ).showSnackbar(context);
+
+      setState(() => _isLoading = false);
+    }
   }
 }

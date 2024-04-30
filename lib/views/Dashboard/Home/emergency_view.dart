@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/models/sensor_model.dart';
 import 'package:frontend/providers/sensor_provider.dart';
 import 'package:frontend/providers/settings_provider.dart';
+import 'package:frontend/widgets/dialog_widget.dart';
 import 'package:frontend/widgets/disconnected_view.dart';
 import 'package:frontend/widgets/snackbar_widget.dart';
 import 'package:frontend/widgets/text_widget.dart';
 import 'package:provider/provider.dart';
 
 class EmergencyView extends StatefulWidget {
-  const EmergencyView({super.key});
+  final VoidCallback? navigateToOverview;
+
+  const EmergencyView({
+    Key? key, 
+    this.navigateToOverview
+  }) : super(key:key);
 
   @override
   State<EmergencyView> createState() => _EmergencyViewState();
@@ -30,12 +37,14 @@ class _EmergencyViewState extends State<EmergencyView> {
     final _isConnect = settings.getBool("isConnect");
     final _isInitialize = settings.getBool("isInitialize");
 
+    final SensorModel? sensor = _sensorProvider.getSensorData();
+
     return _isConnect && _isInitialize
-      ? content()
+      ? content(sensor)
       : const DisconnectedViewWidget();
   }
 
-  Widget content() {
+  Widget content(SensorModel? sensor) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -54,7 +63,29 @@ class _EmergencyViewState extends State<EmergencyView> {
             Positioned.fill(
               child: Center(
                 child: ElevatedButton(
-                  onPressed: () => stopSensor(),
+                  // onPressed: sensor == null ? null : () => stopSensor(),
+                  onPressed: ()  {
+                    // if (widget.navigateToOverview != null) {
+                    //   widget.navigateToOverview!(); 
+                    // }
+
+                    stopMachine();
+
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context){
+                        return MSDialogWidget(
+                          dialogTitle: "Would you like to continue the progress?", 
+                          dialogSubtitle: "Please choose between re-intializing the machine or continuing the current progress.",
+                          dialogOption1: "Continue the progress.", 
+                          dialogOption2: "Re-initialize the machine.",
+                          dialogOption1Ontap: continueProgress,
+                          dialogOption2Ontap: resetMachine,
+                        );
+                      }
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     shape: const CircleBorder(),
                     padding: EdgeInsets.symmetric(
@@ -85,19 +116,38 @@ class _EmergencyViewState extends State<EmergencyView> {
     );
   }
 
-
-  void stopSensor() async { 
+  void stopMachine() async {
     await _sensorProvider.updateSensor(
-        counter: 0,
-        timer: 0,
-        temperature: 0,
-        isInitialized: false,
-        isStart: false,
-        isStop: true
-      );
+      isStart: false,
+      isStop: true
+    );
 
-      const MSSnackbarWidget(
-        message: "You have stopped the machine operation.",
-      ).showSnackbar(context);
+    const MSSnackbarWidget(
+      message: "You have stopped the machine operation.",
+    ).showSnackbar(context);
   }
+
+   void resetMachine() async { 
+    await _sensorProvider.updateSensor(
+      counter: 0,
+      timer: 0,
+      temperature: 0,
+      isInitialized: false,
+    );
+
+    if (widget.navigateToOverview != null) {
+      widget.navigateToOverview!(); 
+    }
+  }
+
+  void continueProgress() async { 
+    await _sensorProvider.updateSensor(
+      isInitialized: true,
+    );
+
+    if (widget.navigateToOverview != null) {
+      widget.navigateToOverview!(); 
+    }
+  }
+  
 }

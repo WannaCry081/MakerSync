@@ -29,6 +29,7 @@ class _SettingsViewState extends State<SettingsView> {
 
   bool _showDisconnectButton = false;
   bool _isNotifications = false;
+  bool _isLoading = false;
 
   UserModel? _user;
 
@@ -172,7 +173,8 @@ class _SettingsViewState extends State<SettingsView> {
         SizedBox(height: 15.h),
 
         MSButtonWidget(
-          btnOnTap: authenticationLogout,
+          btnOnTap: () => authenticationLogout(),
+          btnIsLoading: _isLoading,
           btnColor: Theme.of(context).colorScheme.primary,
           child: Center(
             child: MSTextWidget(
@@ -283,8 +285,14 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   Future<void> authenticationLogout() async {
-    await MakerSyncAuthentication().authenticationLogout();
-    return;
+    setState(() => _isLoading = true);
+
+    await MakerSyncAuthentication().authenticationLogout(context);
+    
+    Future.delayed(
+      const Duration(seconds: 2),
+        () => setState(() => _isLoading = false),
+    );
   }
 
   Future<void> disconnectFromDevice() async {

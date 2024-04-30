@@ -1,9 +1,14 @@
+import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:frontend/services/authentication_service.dart";
+import "package:frontend/utils/form_validator.dart";
+import "package:frontend/views/Dashboard/index.dart";
 import "package:frontend/views/Login/index.dart";
 import "package:frontend/views/Onboarding/index.dart";
 import "package:frontend/widgets/back_button_widget.dart";
 import "package:frontend/widgets/button_widget.dart";
+import "package:frontend/widgets/snackbar_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
 import "package:frontend/widgets/textfield_widget.dart";
 import "package:frontend/widgets/wrapper_widget.dart";
@@ -24,6 +29,8 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController _password = TextEditingController(text : "");
   final TextEditingController _rePassword = TextEditingController(text : "");
 
+  bool _isLoading = false;
+
   @override
   void dispose(){
     super.dispose();
@@ -36,6 +43,7 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context){
+
     return Scaffold(
       body : MSWrapperWidget(
         child : Padding(
@@ -82,6 +90,8 @@ class _RegisterViewState extends State<RegisterView> {
           MSTextFieldWidget(
             controller : _name,
             fieldLabelText: "Full Name",
+            fieldValidator: (value) => FormValidator()
+              .validateInput(value, "Name", 2, 50),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
@@ -98,6 +108,8 @@ class _RegisterViewState extends State<RegisterView> {
           MSTextFieldWidget(
             controller : _email,
             fieldLabelText: "Email Address",
+            fieldValidator: (value) => FormValidator()
+              .validateEmail(value),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
@@ -115,6 +127,8 @@ class _RegisterViewState extends State<RegisterView> {
             controller : _password,
             fieldIsObsecure: true,
             fieldLabelText: "Password",
+            fieldValidator: (value) => FormValidator()
+              .validatePassword(value),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
@@ -132,6 +146,8 @@ class _RegisterViewState extends State<RegisterView> {
             controller : _rePassword,
             fieldIsObsecure: true,
             fieldLabelText: "Confirm Password",
+            fieldValidator: (value) => FormValidator()
+              .validateConfirmPassword(value, _password.text.trim()),
             fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
               ? Theme.of(context).colorScheme.tertiary
               : Colors.grey.shade50,
@@ -146,7 +162,13 @@ class _RegisterViewState extends State<RegisterView> {
           SizedBox(height : 30.h),
           
           MSButtonWidget(
-            btnOnTap: (){},
+            btnOnTap: () async {
+              if(_form.currentState!.validate()){
+                _form.currentState!.save();
+                await signUpWithEmail();
+              } 
+            },
+            btnIsLoading: _isLoading,
             btnColor : Theme.of(context).colorScheme.primary,
             child : Center(
               child : MSTextWidget(
@@ -197,5 +219,42 @@ class _RegisterViewState extends State<RegisterView> {
         builder : (context) => const LoginView(),
       )
     );
+  }
+
+  Future<void> signUpWithEmail() async {
+    try {
+      setState(() => _isLoading = true);
+
+      await MakerSyncAuthentication().signUpWithEmail(
+        _name.text.trim(),
+        _email.text.trim(),
+        _password.text.trim(),
+      );
+
+      const MSSnackbarWidget(
+        message: "Successfully created an account!",
+      ).showSnackbar(context);
+
+      Future.delayed(
+        const Duration(seconds: 1),
+          () => setState(() => _isLoading = false)
+      );
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => DashboardView()));
+
+    } on FirebaseAuthException catch (e) {
+      print("Sign up failed!: ${e.code}");
+
+      MSSnackbarWidget(
+        message: (e.code == "invalid-credential") 
+          ? "Invalid credentials." 
+          : (e.code == "email-already-in-use") 
+          ? "Email already in use. Please try another." 
+          : "Error! Please try again.",
+      ).showSnackbar(context);
+
+      setState(() => _isLoading = false);
+    }
   }
 }
