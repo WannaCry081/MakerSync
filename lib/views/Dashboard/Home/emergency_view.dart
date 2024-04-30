@@ -64,19 +64,25 @@ class _EmergencyViewState extends State<EmergencyView> {
               child: Center(
                 child: ElevatedButton(
                   // onPressed: sensor == null ? null : () => stopSensor(),
-                  onPressed: () {
-                    if (widget.navigateToOverview != null) {
-                      widget.navigateToOverview!(); // Call the callback function
-                    }
+                  onPressed: ()  {
+                    // if (widget.navigateToOverview != null) {
+                    //   widget.navigateToOverview!(); 
+                    // }
+
+                    stopMachine();
+
                     showDialog(
                       context: context,
                       barrierDismissible: false,
                       builder: (BuildContext context){
-                        return const MSDialogWidget(
+                        return MSDialogWidget(
                           dialogTitle: "Would you like to continue the progress?", 
                           dialogSubtitle: "Please choose between re-intializing the machine or continuing the current progress.",
                           dialogOption1: "Continue the progress.", 
-                          dialogOption2: "Re-initialize the machine.");
+                          dialogOption2: "Re-initialize the machine.",
+                          dialogOption1Ontap: continueProgress,
+                          dialogOption2Ontap: resetMachine,
+                        );
                       }
                     );
                   },
@@ -122,6 +128,7 @@ class _EmergencyViewState extends State<EmergencyView> {
   }
 
    void resetMachine() async { 
+    print("reset machine!");
     await _sensorProvider.updateSensor(
       counter: 0,
       timer: 0,
@@ -131,9 +138,10 @@ class _EmergencyViewState extends State<EmergencyView> {
   }
 
   void continueProgress() async { 
+    print("continue progress!");
     await _sensorProvider.updateSensor(
-        isInitialized: true,
-      );
+      isInitialized: true,
+    );
   }
   
 }
