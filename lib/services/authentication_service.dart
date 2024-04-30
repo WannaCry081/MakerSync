@@ -27,7 +27,6 @@ class MakerSyncAuthentication {
     String email,
     String password
   ) async {
-    try {
       UserCredential credential = await _auth.createUserWithEmailAndPassword(
         email: email, 
         password: password
@@ -35,10 +34,6 @@ class MakerSyncAuthentication {
 
       credential.user?.updateDisplayName(name);
       // credential.user?.updatePhotoURL();
-
-    } on FirebaseAuthException catch (_) {
-      print("sign up failed!");
-    }
   }
 
   Future<List<String>> signInWithGoogle() async {
