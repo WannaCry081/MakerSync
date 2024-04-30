@@ -10,29 +10,16 @@ class MakerSyncAuthentication {
   
   final _auth = FirebaseAuth.instance;
   GoogleSignInAccount? _googleUser;
+  
 
   Future<void> signInWithEmail(
     String email,
     String password,
-    BuildContext context
   ) async {
-    try {
       await _auth.signInWithEmailAndPassword(
         email: email,
         password: password
       );
-
-      FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user != null) {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => DashboardView()));
-      }
-    });
-      
-      print("sign in success!");
-    } on FirebaseAuthException catch (_) {
-      print("sign in failed!");
-    }
   }
 
   Future<void> signUpWithEmail (
