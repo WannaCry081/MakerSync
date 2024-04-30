@@ -6,7 +6,7 @@ class FormValidator {
         caseSensitive: false);
 
     if (value == null || value.isEmpty) {
-      return "Email address is required";
+      return "Email address is required.";
     }
 
     if (!expression.hasMatch(value)) {
@@ -18,7 +18,7 @@ class FormValidator {
 
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return "Password is required";
+      return "Password is required.";
     }
 
     if (value.length < 8) {
@@ -30,11 +30,11 @@ class FormValidator {
 
   String? validateConfirmPassword(String?value, String password) {
     if (value == null || value.isEmpty) {
-      return "Confirm password is required";
+      return "Confirm password is required.";
     }
 
     if (password != value) {
-      return "Passwords does not match";
+      return "Passwords do not match.";
     }
 
     return null;
@@ -42,7 +42,7 @@ class FormValidator {
 
   String? validateInput(String? value, String name, int minLength, int maxLength) {
     if (value == null || value.isEmpty) {
-      return "$name is Required";
+      return "$name is required.";
     }
 
     if (value.length < minLength) {
