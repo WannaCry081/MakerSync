@@ -1,5 +1,4 @@
 import "package:firebase_auth/firebase_auth.dart";
-import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:frontend/services/authentication_service.dart";
@@ -241,7 +240,7 @@ class _LoginViewState extends State<LoginView> {
               "System Error",
       ).showSnackbar(context);
 
-       setState(() => _isLoading = false);
+      setState(() => _isLoading = false);
     }
   }
 }
