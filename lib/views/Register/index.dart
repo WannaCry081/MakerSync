@@ -1,7 +1,9 @@
+import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:frontend/services/authentication_service.dart";
 import "package:frontend/utils/form_validator.dart";
+import "package:frontend/views/Dashboard/index.dart";
 import "package:frontend/views/Login/index.dart";
 import "package:frontend/views/Onboarding/index.dart";
 import "package:frontend/widgets/back_button_widget.dart";
@@ -164,10 +166,7 @@ class _RegisterViewState extends State<RegisterView> {
               if(_form.currentState!.validate()){
                 _form.currentState!.save();
                 await signUpWithEmail();
-              } else {
-                setState(() => _isLoading = false);
-                print("Error!");
-              }
+              } 
             },
             btnIsLoading: _isLoading,
             btnColor : Theme.of(context).colorScheme.primary,
@@ -230,22 +229,32 @@ class _RegisterViewState extends State<RegisterView> {
         _name.text.trim(),
         _email.text.trim(),
         _password.text.trim(),
-        context
       );
 
       const MSSnackbarWidget(
         message: "Successfully created an account!",
       ).showSnackbar(context);
 
-       Future.delayed(
-          const Duration(seconds: 1),
-            () => setState(() => _isLoading = false)
-        );
+      Future.delayed(
+        const Duration(seconds: 1),
+          () => setState(() => _isLoading = false)
+      );
 
-      print("Sign up success!");
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => DashboardView()));
 
-    } catch (e) {
-      print("Sign up failed!: $e");
+    } on FirebaseAuthException catch (e) {
+      print("Sign up failed!: ${e.code}");
+
+      MSSnackbarWidget(
+        message: (e.code == "invalid-credential") 
+          ? "Invalid credentials." 
+          : (e.code == "email-already-in-use") 
+          ? "Email already in use. Please try another." 
+          : "Error! Please try again.",
+      ).showSnackbar(context);
+
+      setState(() => _isLoading = false);
     }
   }
 }
