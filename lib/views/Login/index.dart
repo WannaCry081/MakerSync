@@ -1,3 +1,5 @@
+import "package:firebase_auth/firebase_auth.dart";
+import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:frontend/services/authentication_service.dart";
@@ -137,11 +139,10 @@ class _LoginViewState extends State<LoginView> {
           MSButtonWidget(
             btnOnTap: () async {
               if (_form.currentState!.validate()){
+
                 _form.currentState!.save();
                 await signInWithEmail();
-              } else {
-                setState(() => _isLoading = false);
-                print("Error logging in!");
+
               }
             },
             btnIsLoading: _isLoading,
@@ -205,14 +206,6 @@ class _LoginViewState extends State<LoginView> {
     );
   } 
 
-  void navigateToDashboard() {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => DashboardView()
-      )
-    );
-  }
-
   Future<void> signInWithEmail() async {
     try {
       setState(() => _isLoading = true);
@@ -220,7 +213,6 @@ class _LoginViewState extends State<LoginView> {
       await MakerSyncAuthentication().signInWithEmail(
         _email.text.trim(),
         _password.text.trim(),
-        context
       );
 
       const MSSnackbarWidget(
@@ -232,9 +224,13 @@ class _LoginViewState extends State<LoginView> {
           () => setState(() => _isLoading = false)
       );
 
-      print("Sign in success!");
-    } catch (e) {
-      print("Sign in failed!: $e");
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => DashboardView()));
+
+      print("Sign in success in login view!");
+    } on FirebaseAuthException catch (e) {
+
+      print("Sign in failed in login view!: ${e.code}");
     }
   }
 }
