@@ -56,7 +56,12 @@ class MSDialogWidget extends StatelessWidget {
             children: [
               Flexible(
                 child: MSButtonWidget(
-                  btnOnTap: dialogOption1Ontap,
+                  btnOnTap: () {
+                    if (dialogOption1Ontap != null) {
+                      dialogOption1Ontap!();
+                      Navigator.of(context).pop(); // Close dialog
+                    }
+                  },
                   btnColor: Theme.of(context).colorScheme.primary,
                   btnHeight: 40.h,
                   child: MSTextWidget(
@@ -72,7 +77,12 @@ class MSDialogWidget extends StatelessWidget {
           
               Flexible(
                 child: MSButtonWidget(
-                  btnOnTap: dialogOption2Ontap,
+                  btnOnTap: () {
+                    if (dialogOption2Ontap != null) {
+                      dialogOption2Ontap!();
+                      Navigator.of(context).pop(); // Close dialog
+                    }
+                  },
                   btnColor: Theme.of(context).colorScheme.secondary,
                   btnHeight: 40.h,
                   child: MSTextWidget(
