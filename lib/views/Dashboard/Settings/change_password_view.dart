@@ -165,6 +165,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                 await authenticationChangePassword();
               }
             },
+            btnIsLoading: _isLoading,
             btnColor: Theme.of(context).colorScheme.primary,
             child: Center(
               child: MSTextWidget(
