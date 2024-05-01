@@ -11,9 +11,21 @@ class NotificationService {
         'channel id',
         'channel name', 
         channelDescription: 'channel description',
-        importance: Importance.max
+        importance: Importance.max,
+        icon: 'mipmap/ic_launcher'
         
       ),
+    );
+  }
+
+  static Future initializeNotification({ bool initSchedules = false}) async {
+    final android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    final settings = InitializationSettings(
+      android: android
+    );
+
+    await _notifications.initialize(
+      settings,
     );
   }
 
