@@ -1,7 +1,7 @@
 
 
 import 'dart:async';
-
+import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -48,5 +48,24 @@ class NotificationService {
       body, 
       await _notificationDetails(),
       payload: payload,
+  );
+
+  static Future showScheduledNotification({
+    int id = 0,
+    String? title, 
+    String? body,
+    String? payload,
+    required DateTime scheduleDate
+  }) async =>
+    _notifications.zonedSchedule(
+      id, 
+      title, 
+      body, 
+      tz.TZDateTime.from(scheduleDate, tz.local),
+      await _notificationDetails(),
+      payload: payload,
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation: 
+        UILocalNotificationDateInterpretation.absoluteTime
   );
 }
