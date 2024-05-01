@@ -8,18 +8,7 @@ import 'package:rxdart/rxdart.dart';
 class NotificationService {
   static final _notifications = FlutterLocalNotificationsPlugin();
   static final onNotifications = BehaviorSubject<String?>();
-
-  // final StreamController<ReceivedNotification> didReceiveLocalNotificationStream =
-  //   StreamController<ReceivedNotification>.broadcast();
-
-  // static final StreamController<String?> selectNotificationStream =
-  //     StreamController<String?>.broadcast();
-
-  // static final StreamController<NotificationResponse> selectNotificationStream =
-  //   StreamController<NotificationResponse>.broadcast();
-
-      
-
+     
       
   static Future _notificationDetails() async {
     return const NotificationDetails(
@@ -44,22 +33,7 @@ class NotificationService {
       onDidReceiveNotificationResponse: (NotificationResponse response) async {
         onNotifications.add(response.payload);
       },
-      
-    // onDidReceiveNotificationResponse:
-    //     (NotificationResponse notificationResponse) {
-    //   switch (notificationResponse.notificationResponseType) {
-    //     case NotificationResponseType.selectedNotification:
-    //       selectNotificationStream.add(notificationResponse.payload);
-    //       break;
-    //     case NotificationResponseType.selectedNotificationAction:
-    //       // if (notificationResponse.actionId == navigationActionId) {
-    //       //   selectNotificationStream.add(notificationResponse.payload);
-    //       // }
-    //       break;
-    //   }
-    // },
-
-  );
+    );
   }
 
   static Future showNotification({
