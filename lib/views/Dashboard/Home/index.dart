@@ -46,6 +46,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
     
     final _user = _userProvider.getUserData();
     final _auth = MakerSyncAuthentication();
+    final _defaultName = MakerSyncAuthentication().getUserDisplayName;
 
      return Scaffold(
       body: MSWrapperWidget(
@@ -77,7 +78,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                           fontColor: Theme.of(context).colorScheme.primary
                         )
                       :  MSTextWidget(
-                          "Hello, there!",
+                          "Hello, ${_defaultName.split(' ').first }!",
                           fontSize: 26.sp,
                           fontWeight: FontWeight.bold,
                           fontColor: Theme.of(context).colorScheme.primary
