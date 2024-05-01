@@ -150,6 +150,34 @@ class _ProfileViewState extends State<ProfileView> {
 
           SizedBox(height: 30.h),
 
+          if(!_isConnect)
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 20.h),
+
+                MSTextWidget(
+                  "Oops! You are not yet connected :<",
+                  textAlign: TextAlign.center,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  fontColor: Theme.of(context).colorScheme.onBackground,
+                ),
+
+                SizedBox(height: 5.h),
+
+                MSTextWidget(
+                  "Please connect to the device to edit your profile.",
+                  textAlign: TextAlign.center,
+                  fontWeight: FontWeight.w500,
+                  fontColor: Colors.grey.shade600,
+                  fontHeight: 1.5.h,
+                ),
+              ]
+            ),
+          ),
+
           if(_isConnect)
           Column(
             children: [
