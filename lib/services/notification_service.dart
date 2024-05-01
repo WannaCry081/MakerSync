@@ -18,7 +18,7 @@ class NotificationService {
     );
   }
 
-  static Future initializeNotification({ bool initSchedules = false}) async {
+  static Future initializeNotification({ bool initScheduled  = false}) async {
     final android = AndroidInitializationSettings('@mipmap/ic_launcher');
     final settings = InitializationSettings(
       android: android
@@ -26,6 +26,7 @@ class NotificationService {
 
     await _notifications.initialize(
       settings,
+      onDidReceiveNotificationResponse: (payload) async {}
     );
   }
 
