@@ -1,6 +1,5 @@
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
-import "package:frontend/views/Dashboard/index.dart";
 import "package:frontend/views/Onboarding/index.dart";
 import "package:google_sign_in/google_sign_in.dart";
 import "package:persistent_bottom_nav_bar/persistent_tab_view.dart";
@@ -69,8 +68,6 @@ class MakerSyncAuthentication {
           );
         }
       });
-
-    return;
   }
 
   Future<void> authenticationChangePassword(
