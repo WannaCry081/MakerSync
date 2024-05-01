@@ -1,8 +1,8 @@
+import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:frontend/services/authentication_service.dart";
 import "package:frontend/utils/form_validator.dart";
-import "package:frontend/views/Dashboard/Settings/index.dart";
 import "package:frontend/widgets/back_button_widget.dart";
 import "package:frontend/widgets/button_widget.dart";
 import "package:frontend/widgets/snackbar_widget.dart";
@@ -181,25 +181,37 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
   }
 
   Future<void> authenticationChangePassword() async {
-    setState(() => _isLoading = true);
+    try {
+      setState(() => _isLoading = true);
 
-    await MakerSyncAuthentication().authenticationChangePassword(
-      _currentPassword.text.trim(),
-      _newPassword.text.trim()
-    );
+      await MakerSyncAuthentication().authenticationChangePassword(
+        _currentPassword.text.trim(),
+        _newPassword.text.trim()
+      );
 
-    Future.delayed(
-      const Duration(seconds: 1),
-        () => setState(() => _isLoading = false)
-    );
+      Future.delayed(
+        const Duration(seconds: 1),
+          () => setState(() => _isLoading = false)
+      );
 
-    const MSSnackbarWidget(
-      message: "Successfully updated your password!",
-    ).showSnackbar(context);
+      const MSSnackbarWidget(
+        message: "Successfully updated your password!",
+      ).showSnackbar(context);
 
-    await Future.delayed(const Duration(seconds: 2));
-    Navigator.of(context).pop();
+      await Future.delayed(const Duration(seconds: 2));
+      Navigator.of(context).pop();
 
+    } on FirebaseAuthException catch(e) {
+      print("Change password failed!: ${e.code}");
+
+      MSSnackbarWidget(
+        message: (e.code == "invalid-credential") 
+          ? "Wrong password." 
+          : "System Error",
+      ).showSnackbar(context);
+
+      setState(() => _isLoading = false);
+    }
 
   }
 
