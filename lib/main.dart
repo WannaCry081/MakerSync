@@ -15,10 +15,12 @@ import "package:frontend/constants/dark_theme_const.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import "package:timezone/data/latest.dart" as tz;
 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  tz.initializeTimeZones();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
