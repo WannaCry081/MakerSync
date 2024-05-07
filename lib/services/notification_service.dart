@@ -34,6 +34,12 @@ class NotificationService {
         onNotifications.add(response.payload);
       },
     );
+
+    if(initScheduled) {
+      tz.initializeTimeZones();
+      final locationName = await FlutterTimezone.getLocalTimezone();
+      tz.setLocalLocation(tz.getLocation(locationName));
+    }
   }
 
   static Future showNotification({
