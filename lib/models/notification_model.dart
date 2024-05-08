@@ -6,4 +6,11 @@ class NotificationModel {
     required this.title,
     required this.content,
   });
+
+  factory NotificationModel.fromJson(Map<String, dynamic> json) {
+    return NotificationModel(
+      title: json['title'] as String? ?? "",
+      content: json['content'] as String? ?? ""
+    );
+  }
 }
