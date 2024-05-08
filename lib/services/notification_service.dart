@@ -37,6 +37,17 @@ class NotificationService {
 
 
   Future<List<NotificationModel>> fetchNotifications() async {
-    
+    final response = await http.get(Uri.parse("$NOTIFICATION_URL/$MACHINE_CODE"));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> users = json.decode(response.body);
+      return users.map((user) => NotificationModel.fromJson(user as Map<String, dynamic>)).toList();
+    } else if (response.statusCode == 404) {
+      throw Exception("Users not found.");
+    } else if (response.statusCode == 500) {
+      throw Exception("Internal Server Error.");
+    } else {
+      throw Exception("Failed to fetch users.");
+    }
   }
 }
