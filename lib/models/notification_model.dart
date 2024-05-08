@@ -9,8 +9,15 @@ class NotificationModel {
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
-      title: json['title'] as String? ?? "",
-      content: json['content'] as String? ?? ""
+      title: json["title"] as String? ?? "",
+      content: json["content"] as String? ?? ""
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "title" : title,
+      "content" : content
+    };
   }
 }
