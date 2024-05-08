@@ -34,4 +34,9 @@ class NotificationService {
       throw Exception("Failed to create user.");
     }
   }
+
+
+  Future<List<NotificationModel>> fetchNotifications() async {
+    
+  }
 }
