@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:frontend/services/local_notification_service.dart';
 import 'package:frontend/views/Dashboard/Home/index.dart';
 import 'package:frontend/views/Dashboard/Notifications/index.dart';
 import 'package:frontend/views/Dashboard/Settings/index.dart';
@@ -18,6 +19,21 @@ class _DashboardViewState extends State<DashboardView> {
   @override 
   void initState() {
     super.initState();
+  }
+
+  void onClickedNotification(String? response) {
+    print("Response: $response" );
+
+    if (response != null) {
+    String? payload = response;
+
+    print("Payload: $payload" );
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => NotificationsView()
+      )
+    );
+  }
   }
 
   @override
