@@ -38,7 +38,7 @@ class UserService {
 
   Future<List<UserModel>> fetchUsers() async {
     
-    final response = await http.get(Uri.parse("$USER_URL/$MACHINE_CODE"));
+    final response = await http.get(Uri.parse(USER_URL));
 
     if (response.statusCode == 200) {
       final List<dynamic> users = json.decode(response.body);
