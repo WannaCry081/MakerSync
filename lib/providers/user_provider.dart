@@ -10,7 +10,9 @@ class UserProvider with ChangeNotifier {
 
   final _email = MakerSyncAuthentication().getUserEmail;
 
+  late List<UserModel> _users = [];
   UserModel? _user;
+
   
 
   UserProvider() {
@@ -26,7 +28,8 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> fetchUsers() async {
-    await _userService.fetchUsers();
+    final List<UserModel> fetchedUsers = await _userService.fetchUsers();
+    _users = fetchedUsers;
     notifyListeners();
   }
 
