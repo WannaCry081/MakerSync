@@ -20,6 +20,7 @@ class NotificationProvider with ChangeNotifier{
     notifyListeners();
   }
 
+
   Future<void> fetchNotification({
     required int id
   }) async {
@@ -29,5 +30,20 @@ class NotificationProvider with ChangeNotifier{
 
     notifyListeners();
   }
+
+
+  Future<void> createNotification({
+    required String title,
+    required String content
+  }) async {
+
+    await _notificationService.createNotification(
+      title: title, 
+      content: content
+    );
+
+    await fetchNotifications();
+  }
+  
 
 }
