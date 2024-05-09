@@ -4,6 +4,7 @@ import "package:flutter_barcode_scanner/flutter_barcode_scanner.dart";
 import "package:frontend/providers/sensor_provider.dart";
 import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/providers/user_provider.dart";
+import "package:frontend/services/api_constants.dart";
 import "package:frontend/services/authentication_service.dart";
 import "package:frontend/views/Dashboard/Home/overview_views/connected_view.dart";
 import "package:frontend/views/Dashboard/Home/overview_views/disconnected_view.dart";
@@ -84,7 +85,7 @@ class _OverviewViewState extends State<OverviewView> {
         ScanMode.QR
       );
 
-      settings.setString("code", scan);
+      updateMachineCode(scan);
 
       if(!mounted) return;
       
