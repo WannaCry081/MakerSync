@@ -44,6 +44,10 @@ class NotificationProvider with ChangeNotifier{
 
     await fetchNotifications();
   }
-  
+
+  NotificationModel? getNotificationData() {
+    return _notification;
+  }
+
 
 }
