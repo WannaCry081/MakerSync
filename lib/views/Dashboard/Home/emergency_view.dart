@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/models/sensor_model.dart';
+import 'package:frontend/providers/notification_provider.dart';
 import 'package:frontend/providers/sensor_provider.dart';
 import 'package:frontend/providers/settings_provider.dart';
+import 'package:frontend/providers/user_provider.dart';
+import 'package:frontend/services/local_notification_service.dart';
+import 'package:frontend/widgets/button_widget.dart';
 import 'package:frontend/widgets/dialog_widget.dart';
 import 'package:frontend/widgets/disconnected_view.dart';
 import 'package:frontend/widgets/snackbar_widget.dart';
@@ -24,11 +28,15 @@ class EmergencyView extends StatefulWidget {
 class _EmergencyViewState extends State<EmergencyView> {
 
   late SensorProvider _sensorProvider;
+  late UserProvider _userProvider;
+  late NotificationProvider _notificationProvider;
 
   @override
   void initState() {
     super.initState();
     _sensorProvider = Provider.of<SensorProvider>(context, listen: false);
+    _userProvider = Provider.of<UserProvider>(context, listen: false);
+    _notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
   }
 
   @override
@@ -42,6 +50,7 @@ class _EmergencyViewState extends State<EmergencyView> {
     return _isConnect && _isInitialize
       ? content(sensor)
       : const DisconnectedViewWidget();
+      
   }
 
   Widget content(SensorModel? sensor) {
@@ -117,6 +126,8 @@ class _EmergencyViewState extends State<EmergencyView> {
   }
 
   void stopMachine() async {
+    final _user = _userProvider.getUserData();
+
     await _sensorProvider.updateSensor(
       isStart: false,
       isStop: true
@@ -125,6 +136,15 @@ class _EmergencyViewState extends State<EmergencyView> {
     const MSSnackbarWidget(
       message: "You have stopped the machine operation.",
     ).showSnackbar(context);
+
+    LocalNotificationService.showScheduledNotification(
+      title: "Petamentor has stopped.",
+      body: "${_user?.name.split(' ').first ?? ""} has clicked the emergency button.",
+      payload: "Process has been interrupted.",
+      scheduleDate: DateTime.now().add(const Duration(seconds: 1))
+    );
+
+  
   }
 
    void resetMachine() async { 
