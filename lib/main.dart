@@ -1,6 +1,7 @@
 import "package:connectivity_plus/connectivity_plus.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
+import "package:frontend/providers/notification_provider.dart";
 import "package:frontend/providers/sensor_provider.dart";
 import "package:frontend/providers/user_provider.dart";
 import "package:frontend/views/Authentication/index.dart";
@@ -41,7 +42,12 @@ Future<void> main() async {
 
         ChangeNotifierProvider(
           create: (context) => SensorProvider(settingsProvider)
-        )
+        ),
+
+        ChangeNotifierProvider(
+          create: (context) => NotificationProvider()
+        ),
+
       ],
       child : const MyApp()
     )
