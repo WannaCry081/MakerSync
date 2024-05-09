@@ -76,7 +76,7 @@ class UserService {
     required String email,
     String? name
   }) async {
-    final response = await http.get(Uri.parse("$USER_URL/$MACHINE_CODE/$email"));
+    final response = await http.get(Uri.parse("$USER_URL/$email"));
 
     if (response.statusCode != 200) { throw Exception("Failed to fetch user data."); }
 
