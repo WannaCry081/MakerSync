@@ -17,6 +17,7 @@ class NotificationProvider with ChangeNotifier{
 
   Future<void> fetchNotifications() async {
     await _notificationService.fetchNotifications();
+    notifyListeners();
   }
 
   Future<void> fetchNotification({
