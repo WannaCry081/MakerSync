@@ -30,13 +30,24 @@ class SensorProvider with ChangeNotifier {
   }
 
   
-  Future<void> fetchSensor() async {
-    final SensorModel sensor = await _sensorService.fetchSensor(
-      settings: _settingsProvider
-    );
+  Future<bool> fetchSensor() async {
+    try{
+      final SensorModel sensor = await _sensorService.fetchSensor(
+        settings: _settingsProvider
+      );
 
-    setSensorData(sensor);
-    notifyListeners();
+      setSensorData(sensor);
+      notifyListeners();
+
+      return true;
+    } catch (e) {
+      if (e is Exception && e.toString().contains("Sensor not found")) {
+        print("Provider: Sensor not found!");
+        return false;
+      } else {
+        return false;
+      }
+    }
   }
 
   Future<void> updateSensor({
