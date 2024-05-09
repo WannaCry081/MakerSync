@@ -19,6 +19,8 @@ class _DashboardViewState extends State<DashboardView> {
   @override 
   void initState() {
     super.initState();
+    LocalNotificationService.initializeNotification(initScheduled: true);
+    listenNotifications();
   }
 
   void listenNotifications() {
