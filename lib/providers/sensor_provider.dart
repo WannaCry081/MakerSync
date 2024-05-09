@@ -35,7 +35,7 @@ class SensorProvider with ChangeNotifier {
 
       return true;
     } catch (e) {
-      if (e is Exception && e.toString().contains("Sensor not found")) {
+      if (e is Exception && e.toString().contains("Sensor not found.")) {
         print("Provider: Sensor not found!");
         return false;
       } else {
