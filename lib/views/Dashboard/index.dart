@@ -21,19 +21,25 @@ class _DashboardViewState extends State<DashboardView> {
     super.initState();
   }
 
+  void listenNotifications() {
+    LocalNotificationService.onNotifications.stream.listen(
+      onClickedNotification
+    );
+  }
+
   void onClickedNotification(String? response) {
     print("Response: $response" );
 
     if (response != null) {
-    String? payload = response;
+      String? payload = response;
 
-    print("Payload: $payload" );
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => NotificationsView()
-      )
-    );
-  }
+      print("Payload: $payload" );
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => NotificationsView()
+        )
+      );
+    }
   }
 
   @override
