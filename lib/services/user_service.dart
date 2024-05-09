@@ -114,7 +114,7 @@ class UserService {
     required String email
   }) async {
 
-    final response = await http.delete(Uri.parse("$USER_URL/$MACHINE_CODE/$email"));
+    final response = await http.delete(Uri.parse("$USER_URL/$email"));
     if (response.statusCode == 204) {
       return;
     } else if (response.statusCode == 404) {
