@@ -91,13 +91,17 @@ class _NotificationsViewState extends State<NotificationsView> {
                           final NotificationModel notification = notifications[index];
                           return notificationCard(
                             context: context,
-                            name: "Shiela Mae Lepon", 
-                            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam feugiat, quam et sollicitudin pharetra",
-                            date: "Feb 15"
+                            title: notification.title, 
+                            content: notification.content,
+                            date: notification.date
                           );
                         }
-                      )
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
                     }
+
+                    return const CircularProgressIndicator();
                   },
                 )
               )
@@ -112,9 +116,9 @@ class _NotificationsViewState extends State<NotificationsView> {
 
   Widget notificationCard({
     required BuildContext context, 
-    required String name,
+    required String title,
     required String content,
-    required String date
+    String? date
   }) {
   return Padding(
     padding: EdgeInsets.symmetric(
@@ -145,7 +149,7 @@ class _NotificationsViewState extends State<NotificationsView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MSTextWidget(
-                  name,
+                  title,
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
                   fontColor: Theme.of(context).colorScheme.onBackground,
@@ -166,7 +170,7 @@ class _NotificationsViewState extends State<NotificationsView> {
           ),
 
           MSTextWidget(
-            date,
+            date!,
             fontSize: 10.sp,
             fontColor: Colors.grey.shade500,
             fontHeight: 2.h,
