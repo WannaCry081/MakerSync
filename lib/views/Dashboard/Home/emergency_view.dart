@@ -50,7 +50,7 @@ class _EmergencyViewState extends State<EmergencyView> {
     return _isConnect && _isInitialize
       ? content(sensor)
       : const DisconnectedViewWidget();
-      
+
   }
 
   Widget content(SensorModel? sensor) {
@@ -142,6 +142,11 @@ class _EmergencyViewState extends State<EmergencyView> {
       body: "${_user?.name.split(' ').first ?? ""} has clicked the emergency button.",
       payload: "Process has been interrupted.",
       scheduleDate: DateTime.now().add(const Duration(seconds: 1))
+    );
+
+    _notificationProvider.createNotification(
+      title: "Petamentor has stopped.",
+      content: "${_user?.name.split(' ').first ?? ""} has clicked the emergency button."
     );
 
   
