@@ -88,7 +88,7 @@ class _OverviewViewState extends State<OverviewView> {
 
       if(!mounted) return;
       
-      if(await sensorProvider.isSensorExist()){
+      if(await sensorProvider.fetchSensor()){
         setState((){
           settings.setBool("isConnect", true);
         });
