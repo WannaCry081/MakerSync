@@ -7,3 +7,8 @@ const String USER_URL = "$BASE_URL/$MACHINE_CODE/users";
 const String SENSOR_URL = "$BASE_URL/$MACHINE_CODE/sensors";
 const String NOTIFICATION_URL = "$BASE_URL/$MACHINE_CODE/notifications";
 
+
+void updateMachineCode(String code) {
+  MACHINE_CODE = code;
+}
+
