@@ -18,7 +18,7 @@ class UserService {
     );
     
     final response = await http.post(
-      Uri.parse("$USER_URL/$MACHINE_CODE"),
+      Uri.parse(USER_URL),
       body: jsonEncode(request.toJson()),
       headers: <String, String> {
         "Content-Type": "application/json; charset=UTF-8"
