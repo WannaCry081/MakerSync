@@ -15,4 +15,8 @@ class NotificationProvider with ChangeNotifier{
     _notification = data;
   }
 
+  Future<void> fetchNotifications() async {
+    await _notificationService.fetchNotifications();
+  }
+
 }
