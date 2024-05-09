@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/providers/settings_provider.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/services/user_service.dart';
 import 'package:frontend/widgets/disconnected_view.dart';
 import 'package:frontend/widgets/text_widget.dart';
@@ -16,14 +17,18 @@ class MembersView extends StatefulWidget {
 }
 
 class _MembersViewState extends State<MembersView> {
-  late Future<List<UserModel>> users;
   
-  final UserService _userService = UserService();
+  // final UserService _userService = UserService();
+  late UserProvider _userProvider;
+  late Future<List<UserModel>> _users;
+
 
   @override
   void initState() {
     super.initState();
-    users = _userService.fetchUsers();
+    _userProvider = Provider.of<UserProvider>(context, listen: false);
+    _users = _userProvider.fetchUsers();
+    // users = _userService.fetchUsers();
   }
 
   @override
@@ -38,7 +43,7 @@ class _MembersViewState extends State<MembersView> {
           ? Container(
               padding: EdgeInsets.only(top: 15.h),
               child: FutureBuilder<List<UserModel>> (
-                  future: users,
+                  future: _users,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       final List<UserModel> users = snapshot.data!;
