@@ -5,10 +5,20 @@ import 'package:frontend/views/Dashboard/Notifications/index.dart';
 import 'package:frontend/views/Dashboard/Settings/index.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
-class DashboardView extends StatelessWidget {
+class DashboardView extends StatefulWidget {
   DashboardView({Key? key}) : super(key:key);
 
+  @override
+  State<DashboardView> createState() => _DashboardViewState();
+}
+
+class _DashboardViewState extends State<DashboardView> {
   final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
+
+  @override 
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
