@@ -25,6 +25,11 @@ class UserProvider with ChangeNotifier {
     _user = data;
   }
 
+  Future<void> fetchUsers() async {
+    await _userService.fetchUsers();
+    notifyListeners();
+  }
+
   Future<void> fetchUserCredential() async {
     final UserModel user = await _userService.fetchUser(
       email: _email
