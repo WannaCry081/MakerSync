@@ -1,6 +1,8 @@
+import "dart:async";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_barcode_scanner/flutter_barcode_scanner.dart";
+import "package:frontend/providers/notification_provider.dart";
 import "package:frontend/providers/sensor_provider.dart";
 import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/providers/user_provider.dart";
@@ -26,20 +28,28 @@ class _OverviewViewState extends State<OverviewView> {
   late String _email;
   late String _name;
 
+  late SettingsProvider _settingsProvider;
+  late SensorProvider _sensorProvider;
+  late UserProvider _userProvider;
+  late NotificationProvider _notificationProvider;
+
   @override
   void initState() {
     super.initState();
     _email = MakerSyncAuthentication().getUserEmail;
     _name = MakerSyncAuthentication().getUserDisplayName;
+
+    _settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
+    _sensorProvider = Provider.of<SensorProvider>(context, listen: false);
+    _userProvider = Provider.of<UserProvider>(context, listen: false);
+    _notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
   }
 
   @override
   Widget build(BuildContext context){
-    final SettingsProvider _settingsProvider  = Provider.of<SettingsProvider>(context);
-    final SensorProvider _sensorProvider = Provider.of<SensorProvider>(context);
-    final UserProvider _userProvider = Provider.of<UserProvider>(context);
 
     _sensorProvider.fetchSensor();
+    _notificationProvider.fetchNotifications();
 
     final bool _isConnect = _settingsProvider.getBool("isConnect");
     final bool _isInitialize = _settingsProvider.getBool("isInitialize");
@@ -62,18 +72,13 @@ class _OverviewViewState extends State<OverviewView> {
           )
         : DisconnectedView(
               isScanFail: _isScanFail, 
-              btnOnTap: () => scanQRCode(
-                context, _settingsProvider, _userProvider, _sensorProvider
-              )) 
+              btnOnTap: () => scanQRCode(context)) 
       )
     );
   }
   
   Future<void> scanQRCode(
     BuildContext context, 
-    SettingsProvider settings,
-    UserProvider userProvider,
-    SensorProvider sensorProvider
   ) async {
     String scan;
     try{
@@ -89,15 +94,15 @@ class _OverviewViewState extends State<OverviewView> {
 
       if(!mounted) return;
       
-      if(await sensorProvider.fetchSensor()){
+      if(await _sensorProvider.fetchSensor()){
         setState((){
-          settings.setBool("isConnect", true);
+          _settingsProvider.setBool("isConnect", true);
         });
 
-        sensorProvider.fetchSensor();
-        sensorProvider.startFetchingSensorValues();
+        _sensorProvider.fetchSensor();
+        _sensorProvider.startFetchingSensorValues();
 
-        userProvider.addUserCredential(
+        _userProvider.addUserCredential(
           email: _email, 
           name: _name
         );
