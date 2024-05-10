@@ -37,7 +37,7 @@ class NotificationService {
 
 
   Future<List<NotificationModel>> fetchNotifications() async {
-    final response = await http.get(Uri.parse("$NOTIFICATION_URL/$MACHINE_CODE"));
+    final response = await http.get(Uri.parse(NOTIFICATION_URL));
 
     if (response.statusCode == 200) {
       final List<dynamic> users = json.decode(response.body);
