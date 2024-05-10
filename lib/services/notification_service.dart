@@ -43,18 +43,34 @@ class NotificationService {
     if (response.statusCode == 200) {
       final List<dynamic> notifications = json.decode(response.body);
     
-    // overheat and disconnected filament
+      // overheat and disconnected filament
       List<NotificationModel> machineNotifications = notifications
         .map((notification) => NotificationModel.fromJson(notification as Map<String, dynamic>))
         .where((notification) => notification.title == "Petamentor has been stopped due to some issues.")
+        .toList();
+
+      // machine has been initialized
+      List<NotificationModel> startNotifications = notifications
+        .map((notification) => NotificationModel.fromJson(notification as Map<String, dynamic>))
+        .where((notification) => notification.title == "Petamentor has started.")
         .toList();
 
 
       if (machineNotifications.isNotEmpty) {
         Future.delayed(const Duration(seconds: 1), () {
           LocalNotificationService.showScheduledNotification(
-            title: "Petamentor has been stopped due to some issues.",
-            body: "The machine is experiencing some issues. Please fix the issue before proceeding.",
+            title: machineNotifications[0].title,
+            body: machineNotifications[0].content,
+            scheduleDate: DateTime.now().add(const Duration(seconds: 1)),
+          );
+        });
+      }
+
+      if (startNotifications.isNotEmpty) {
+        Future.delayed(const Duration(seconds: 1), () {
+          LocalNotificationService.showScheduledNotification(
+            title: startNotifications[0].title,
+            body: startNotifications[0].content,
             scheduleDate: DateTime.now().add(const Duration(seconds: 1)),
           );
         });
