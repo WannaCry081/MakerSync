@@ -237,13 +237,39 @@ class _InitializeViewState extends State<InitializeView> {
         () => setState(() => _isLoading = false),
       );
 
-      LocalNotificationService.showScheduledNotification(
-        title: "Petamentor has stopped.",
-        body: "${_user?.name.split(' ').first ?? ""} has clicked the emergency button.",
-        payload: "Process has been interrupted.",
-        scheduleDate: DateTime.now().add(
-          Duration(seconds: _options[_clickedOption]["timer"] as int))
+
+      // LocalNotificationService.showScheduledNotification(
+      //   title: "Petamentor has started.",
+      //   body: "${_user?.name.split(' ').first ?? ""} has initialized the machine. Petamentor is starting.",
+      //   payload: "Process is starting.",
+      //   scheduleDate: DateTime.now().add(const Duration(seconds: 1))
+      // );
+
+
+      // // for the actual process
+      // LocalNotificationService.showScheduledNotification(
+      //   title: "Petamentor has finished the current process.",
+      //   body: "Your 3D filament is ready.",
+      //   payload: "Process has finished.",
+      //   scheduleDate: DateTime.now().add(Duration(seconds: _options[_clickedOption]["timer"] as int))
+      // );
+
+      _notificationProvider.createNotification(
+        title: "Petamentor has started.",
+        content: "${_user?.name.split(' ').first ?? ""} has initialized the machine. Petamentor is starting.",
       );
+
+      Future.delayed(
+        Duration(seconds: _options[_clickedOption]["timer"] as int),
+        () => _notificationProvider.createNotification(
+          title: "Petamentor has successfully completed the process.",
+          content: "Your 3D filament is ready.",
+
+        )
+      );
+      
+
+      
 
     } catch (e) {
       print("Error updating sensor: $e");
