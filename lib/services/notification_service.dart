@@ -55,7 +55,7 @@ class NotificationService {
   Future<NotificationModel> fetchNotification({
     required int notificationId
   }) async {
-    final response = await http.get(Uri.parse("$NOTIFICATION_URL/$MACHINE_CODE/$notificationId"));
+    final response = await http.get(Uri.parse("$NOTIFICATION_URL/$notificationId"));
 
     if (response.statusCode == 200) {
       return NotificationModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
