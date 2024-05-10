@@ -26,6 +26,7 @@ class _InitializeViewState extends State<InitializeView> {
 
   late UserProvider _userProvider;
   late NotificationProvider _notificationProvider;  
+  
 
   @override
   void initState() {
@@ -215,7 +216,7 @@ class _InitializeViewState extends State<InitializeView> {
   );
 }
 
-  Future<void> initializeMachine({
+Future<void> initializeMachine({
     required SettingsProvider settings
   }) async {
     try {
@@ -230,6 +231,7 @@ class _InitializeViewState extends State<InitializeView> {
       );
 
       settings.setBool("isConnect", true);
+      settings.setInt("timer",  _options[_clickedOption]["timer"] as int);
 
       Future.delayed(
       const Duration(seconds: 2),
@@ -257,13 +259,18 @@ class _InitializeViewState extends State<InitializeView> {
         content: "${_user?.name.split(' ').first ?? ""} has initialized the machine. Petamentor is starting.",
       );
 
-      Future.delayed(
-        Duration(seconds: _options[_clickedOption]["timer"] as int),
-        () => _notificationProvider.createNotification(
-          title: "Petamentor has successfully completed the process.",
-          content: "Your 3D filament is ready.",
-        )
-      );
+
+      // -- handled in the dashboard --
+      // Future.delayed(
+      //   Duration(seconds: _options[_clickedOption]["timer"] as int),
+      //   () => _notificationProvider.createNotification(
+      //     title: "Petamentor has successfully completed the process.",
+      //     content: "Your 3D filament is ready.",
+      //   )
+      // );
+
+      settings.setBool("isStartProcess", true);
+
     } catch (e) {
       print("Error updating sensor: $e");
     }
