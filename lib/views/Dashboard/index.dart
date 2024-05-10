@@ -8,6 +8,7 @@ import 'package:frontend/providers/settings_provider.dart';
 import 'package:frontend/services/local_notification_service.dart';
 import 'package:frontend/views/Dashboard/Home/index.dart';
 import 'package:frontend/views/Dashboard/Notifications/index.dart';
+import 'package:frontend/views/Dashboard/Notifications/notification_preview.dart';
 import 'package:frontend/views/Dashboard/Settings/index.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +23,7 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
   final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
 
-  Completer<void> _notificationCompleter = Completer<void>();
+  Completer<void>? _notificationCompleter;
 
   @override 
   void initState() {
@@ -72,14 +73,17 @@ class _DashboardViewState extends State<DashboardView> {
     if(_isStartProcess) {
         Future.delayed(
           Duration(seconds: _settingsProvider.getInt("timer")),
-          () => _notificationProvider.createNotification(
-            title: "Petamentor has successfully completed the process.",
-            content: "Your 3D filament is ready.",
-          )
+          () {  
+            if (!_notificationCompleter!.isCompleted) {
+              _notificationProvider.createNotification(
+                title: "Petamentor has successfully completed the process.",
+                content: "Your 3D filament is ready.",
+              );
+            }
+          }
         );
-      } 
-      if (!_isStartProcess) {
-        _notificationCompleter.complete();
+      } else {
+        _notificationCompleter?.complete();
       }
 
 
@@ -94,7 +98,7 @@ class _DashboardViewState extends State<DashboardView> {
         confineInSafeArea: true,
         screens: const [
           HomeView(),
-          NotificationsView(),
+          NotificationPreview(),
           SettingsView(),
         ],
         items: [
