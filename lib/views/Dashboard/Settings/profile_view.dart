@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:frontend/models/user_model.dart";
+import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/providers/user_provider.dart";
 import "package:frontend/services/authentication_service.dart";
 import "package:frontend/utils/form_validator.dart";
@@ -84,7 +85,8 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   Widget content(){
-
+    final SettingsProvider _settingsProvider = Provider.of<SettingsProvider>(context);
+    final bool _isConnect = _settingsProvider.getBool("isConnect");
     final auth = MakerSyncAuthentication();
 
     return Form(
@@ -148,38 +150,71 @@ class _ProfileViewState extends State<ProfileView> {
 
           SizedBox(height: 30.h),
 
-          MSTextFieldWidget(
-            controller : _currentDisplayName,
-            fieldIsReadOnly: true,
-            fieldIsValid: true,
-            fieldLabelText: "Current Display Name",
-            fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
-              ? Theme.of(context).colorScheme.tertiary
-              : Colors.grey.shade50,
-            fieldBorderColor: (Theme.of(context).brightness == Brightness.dark)
-              ? Colors.grey.shade600
-              : Colors.grey.shade300,
-            fieldLabelColor: (Theme.of(context).brightness == Brightness.dark) 
-              ? Colors.grey.shade400 
-              : Colors.grey.shade600
+          if(!_isConnect)
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 20.h),
+
+                MSTextWidget(
+                  "Oops! You are not yet connected :<",
+                  textAlign: TextAlign.center,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  fontColor: Theme.of(context).colorScheme.onBackground,
+                ),
+
+                SizedBox(height: 5.h),
+
+                MSTextWidget(
+                  "Please connect to the device to edit your profile.",
+                  textAlign: TextAlign.center,
+                  fontWeight: FontWeight.w500,
+                  fontColor: Colors.grey.shade600,
+                  fontHeight: 1.5.h,
+                ),
+              ]
+            ),
           ),
 
-          SizedBox(height : 15.h),
+          if(_isConnect)
+          Column(
+            children: [
+              MSTextFieldWidget(
+                controller : _currentDisplayName,
+                fieldIsReadOnly: true,
+                fieldIsValid: true,
+                fieldLabelText: "Current Display Name",
+                fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
+                  ? Theme.of(context).colorScheme.tertiary
+                  : Colors.grey.shade50,
+                fieldBorderColor: (Theme.of(context).brightness == Brightness.dark)
+                  ? Colors.grey.shade600
+                  : Colors.grey.shade300,
+                fieldLabelColor: (Theme.of(context).brightness == Brightness.dark) 
+                  ? Colors.grey.shade400 
+                  : Colors.grey.shade600
+              ),
 
-          MSTextFieldWidget(
-            controller : _newDisplayName,
-            fieldLabelText: "New Display Name",
-            fieldValidator: (value) => FormValidator()
-              .validateInput(value, "Name", 2, 20),
-            fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
-              ? Theme.of(context).colorScheme.tertiary
-              : Colors.grey.shade50,
-            fieldBorderColor: (Theme.of(context).brightness == Brightness.dark)
-              ? Colors.grey.shade600
-              : Colors.grey.shade300,
-            fieldLabelColor: (Theme.of(context).brightness == Brightness.dark) 
-              ? Colors.grey.shade400 
-              : Colors.grey.shade600
+              SizedBox(height : 15.h),
+
+              MSTextFieldWidget(
+                controller : _newDisplayName,
+                fieldLabelText: "New Display Name",
+                fieldValidator: (value) => FormValidator()
+                  .validateInput(value, "Name", 2, 20),
+                fieldBackground: (Theme.of(context).brightness == Brightness.dark) 
+                  ? Theme.of(context).colorScheme.tertiary
+                  : Colors.grey.shade50,
+                fieldBorderColor: (Theme.of(context).brightness == Brightness.dark)
+                  ? Colors.grey.shade600
+                  : Colors.grey.shade300,
+                fieldLabelColor: (Theme.of(context).brightness == Brightness.dark) 
+                  ? Colors.grey.shade400 
+                  : Colors.grey.shade600
+              ),
+            ],
           ),
 
           SizedBox(height : 15.h),

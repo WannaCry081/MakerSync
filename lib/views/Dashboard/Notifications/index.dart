@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/models/notification_model.dart';
+import 'package:frontend/providers/notification_provider.dart';
 import 'package:frontend/providers/settings_provider.dart';
 import 'package:frontend/widgets/disconnected_view.dart';
 import 'package:frontend/widgets/text_widget.dart';
@@ -15,6 +17,16 @@ class NotificationsView extends StatefulWidget {
 }
 
 class _NotificationsViewState extends State<NotificationsView> {
+  late NotificationProvider _notificationProvider;
+  late Future<List<NotificationModel>> _notifications;
+
+  @override
+  void initState(){
+    super.initState();
+    _notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
+    _notifications = _notificationProvider.fetchNotifications();
+  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -56,16 +68,41 @@ class _NotificationsViewState extends State<NotificationsView> {
           Expanded(
             child: _isConnect && _isInitialize
               ? SizedBox(
-                child: ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (context, index){
-                    return notificationCard(
-                      context: context,
-                      name: "Shiela Mae Lepon", 
-                      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam feugiat, quam et sollicitudin pharetra",
-                      date: "Feb 15"
-                    );
-                  }
+                child: FutureBuilder<List<NotificationModel>> (
+                  future: _notifications,
+                  builder: (context, snapshot) {
+                    if(snapshot.hasData){
+                      final List<NotificationModel> notifications = snapshot.data!;
+
+                      if(notifications.isEmpty){
+                        return Center(
+                          child: MSTextWidget(
+                            "No notifications yet",
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
+                            fontColor: Theme.of(context).colorScheme.onBackground,
+                          ),
+                        );
+                      }
+
+                      ListView.builder(
+                        itemCount: notifications.length,
+                        itemBuilder: (context, index){
+                          final NotificationModel notification = notifications[index];
+                          return notificationCard(
+                            context: context,
+                            title: notification.title, 
+                            content: notification.content,
+                            date: notification.date
+                          );
+                        }
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                    }
+
+                    return const CircularProgressIndicator();
+                  },
                 )
               )
             : const DisconnectedViewWidget()
@@ -79,9 +116,9 @@ class _NotificationsViewState extends State<NotificationsView> {
 
   Widget notificationCard({
     required BuildContext context, 
-    required String name,
+    required String title,
     required String content,
-    required String date
+    String? date
   }) {
   return Padding(
     padding: EdgeInsets.symmetric(
@@ -112,7 +149,7 @@ class _NotificationsViewState extends State<NotificationsView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MSTextWidget(
-                  name,
+                  title,
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
                   fontColor: Theme.of(context).colorScheme.onBackground,
@@ -133,7 +170,7 @@ class _NotificationsViewState extends State<NotificationsView> {
           ),
 
           MSTextWidget(
-            date,
+            date!,
             fontSize: 10.sp,
             fontColor: Colors.grey.shade500,
             fontHeight: 2.h,

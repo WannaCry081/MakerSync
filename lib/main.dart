@@ -1,6 +1,7 @@
 import "package:connectivity_plus/connectivity_plus.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
+import "package:frontend/providers/notification_provider.dart";
 import "package:frontend/providers/sensor_provider.dart";
 import "package:frontend/providers/user_provider.dart";
 import "package:frontend/views/Authentication/index.dart";
@@ -15,10 +16,12 @@ import "package:frontend/constants/dark_theme_const.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import "package:timezone/data/latest.dart" as tz;
 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  tz.initializeTimeZones();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
@@ -39,7 +42,12 @@ Future<void> main() async {
 
         ChangeNotifierProvider(
           create: (context) => SensorProvider(settingsProvider)
-        )
+        ),
+
+        ChangeNotifierProvider(
+          create: (context) => NotificationProvider()
+        ),
+
       ],
       child : const MyApp()
     )

@@ -18,7 +18,7 @@ class UserService {
     );
     
     final response = await http.post(
-      Uri.parse("$USER_URL/$MACHINE_CODE"),
+      Uri.parse(USER_URL),
       body: jsonEncode(request.toJson()),
       headers: <String, String> {
         "Content-Type": "application/json; charset=UTF-8"
@@ -38,7 +38,7 @@ class UserService {
 
   Future<List<UserModel>> fetchUsers() async {
     
-    final response = await http.get(Uri.parse("$USER_URL/$MACHINE_CODE"));
+    final response = await http.get(Uri.parse(USER_URL));
 
     if (response.statusCode == 200) {
       final List<dynamic> users = json.decode(response.body);
@@ -56,7 +56,7 @@ class UserService {
     required String email
   }) async {
 
-    final response = await http.get(Uri.parse("$USER_URL/$MACHINE_CODE/$email"));
+    final response = await http.get(Uri.parse("$USER_URL/$email"));
 
     if (response.statusCode == 200) {
         return UserModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
@@ -76,7 +76,7 @@ class UserService {
     required String email,
     String? name
   }) async {
-    final response = await http.get(Uri.parse("$USER_URL/$MACHINE_CODE/$email"));
+    final response = await http.get(Uri.parse("$USER_URL/$email"));
 
     if (response.statusCode != 200) { throw Exception("Failed to fetch user data."); }
 
@@ -114,7 +114,7 @@ class UserService {
     required String email
   }) async {
 
-    final response = await http.delete(Uri.parse("$USER_URL/$MACHINE_CODE/$email"));
+    final response = await http.delete(Uri.parse("$USER_URL/$email"));
     if (response.statusCode == 204) {
       return;
     } else if (response.statusCode == 404) {

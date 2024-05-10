@@ -1,8 +1,10 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
+import "package:frontend/providers/notification_provider.dart";
 import "package:frontend/providers/sensor_provider.dart";
 import "package:frontend/providers/settings_provider.dart";
+import "package:frontend/providers/user_provider.dart";
 import "package:frontend/widgets/button_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
 import "package:provider/provider.dart";
@@ -20,7 +22,17 @@ class InitializeView extends StatefulWidget {
 }
 
 class _InitializeViewState extends State<InitializeView> {
-   bool _isLoading = false;
+  bool _isLoading = false;
+
+  late UserProvider _userProvider;
+  late NotificationProvider _notificationProvider;  
+
+  @override
+  void initState() {
+    super.initState();
+    _userProvider = Provider.of<UserProvider>(context, listen: false);
+    _notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
+  }
   
   int _clickedOption = -1;
   final _options = [
@@ -207,6 +219,8 @@ class _InitializeViewState extends State<InitializeView> {
     required SettingsProvider settings
   }) async {
     try {
+      final _user = _userProvider.getUserData();
+
       setState(() => _isLoading = true);
       await widget.sensorProvider.updateSensor(
           isInitialized: true,
@@ -222,6 +236,34 @@ class _InitializeViewState extends State<InitializeView> {
         () => setState(() => _isLoading = false),
       );
 
+
+      // LocalNotificationService.showScheduledNotification(
+      //   title: "Petamentor has started.",
+      //   body: "${_user?.name.split(' ').first ?? ""} has initialized the machine. Petamentor is starting.",
+      //   payload: "Process is starting.",
+      //   scheduleDate: DateTime.now().add(const Duration(seconds: 1))
+      // );
+
+
+      // LocalNotificationService.showScheduledNotification(
+      //   title: "Petamentor has finished the current process.",
+      //   body: "Your 3D filament is ready.",
+      //   payload: "Process has finished.",
+      //   scheduleDate: DateTime.now().add(Duration(seconds: _options[_clickedOption]["timer"] as int))
+      // );
+
+      _notificationProvider.createNotification(
+        title: "Petamentor has started.",
+        content: "${_user?.name.split(' ').first ?? ""} has initialized the machine. Petamentor is starting.",
+      );
+
+      Future.delayed(
+        Duration(seconds: _options[_clickedOption]["timer"] as int),
+        () => _notificationProvider.createNotification(
+          title: "Petamentor has successfully completed the process.",
+          content: "Your 3D filament is ready.",
+        )
+      );
     } catch (e) {
       print("Error updating sensor: $e");
     }
