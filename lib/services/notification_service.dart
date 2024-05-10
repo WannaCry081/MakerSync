@@ -49,16 +49,24 @@ class NotificationService {
         .where((notification) => notification.title == "Petamentor has been stopped due to some issues.")
         .toList();
 
-      // machine has been initialized
+      // machine has been initialized, process is starting
       List<NotificationModel> startNotifications = notifications
         .map((notification) => NotificationModel.fromJson(notification as Map<String, dynamic>))
         .where((notification) => notification.title == "Petamentor has started.")
         .toList();
       
+      // emergency button has been clicked
       List<NotificationModel> emergencyNotifications = notifications
         .map((notification) => NotificationModel.fromJson(notification as Map<String, dynamic>))
         .where((notification) => notification.title == "Petamentor's emergency stop has been activated.")
         .toList();
+
+      // process has finished 
+      List<NotificationModel> finishNotifications = notifications
+        .map((notification) => NotificationModel.fromJson(notification as Map<String, dynamic>))
+        .where((notification) => notification.title == "Petamentor has successfully completed the process.")
+        .toList();
+
 
 
       if (machineNotifications.isNotEmpty) {
@@ -86,6 +94,16 @@ class NotificationService {
           LocalNotificationService.showScheduledNotification(
             title: emergencyNotifications[0].title,
             body: emergencyNotifications[0].content,
+            scheduleDate: DateTime.now().add(const Duration(seconds: 1)),
+          );
+        });
+      }
+
+      if (finishNotifications.isNotEmpty) {
+        Future.delayed(const Duration(seconds: 1), () {
+          LocalNotificationService.showScheduledNotification(
+            title: finishNotifications[0].title,
+            body: finishNotifications[0].content,
             scheduleDate: DateTime.now().add(const Duration(seconds: 1)),
           );
         });
