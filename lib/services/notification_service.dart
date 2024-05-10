@@ -70,43 +70,35 @@ class NotificationService {
 
 
       if (machineNotifications.isNotEmpty) {
-        Future.delayed(const Duration(seconds: 1), () {
-          LocalNotificationService.showScheduledNotification(
-            title: machineNotifications[0].title,
-            body: machineNotifications[0].content,
-            scheduleDate: DateTime.now().add(const Duration(seconds: 1)),
-          );
-        });
+        LocalNotificationService.showScheduledNotification(
+          title: machineNotifications[0].title,
+          body: machineNotifications[0].content,
+          scheduleDate: DateTime.now().add(const Duration(seconds: 1)),
+        );
       }
 
       if (startNotifications.isNotEmpty) {
-        Future.delayed(const Duration(seconds: 1), () {
-          LocalNotificationService.showScheduledNotification(
-            title: startNotifications[0].title,
-            body: startNotifications[0].content,
-            scheduleDate: DateTime.now().add(const Duration(seconds: 1)),
-          );
-        });
+        LocalNotificationService.showScheduledNotification(
+          title: startNotifications[0].title,
+          body: startNotifications[0].content,
+          scheduleDate: DateTime.now().add(const Duration(seconds: 1)),
+        );
       }
       
       if (emergencyNotifications.isNotEmpty) {
-        Future.delayed(const Duration(seconds: 1), () {
-          LocalNotificationService.showScheduledNotification(
-            title: emergencyNotifications[0].title,
-            body: emergencyNotifications[0].content,
-            scheduleDate: DateTime.now().add(const Duration(seconds: 1)),
-          );
-        });
+        LocalNotificationService.showScheduledNotification(
+          title: emergencyNotifications[0].title,
+          body: emergencyNotifications[0].content,
+          scheduleDate: DateTime.now().add(const Duration(seconds: 1)),
+        );
       }
 
       if (finishNotifications.isNotEmpty) {
-        Future.delayed(const Duration(seconds: 1), () {
-          LocalNotificationService.showScheduledNotification(
-            title: finishNotifications[0].title,
-            body: finishNotifications[0].content,
-            scheduleDate: DateTime.now().add(const Duration(seconds: 1)),
-          );
-        });
+        LocalNotificationService.showScheduledNotification(
+          title: finishNotifications[0].title,
+          body: finishNotifications[0].content,
+          scheduleDate: DateTime.now().add(const Duration(seconds: 1)),
+        );
       }
 
 
