@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'package:frontend/services/local_notification_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:frontend/models/notification_model.dart';
 import 'package:frontend/services/api_constants.dart';
@@ -41,6 +42,25 @@ class NotificationService {
 
     if (response.statusCode == 200) {
       final List<dynamic> notifications = json.decode(response.body);
+    
+    // overheat and disconnected filament
+      List<NotificationModel> machineNotifications = notifications
+        .map((notification) => NotificationModel.fromJson(notification as Map<String, dynamic>))
+        .where((notification) => notification.title == "Petamentor has been stopped due to some issues.")
+        .toList();
+
+
+      if (machineNotifications.isNotEmpty) {
+        Future.delayed(const Duration(seconds: 1), () {
+          LocalNotificationService.showScheduledNotification(
+            title: "Petamentor has been stopped due to some issues.",
+            body: "The machine is experiencing some issues. Please fix the issue before proceeding.",
+            scheduleDate: DateTime.now().add(const Duration(seconds: 1)),
+          );
+        });
+      }
+
+
       return notifications.map((user) => NotificationModel.fromJson(user as Map<String, dynamic>)).toList();
     } else if (response.statusCode == 404) {
       throw Exception("Users not found.");
