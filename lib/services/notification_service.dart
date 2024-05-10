@@ -73,7 +73,7 @@ class NotificationService {
         LocalNotificationService.showScheduledNotification(
           title: machineNotifications[0].title,
           body: machineNotifications[0].content,
-          scheduleDate: DateTime.now().add(const Duration(seconds: 1)),
+          scheduleDate: DateTime.now(),
         );
       }
 
@@ -81,7 +81,7 @@ class NotificationService {
         LocalNotificationService.showScheduledNotification(
           title: startNotifications[0].title,
           body: startNotifications[0].content,
-          scheduleDate: DateTime.now().add(const Duration(seconds: 1)),
+          scheduleDate: DateTime.now(),
         );
       }
       
@@ -89,7 +89,7 @@ class NotificationService {
         LocalNotificationService.showScheduledNotification(
           title: emergencyNotifications[0].title,
           body: emergencyNotifications[0].content,
-          scheduleDate: DateTime.now().add(const Duration(seconds: 1)),
+          scheduleDate: DateTime.now(),
         );
       }
 
@@ -97,7 +97,7 @@ class NotificationService {
         LocalNotificationService.showScheduledNotification(
           title: finishNotifications[0].title,
           body: finishNotifications[0].content,
-          scheduleDate: DateTime.now().add(const Duration(seconds: 1)),
+          scheduleDate: DateTime.now(),
         );
       }
 
