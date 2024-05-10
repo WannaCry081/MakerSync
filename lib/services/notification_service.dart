@@ -17,7 +17,7 @@ class NotificationService {
     );
 
     final response = await http.post(
-      Uri.parse("$NOTIFICATION_URL/$MACHINE_CODE"),
+      Uri.parse(NOTIFICATION_URL),
       body: jsonEncode(request.toJson()),
       headers: <String, String> {
         "Content-Type": "application/json; charset=UTF-8"
