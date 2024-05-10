@@ -30,6 +30,7 @@ class _EmergencyViewState extends State<EmergencyView> {
   late SensorProvider _sensorProvider;
   late UserProvider _userProvider;
   late NotificationProvider _notificationProvider;
+  late SettingsProvider _settingsProvider;
 
   @override
   void initState() {
@@ -37,13 +38,13 @@ class _EmergencyViewState extends State<EmergencyView> {
     _sensorProvider = Provider.of<SensorProvider>(context, listen: false);
     _userProvider = Provider.of<UserProvider>(context, listen: false);
     _notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
+    _settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
   }
 
   @override
   Widget build(BuildContext context) {
-    final SettingsProvider settings =  Provider.of<SettingsProvider>(context);
-    final _isConnect = settings.getBool("isConnect");
-    final _isInitialize = settings.getBool("isInitialize");
+    final _isConnect = _settingsProvider.getBool("isConnect");
+    final _isInitialize = _settingsProvider.getBool("isInitialize");
 
     final SensorModel? sensor = _sensorProvider.getSensorData();
 
@@ -137,18 +138,19 @@ class _EmergencyViewState extends State<EmergencyView> {
       message: "You have stopped the machine operation.",
     ).showSnackbar(context);
 
-    LocalNotificationService.showScheduledNotification(
-      title: "Petamentor has stopped.",
-      body: "${_user?.name.split(' ').first ?? ""} has clicked the emergency button.",
-      payload: "Process has been interrupted.",
-      scheduleDate: DateTime.now().add(const Duration(seconds: 1))
-    );
+    // LocalNotificationService.showScheduledNotification(
+    //   title: "Petamentor has stopped.",
+    //   body: "${_user?.name.split(' ').first ?? ""} has clicked the emergency button.",
+    //   payload: "Process has been interrupted.",
+    //   scheduleDate: DateTime.now().add(const Duration(seconds: 1))
+    // );
 
     _notificationProvider.createNotification(
-      title: "Petamentor has stopped.",
-      content: "${_user?.name.split(' ').first ?? ""} has clicked the emergency button."
+      title: "Petamentor's emergency stop has been activated.",
+      content: "${_user?.name.split(' ').first ?? ""} has clicked the emergency button. Petamentor has stopped."
     );
 
+    _settingsProvider.setBool("isStartProcess", false);
   
   }
 
