@@ -147,7 +147,7 @@ class _EmergencyViewState extends State<EmergencyView> {
 
     _notificationProvider.createNotification(
       title: "Petamentor's emergency stop has been activated.",
-      content: "${_user?.name.split(' ').first ?? ""} has clicked the emergency button. Petamentor has stopped."
+      content: "${_user?.name.split(' ').first ?? ""} has pressed the emergency button. Petamentor has stopped."
     );
 
     _settingsProvider.setBool("isStartProcess", false);
