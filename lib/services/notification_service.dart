@@ -40,8 +40,8 @@ class NotificationService {
     final response = await http.get(Uri.parse(NOTIFICATION_URL));
 
     if (response.statusCode == 200) {
-      final List<dynamic> users = json.decode(response.body);
-      return users.map((user) => NotificationModel.fromJson(user as Map<String, dynamic>)).toList();
+      final List<dynamic> notifications = json.decode(response.body);
+      return notifications.map((user) => NotificationModel.fromJson(user as Map<String, dynamic>)).toList();
     } else if (response.statusCode == 404) {
       throw Exception("Users not found.");
     } else if (response.statusCode == 500) {
