@@ -5,7 +5,6 @@ import "package:frontend/providers/notification_provider.dart";
 import "package:frontend/providers/sensor_provider.dart";
 import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/providers/user_provider.dart";
-import "package:frontend/services/local_notification_service.dart";
 import "package:frontend/widgets/button_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
 import "package:provider/provider.dart";
@@ -246,7 +245,6 @@ class _InitializeViewState extends State<InitializeView> {
       // );
 
 
-      // // for the actual process
       // LocalNotificationService.showScheduledNotification(
       //   title: "Petamentor has finished the current process.",
       //   body: "Your 3D filament is ready.",
@@ -264,13 +262,8 @@ class _InitializeViewState extends State<InitializeView> {
         () => _notificationProvider.createNotification(
           title: "Petamentor has successfully completed the process.",
           content: "Your 3D filament is ready.",
-
         )
       );
-      
-
-      
-
     } catch (e) {
       print("Error updating sensor: $e");
     }
