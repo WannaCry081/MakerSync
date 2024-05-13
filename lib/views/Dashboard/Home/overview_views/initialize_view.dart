@@ -222,16 +222,18 @@ Future<void> initializeMachine({
     try {
       final _user = _userProvider.getUserData();
 
+      int timer = _options[_clickedOption]["timer"] as int;
+
       setState(() => _isLoading = true);
       await widget.sensorProvider.updateSensor(
           isInitialized: true,
           isStart: true,
           isStop: false,
-          timer: _options[_clickedOption]["timer"] as int
+          timer: timer 
       );
 
       settings.setBool("isConnect", true);
-      settings.setInt("timer",  _options[_clickedOption]["timer"] as int);
+      settings.setInt("timer", timer);
 
       Future.delayed(
       const Duration(seconds: 2),
@@ -255,7 +257,7 @@ Future<void> initializeMachine({
       // );
 
       _notificationProvider.createNotification(
-        title: "Petamentor has started.",
+        title: "Petamentor has started! Please wait for further notifications.",
         content: "${_user?.name.split(' ').first ?? ""} has initialized the machine. Petamentor is starting.",
       );
 
