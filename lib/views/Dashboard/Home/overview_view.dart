@@ -49,7 +49,9 @@ class _OverviewViewState extends State<OverviewView> {
   Widget build(BuildContext context){
 
     _sensorProvider.fetchSensor();
+    _sensorProvider.startFetchingSensorValues();
     _notificationProvider.fetchNotifications();
+    
 
     final bool _isConnect = _settingsProvider.getBool("isConnect");
     final bool _isInitialize = _settingsProvider.getBool("isInitialize");
@@ -90,7 +92,8 @@ class _OverviewViewState extends State<OverviewView> {
         ScanMode.QR
       );
 
-      updateMachineCode(scan);
+      print(scan);
+      _settingsProvider.setString("code", scan);
 
       if(!mounted) return;
       
