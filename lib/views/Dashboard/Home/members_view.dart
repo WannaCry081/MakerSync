@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/providers/settings_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
-import 'package:frontend/services/user_service.dart';
 import 'package:frontend/widgets/disconnected_view.dart';
 import 'package:frontend/widgets/text_widget.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +65,7 @@ class _MembersViewState extends State<MembersView> {
                           return memberCard(
                             context: context,
                             email: user.email,
-                            name: user.name,
+                            name: user.username,
                           );
                         },
                       );
