@@ -162,7 +162,10 @@ class _EmergencyViewState extends State<EmergencyView> {
       isInitialized: false,
     );
 
+    _settingsProvider.setBool("isInitialize", false);
+
     if (widget.navigateToOverview != null) {
+    _settingsProvider.setBool("isInitialize", false);
       widget.navigateToOverview!(); 
     }
   }
