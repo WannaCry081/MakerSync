@@ -32,7 +32,7 @@ class NotificationService {
     } else if (response.statusCode == 500) {
       throw Exception("Internal Server Error.");
     } else {
-      throw Exception("Failed to create user.");
+      throw Exception("Failed to create notification.");
     }
   }
 
