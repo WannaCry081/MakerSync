@@ -258,7 +258,7 @@ Future<void> initializeMachine({
 
       _notificationProvider.createNotification(
         title: "Petamentor has started! Please wait for further notifications.",
-        content: "${_user?.name.split(' ').first ?? ""} has initialized the machine. Petamentor is starting.",
+        content: "${_user?.username.split(' ').first ?? ""} has initialized the machine. Petamentor is starting.",
       );
 
 
