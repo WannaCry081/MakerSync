@@ -88,7 +88,7 @@ class UserService {
     );
 
     final updatedResponse = await http.put(
-      Uri.parse("$USER_URL/$MACHINE_CODE/$email"),
+      Uri.parse("$USER_URL/$email"),
       body: jsonEncode(updatedUserData.toJson()),
       headers: <String, String> {
         "Content-Type" : "application/json; charset=UTF-8"
