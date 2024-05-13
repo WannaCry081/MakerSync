@@ -5,8 +5,6 @@ import 'package:frontend/providers/notification_provider.dart';
 import 'package:frontend/providers/sensor_provider.dart';
 import 'package:frontend/providers/settings_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
-import 'package:frontend/services/local_notification_service.dart';
-import 'package:frontend/widgets/button_widget.dart';
 import 'package:frontend/widgets/dialog_widget.dart';
 import 'package:frontend/widgets/disconnected_view.dart';
 import 'package:frontend/widgets/snackbar_widget.dart';
@@ -147,7 +145,7 @@ class _EmergencyViewState extends State<EmergencyView> {
 
     _notificationProvider.createNotification(
       title: "Petamentor's emergency stop has been activated.",
-      content: "${_user?.name.split(' ').first ?? ""} has pressed the emergency button. Petamentor has stopped."
+      content: "${_user?.username.split(' ').first ?? ""} has pressed the emergency button. Petamentor has stopped."
     );
 
     _settingsProvider.setBool("isStartProcess", false);
