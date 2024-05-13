@@ -72,7 +72,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
 
                       _settingsProvider.getBool("isConnect")
                       ?  MSTextWidget(
-                          "Hello, ${_user?.name.split(' ').first ?? ""}!",
+                          "Hello, ${_user?.username.split(' ').first ?? ""}!",
                           fontSize: 26.sp,
                           fontWeight: FontWeight.bold,
                           fontColor: Theme.of(context).colorScheme.primary
