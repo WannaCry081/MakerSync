@@ -93,7 +93,7 @@ class _NotificationsViewState extends State<NotificationsView> {
                             context: context,
                             title: notification.title, 
                             content: notification.content,
-                            date: notification.date
+                            created: notification.created
                           );
                         }
                       );
@@ -118,7 +118,7 @@ class _NotificationsViewState extends State<NotificationsView> {
     required BuildContext context, 
     required String title,
     required String content,
-    String? date
+    String? created
   }) {
   return Padding(
     padding: EdgeInsets.symmetric(
@@ -170,7 +170,7 @@ class _NotificationsViewState extends State<NotificationsView> {
           ),
 
           MSTextWidget(
-            date!,
+            created ?? "",
             fontSize: 10.sp,
             fontColor: Colors.grey.shade500,
             fontHeight: 2.h,
