@@ -66,7 +66,7 @@ class SensorProvider with ChangeNotifier {
   }
 
   Future<void> startFetchingSensorValues() async {
-    _timer = Timer.periodic(const Duration(seconds: 500), (timer) async {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       await fetchSensor();
     });
   }
