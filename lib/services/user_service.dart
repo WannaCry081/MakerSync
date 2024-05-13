@@ -8,12 +8,12 @@ import 'package:frontend/services/api_constants.dart';
 class UserService {
 
   Future<UserModel> createUser({
-    required String name,
+    required String username,
     required String email
   }) async {
 
     final request = UserModel(
-      name: name,
+      username: username,
       email: email,
     );
     
@@ -74,7 +74,7 @@ class UserService {
   
   Future<UserModel> updateUser({
     required String email,
-    String? name
+    String? username
   }) async {
     final response = await http.get(Uri.parse("$USER_URL/$email"));
 
@@ -84,7 +84,7 @@ class UserService {
 
     final updatedUserData = UserModel(
       email: email,
-      name: name ?? userData.name
+      username: username ?? userData.username
     );
 
     final updatedResponse = await http.put(
