@@ -6,7 +6,6 @@ import "package:frontend/providers/notification_provider.dart";
 import "package:frontend/providers/sensor_provider.dart";
 import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/providers/user_provider.dart";
-import "package:frontend/services/api_constants.dart";
 import "package:frontend/services/authentication_service.dart";
 import "package:frontend/views/Dashboard/Home/overview_views/connected_view.dart";
 import "package:frontend/views/Dashboard/Home/overview_views/disconnected_view.dart";
@@ -26,7 +25,7 @@ class _OverviewViewState extends State<OverviewView> {
 
   bool _isScanFail = false;
   late String _email;
-  late String _name;
+  late String _username;
 
   late SettingsProvider _settingsProvider;
   late SensorProvider _sensorProvider;
@@ -37,7 +36,7 @@ class _OverviewViewState extends State<OverviewView> {
   void initState() {
     super.initState();
     _email = MakerSyncAuthentication().getUserEmail;
-    _name = MakerSyncAuthentication().getUserDisplayName;
+    _username = MakerSyncAuthentication().getUserDisplayName;
 
     _settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
     _sensorProvider = Provider.of<SensorProvider>(context, listen: false);
@@ -107,7 +106,7 @@ class _OverviewViewState extends State<OverviewView> {
 
         _userProvider.addUserCredential(
           email: _email, 
-          name: _name
+          username: _username
         );
 
         const MSSnackbarWidget(
