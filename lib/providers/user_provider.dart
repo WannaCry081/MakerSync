@@ -45,11 +45,11 @@ class UserProvider with ChangeNotifier {
 
   Future<void> addUserCredential({
     required String email,
-    required String name
+    required String username
   }) async {
 
     await _userService.createUser(
-      name: name, 
+      username: username, 
       email: email
     );
 
@@ -59,13 +59,13 @@ class UserProvider with ChangeNotifier {
 
   Future<void> updateUserCredential({
     required String email,
-    String? name,
+    String? username,
     bool? isConnected
   }) async {
 
     await _userService.updateUser(
       email: _email,
-      name: name
+      username: username
     );
 
     await fetchUserCredential();
