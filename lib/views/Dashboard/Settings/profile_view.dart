@@ -252,7 +252,7 @@ class _ProfileViewState extends State<ProfileView> {
 
   await _userProvider.updateUserCredential(
     email: _user?.email ?? "",
-    name: _newDisplayName.text.trim()
+    username: _newDisplayName.text.trim()
   );
 
   Future.delayed(
