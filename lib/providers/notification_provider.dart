@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/models/notification_model.dart';
 import 'package:frontend/services/notification_service.dart';
@@ -6,6 +8,7 @@ class NotificationProvider with ChangeNotifier{
   final NotificationService _notificationService = NotificationService();
  
   NotificationModel? _notification;
+  late Timer? _timer;
 
   NotificationProvider() {
     _notification = null;
@@ -46,6 +49,12 @@ class NotificationProvider with ChangeNotifier{
     );
 
     await fetchNotifications();
+  }
+
+   Future<void> startFetchingNotifications() async {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      await fetchNotifications();
+    });
   }
 
   NotificationModel? getNotificationData() {
