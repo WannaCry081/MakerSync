@@ -30,6 +30,7 @@ class NotificationProvider with ChangeNotifier{
       notificationId: id
     );
 
+    setNotificationData(notification);
     notifyListeners();
   }
 
