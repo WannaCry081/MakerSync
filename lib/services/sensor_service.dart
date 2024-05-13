@@ -53,7 +53,7 @@ class SensorService {
     bool? isStop,
   }) async {
       // fetch existing sensor data
-      final response = await http.get(Uri.parse("$SENSOR_URL/$MACHINE_CODE"));
+      final response = await http.get(Uri.parse(SENSOR_URL));
 
       if (response.statusCode != 200) { throw Exception("Failed to fetch sensor data."); }
 
@@ -70,7 +70,7 @@ class SensorService {
       );
 
       final updatedResponse = await http.put(
-        Uri.parse("$SENSOR_URL/$MACHINE_CODE"),
+        Uri.parse(SENSOR_URL),
         body: jsonEncode(updatedSensorData.toJson()),
         headers: <String, String> {
           "Content-Type" : "application/json; charset=UTF-8"
