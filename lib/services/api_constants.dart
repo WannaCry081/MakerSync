@@ -1,17 +1,10 @@
-String MACHINE_CODE = "";
+import 'package:frontend/main.dart';
 
 const String BASE_URL = "https://maker-sync-django.vercel.app/api/v2/machines";
-String USER_URL = "";
-String SENSOR_URL = "";
-String NOTIFICATION_URL = "";
+
+String USER_URL = "$BASE_URL/$MACHINE_CODE/users/";
+String SENSOR_URL = "$BASE_URL/$MACHINE_CODE/sensors/";
+String NOTIFICATION_URL = "$BASE_URL/$MACHINE_CODE/notifications";
 
 
 
-void updateMachineCode(String code) {
-  MACHINE_CODE = code;
-  print("Machine Code: $MACHINE_CODE");
-
-  USER_URL = "$BASE_URL/$MACHINE_CODE/users/";
-  SENSOR_URL = "$BASE_URL/$MACHINE_CODE/sensors/";
-  NOTIFICATION_URL = "$BASE_URL/$MACHINE_CODE/notifications";
-}
