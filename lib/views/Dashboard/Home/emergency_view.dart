@@ -5,6 +5,8 @@ import 'package:frontend/providers/notification_provider.dart';
 import 'package:frontend/providers/sensor_provider.dart';
 import 'package:frontend/providers/settings_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
+import 'package:frontend/services/local_notification_service.dart';
+import 'package:frontend/widgets/button_widget.dart';
 import 'package:frontend/widgets/dialog_widget.dart';
 import 'package:frontend/widgets/disconnected_view.dart';
 import 'package:frontend/widgets/snackbar_widget.dart';
@@ -49,7 +51,6 @@ class _EmergencyViewState extends State<EmergencyView> {
     return _isConnect && _isInitialize
       ? content(sensor)
       : const DisconnectedViewWidget();
-
   }
 
   Widget content(SensorModel? sensor) {
