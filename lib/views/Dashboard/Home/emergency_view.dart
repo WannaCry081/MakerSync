@@ -5,8 +5,6 @@ import 'package:frontend/providers/notification_provider.dart';
 import 'package:frontend/providers/sensor_provider.dart';
 import 'package:frontend/providers/settings_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
-import 'package:frontend/services/local_notification_service.dart';
-import 'package:frontend/widgets/button_widget.dart';
 import 'package:frontend/widgets/dialog_widget.dart';
 import 'package:frontend/widgets/disconnected_view.dart';
 import 'package:frontend/widgets/snackbar_widget.dart';
@@ -51,6 +49,7 @@ class _EmergencyViewState extends State<EmergencyView> {
     return _isConnect && _isInitialize
       ? content(sensor)
       : const DisconnectedViewWidget();
+
   }
 
   Widget content(SensorModel? sensor) {
@@ -72,12 +71,7 @@ class _EmergencyViewState extends State<EmergencyView> {
             Positioned.fill(
               child: Center(
                 child: ElevatedButton(
-                  // onPressed: sensor == null ? null : () => stopSensor(),
                   onPressed: ()  {
-                    // if (widget.navigateToOverview != null) {
-                    //   widget.navigateToOverview!(); 
-                    // }
-
                     stopMachine();
 
                     showDialog(
@@ -137,13 +131,6 @@ class _EmergencyViewState extends State<EmergencyView> {
       message: "You have stopped the machine operation.",
     ).showSnackbar(context);
 
-    // LocalNotificationService.showScheduledNotification(
-    //   title: "Petamentor has stopped.",
-    //   body: "${_user?.name.split(' ').first ?? ""} has clicked the emergency button.",
-    //   payload: "Process has been interrupted.",
-    //   scheduleDate: DateTime.now().add(const Duration(seconds: 1))
-    // );
-
     _notificationProvider.createNotification(
       title: "Petamentor's emergency stop has been activated.",
       content: "${_user?.username.split(' ').first ?? ""} has pressed the emergency button. Petamentor has stopped."
@@ -153,7 +140,7 @@ class _EmergencyViewState extends State<EmergencyView> {
   
   }
 
-   void resetMachine() async { 
+  void resetMachine() async { 
     await _sensorProvider.updateSensor(
       counter: 0,
       timer: 0,
