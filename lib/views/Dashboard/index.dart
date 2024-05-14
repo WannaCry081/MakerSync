@@ -98,7 +98,7 @@ class _DashboardViewState extends State<DashboardView> {
         confineInSafeArea: true,
         screens: const [
           HomeView(),
-          NotificationPreview(),
+          NotificationsView(),
           SettingsView(),
         ],
         items: [
