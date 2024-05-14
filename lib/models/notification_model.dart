@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class NotificationModel {
   final int? id;
   final String? created;
@@ -18,6 +20,12 @@ class NotificationModel {
       title: json["title"] as String? ?? "",
       content: json["content"] as String? ?? ""
     );
+  }
+
+  String get formattedDate {
+    if (created == null || created!.isEmpty) return "";
+    final DateTime dateTime = DateTime.parse(created!);
+    return DateFormat('MMMM d, EEE').format(dateTime);
   }
 
   Map<String, dynamic> toJson() {
