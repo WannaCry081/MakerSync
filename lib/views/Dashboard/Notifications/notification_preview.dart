@@ -4,13 +4,25 @@ import "package:frontend/views/Dashboard/Notifications/index.dart";
 import "package:frontend/widgets/back_button_widget.dart";
 import "package:frontend/widgets/text_widget.dart";
 import "package:frontend/widgets/wrapper_widget.dart";
+import "package:intl/intl.dart";
 
 
 class NotificationPreview extends StatelessWidget {
-  const NotificationPreview({super.key});
+  final int id;
+  final String created;
+  final String title;
+  final String body;
+
+  const NotificationPreview({
+    required this.id,
+    required this.created,
+    required this.title,
+    required this.body
+  });
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: MSWrapperWidget(
        child: Padding(
@@ -19,7 +31,9 @@ class NotificationPreview extends StatelessWidget {
           vertical: 22.h
         ),
 
-        child: content(context: context),
+        child: content(
+          context: context, 
+        ),
        )
       )
     );
@@ -28,28 +42,25 @@ class NotificationPreview extends StatelessWidget {
   Widget content({
     required BuildContext context
   }) {
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         MSBackButtonWidget(
-            btnOnTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const NotificationsView()
-              )
-            )
+            btnOnTap: () => Navigator.of(context).pop()
         ),
         
         SizedBox(height: 30.h),
 
         MSTextWidget(
-          "July 10, 2024 | 9:10AM",
+          created,
           fontColor: Colors.grey.shade400,
         ),
 
         SizedBox(height: 10.h),
         
         MSTextWidget(
-          "Petamentor's emergency stop has been activated.",
+          title,
           fontSize: 26.sp,
           fontColor: Theme.of(context).colorScheme.primary,
           fontWeight: FontWeight.bold
@@ -58,7 +69,7 @@ class NotificationPreview extends StatelessWidget {
         SizedBox(height: 35.h),
 
         MSTextWidget(
-          "Someone has pressed the emergency button. Petamentor has stopped.",
+          body,
           fontSize: 16.sp,
           fontColor: Theme.of(context).colorScheme.onBackground,
         ),
