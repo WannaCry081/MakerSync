@@ -25,7 +25,13 @@ class NotificationModel {
   String get formattedDate {
     if (created == null || created!.isEmpty) return "";
     final DateTime dateTime = DateTime.parse(created!);
-    return DateFormat('MMMM d, EEE').format(dateTime);
+    return DateFormat('MMMM d').format(dateTime);
+  }
+
+  String get previewDate {
+    if (created == null || created!.isEmpty) return "";
+    final DateTime dateTime = DateTime.parse(created!);
+    return DateFormat('MMMM d, y  |  h:mma').format(dateTime);
   }
 
   Map<String, dynamic> toJson() {
