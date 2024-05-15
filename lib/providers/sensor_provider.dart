@@ -71,6 +71,23 @@ class SensorProvider with ChangeNotifier {
     });
   }
 
+  Future<void> updateTime({
+    required int maxTimer
+  }) async {
+    int currentValue = 0;
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      if (currentValue <= maxTimer) {
+        await _sensorService.updateSensor(
+          timer: currentValue,
+        );
+        currentValue++;
+      } else {
+        _timer?.cancel();
+      }
+    });
+  }
+
   SensorModel? getSensorData(){
     return _sensor;
   }
