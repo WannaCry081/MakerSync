@@ -6,6 +6,7 @@ import "package:frontend/providers/notification_provider.dart";
 import "package:frontend/providers/sensor_provider.dart";
 import "package:frontend/providers/settings_provider.dart";
 import "package:frontend/providers/user_provider.dart";
+import "package:frontend/services/api_constants.dart";
 import "package:frontend/services/authentication_service.dart";
 import "package:frontend/views/Dashboard/Home/overview_views/connected_view.dart";
 import "package:frontend/views/Dashboard/Home/overview_views/disconnected_view.dart";
@@ -27,7 +28,7 @@ class _OverviewViewState extends State<OverviewView> {
   late String _email;
   late String _username;
 
-  late SettingsProvider _settingsProvider;
+  // late SettingsProvider _settingsProvider;
   late SensorProvider _sensorProvider;
   late UserProvider _userProvider;
   late NotificationProvider _notificationProvider;
@@ -38,19 +39,20 @@ class _OverviewViewState extends State<OverviewView> {
     _email = MakerSyncAuthentication().getUserEmail;
     _username = MakerSyncAuthentication().getUserDisplayName;
 
-    _settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
+    // _settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
     _sensorProvider = Provider.of<SensorProvider>(context, listen: false);
     _userProvider = Provider.of<UserProvider>(context, listen: false);
     _notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
+    _sensorProvider.fetchSensor();
+    _sensorProvider.startFetchingSensorValues();
+    _notificationProvider.startFetchingNotifications();
+    _notificationProvider.fetchNotifications();
   }
 
   @override
   Widget build(BuildContext context){
-
-    _sensorProvider.fetchSensor();
-    _sensorProvider.startFetchingSensorValues();
-    _notificationProvider.fetchNotifications();
     
+    final SettingsProvider _settingsProvider = Provider.of<SettingsProvider>(context, listen: true);
 
     final bool _isConnect = _settingsProvider.getBool("isConnect");
     final bool _isInitialize = _settingsProvider.getBool("isInitialize");
@@ -66,20 +68,20 @@ class _OverviewViewState extends State<OverviewView> {
         ? _isInitialize
           ? ConnectedView(
             settingsProvider: _settingsProvider,
-            sensorProvider: _sensorProvider,
           )
           : InitializeView(
             sensorProvider: _sensorProvider,
           )
         : DisconnectedView(
               isScanFail: _isScanFail, 
-              btnOnTap: () => scanQRCode(context)) 
+              btnOnTap: () => scanQRCode(context, _settingsProvider)) 
       )
     );
   }
   
   Future<void> scanQRCode(
     BuildContext context, 
+    SettingsProvider _settingsProvider
   ) async {
     String scan;
     try{
@@ -92,7 +94,10 @@ class _OverviewViewState extends State<OverviewView> {
       );
 
       print(scan);
+      print(SENSOR_URL);
       _settingsProvider.setString("code", scan);
+      print(_settingsProvider.getString("code"));
+
 
       if(!mounted) return;
       
