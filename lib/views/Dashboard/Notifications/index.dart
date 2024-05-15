@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:frontend/models/notification_model.dart';
 import 'package:frontend/providers/notification_provider.dart';
 import 'package:frontend/providers/settings_provider.dart';
+import 'package:frontend/views/Dashboard/Notifications/notification_preview.dart';
 import 'package:frontend/widgets/disconnected_view.dart';
 import 'package:frontend/widgets/text_widget.dart';
 import 'package:frontend/widgets/wrapper_widget.dart';
@@ -85,15 +86,28 @@ class _NotificationsViewState extends State<NotificationsView> {
                         );
                       }
 
-                      ListView.builder(
+                      return ListView.builder(
                         itemCount: notifications.length,
                         itemBuilder: (context, index){
                           final NotificationModel notification = notifications[index];
+
                           return notificationCard(
                             context: context,
                             title: notification.title, 
                             content: notification.content,
-                            created: notification.created
+                            created: notification.formattedDate,
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => NotificationPreview(
+                                    id: index,
+                                    title: notification.title,
+                                    body: notification.content,
+                                    created: notification.previewDate
+                                  )
+                                )
+                              );
+                            }
                           );
                         }
                       );
@@ -101,7 +115,12 @@ class _NotificationsViewState extends State<NotificationsView> {
                       return Text("${snapshot.error}");
                     }
 
-                    return const CircularProgressIndicator();
+                    return Center(
+                      child: SizedBox(
+                        height: 50.h,
+                        width: 50.w,
+                        child: const CircularProgressIndicator()),
+                    );
                   },
                 )
               )
@@ -118,64 +137,68 @@ class _NotificationsViewState extends State<NotificationsView> {
     required BuildContext context, 
     required String title,
     required String content,
+    required VoidCallback onTap,
     String? created
   }) {
-  return Padding(
-    padding: EdgeInsets.symmetric(
-      vertical: 7.5.h,
-    ),
-    child: Container(
+  return GestureDetector(
+    onTap: onTap,
+    child: Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: 12.w,
-        vertical: 12.h
+        vertical: 7.5.h,
       ),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.r),
-          color: Theme.of(context).colorScheme.tertiary,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 12.w,
+          vertical: 12.h
         ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SvgPicture.asset(
-            Theme.of(context).brightness == Brightness.dark
-            ? "assets/svgs/Logo_DarkMode.svg"
-            : "assets/svgs/Logo_LightMode.svg",
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.r),
+            color: Theme.of(context).colorScheme.tertiary,
           ),
-
-          SizedBox(width: 12.w),
-          
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                MSTextWidget(
-                  title,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  fontColor: Theme.of(context).colorScheme.onBackground,
-                  textOverflow: TextOverflow.ellipsis,
-                ),
-
-                SizedBox(height: 3.h),
-
-                MSTextWidget(
-                  content,
-                  fontWeight: FontWeight.w500,
-                  fontColor: Colors.grey.shade600,
-                  textOverflow: TextOverflow.ellipsis,
-                  fontHeight: 1.h,
-                )
-              ],
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SvgPicture.asset(
+              Theme.of(context).brightness == Brightness.dark
+              ? "assets/svgs/Logo_DarkMode.svg"
+              : "assets/svgs/Logo_LightMode.svg",
             ),
-          ),
-
-          MSTextWidget(
-            created ?? "",
-            fontSize: 10.sp,
-            fontColor: Colors.grey.shade500,
-            fontHeight: 2.h,
-          )
-        ],
+    
+            SizedBox(width: 12.w),
+            
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MSTextWidget(
+                    title,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    fontColor: Theme.of(context).colorScheme.onBackground,
+                    textOverflow: TextOverflow.ellipsis,
+                  ),
+    
+                  SizedBox(height: 3.h),
+    
+                  MSTextWidget(
+                    content,
+                    fontWeight: FontWeight.w500,
+                    fontColor: Colors.grey.shade600,
+                    textOverflow: TextOverflow.ellipsis,
+                    fontHeight: 1.h,
+                  )
+                ],
+              ),
+            ),
+    
+            MSTextWidget(
+              created ?? "",
+              fontSize: 10.sp,
+              fontColor: Colors.grey.shade500,
+              fontHeight: 2.h,
+            )
+          ],
+        ),
       ),
     ),
   );
