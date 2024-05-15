@@ -73,7 +73,7 @@ class _InitializeViewState extends State<InitializeView> {
   @override
   Widget build(BuildContext context) {
 
-    final SettingsProvider settings = Provider.of<SettingsProvider>(context, listen: false);;
+    final SettingsProvider settings = Provider.of<SettingsProvider>(context, listen: true);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -236,42 +236,21 @@ Future<void> initializeMachine({
       settings.setInt("timer", timer);
 
       Future.delayed(
-      const Duration(seconds: 2),
-        () => setState(() => _isLoading = false),
+        const Duration(seconds: 2),
+          () {
+            if (mounted) setState(() => _isLoading = false);
+          },
       );
 
-
-      // LocalNotificationService.showScheduledNotification(
-      //   title: "Petamentor has started.",
-      //   body: "${_user?.name.split(' ').first ?? ""} has initialized the machine. Petamentor is starting.",
-      //   payload: "Process is starting.",
-      //   scheduleDate: DateTime.now().add(const Duration(seconds: 1))
-      // );
-
-
-      // LocalNotificationService.showScheduledNotification(
-      //   title: "Petamentor has finished the current process.",
-      //   body: "Your 3D filament is ready.",
-      //   payload: "Process has finished.",
-      //   scheduleDate: DateTime.now().add(Duration(seconds: _options[_clickedOption]["timer"] as int))
-      // );
-
       _notificationProvider.createNotification(
-        title: "Petamentor has started! Please wait for further notifications.",
+        title: "Petamentor has started.",
         content: "${_user?.username.split(' ').first ?? ""} has initialized the machine. Petamentor is starting.",
       );
 
-
-      // -- handled in the dashboard --
-      // Future.delayed(
-      //   Duration(seconds: _options[_clickedOption]["timer"] as int),
-      //   () => _notificationProvider.createNotification(
-      //     title: "Petamentor has successfully completed the process.",
-      //     content: "Your 3D filament is ready.",
-      //   )
-      // );
+      print("user: ${_user?.username.split(' ').first ?? ""}");
 
       settings.setBool("isStartProcess", true);
+      print("initialized!");
 
     } catch (e) {
       print("Error updating sensor: $e");
