@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
@@ -11,9 +13,11 @@ import "package:provider/provider.dart";
 
 class InitializeView extends StatefulWidget {
   final SensorProvider sensorProvider;
+  final SettingsProvider settingsProvider;
 
   const InitializeView({
     required this.sensorProvider,
+    required this.settingsProvider,
     super.key
   });
 
@@ -26,6 +30,8 @@ class _InitializeViewState extends State<InitializeView> {
 
   late UserProvider _userProvider;
   late NotificationProvider _notificationProvider;  
+
+  late Timer? _timer;
   
 
   @override
@@ -127,9 +133,12 @@ class _InitializeViewState extends State<InitializeView> {
         ),
         
         MSButtonWidget(
-          btnOnTap: () => initializeMachine(
-            settings: settings
-          ),
+          btnOnTap: () async {
+            int timer = _options[_clickedOption]["timer"] as int;
+
+            await initializeMachine();
+            widget.sensorProvider.updateTime(maxTimer: timer); 
+          },
           btnIsLoading: _isLoading,
           btnColor: Theme.of(context).colorScheme.primary,
           child: Center(
@@ -216,24 +225,33 @@ class _InitializeViewState extends State<InitializeView> {
   );
 }
 
-Future<void> initializeMachine({
-    required SettingsProvider settings
-  }) async {
+Future<void> initializeMachine() async {
     try {
       final _user = _userProvider.getUserData();
 
-      int timer = _options[_clickedOption]["timer"] as int;
+      int maxTimer = _options[_clickedOption]["timer"] as int;
+      int currentValue = 0;
 
       setState(() => _isLoading = true);
-      await widget.sensorProvider.updateSensor(
+      
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      if (currentValue <= maxTimer) {
+        await widget.sensorProvider.updateSensor(
           isInitialized: true,
           isStart: true,
           isStop: false,
-          timer: timer 
-      );
+          timer: maxTimer,
+          counter: currentValue,
+        );
+        currentValue++;
+      } else {
+        _timer?.cancel();
+      }
+    });
 
-      settings.setBool("isConnect", true);
-      settings.setInt("timer", timer);
+
+      widget.settingsProvider.setBool("isConnect", true);
+      widget.settingsProvider.setInt("timer", maxTimer);
 
       Future.delayed(
         const Duration(seconds: 2),
@@ -247,9 +265,11 @@ Future<void> initializeMachine({
         content: "${_user?.username.split(' ').first ?? ""} has initialized the machine. Petamentor is starting.",
       );
 
+      // widget.sensorProvider.updateTime(maxTimer: timer);      
+
       print("user: ${_user?.username.split(' ').first ?? ""}");
 
-      settings.setBool("isStartProcess", true);
+      widget.settingsProvider.setBool("isStartProcess", true);
       print("initialized!");
 
     } catch (e) {
