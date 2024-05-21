@@ -31,7 +31,8 @@ class _InitializeViewState extends State<InitializeView> {
   late UserProvider _userProvider;
   late NotificationProvider _notificationProvider;  
 
-  late Timer? _timer;
+  int currentValue = 0;
+  Timer? _timer;
   
 
   @override
@@ -51,36 +52,33 @@ class _InitializeViewState extends State<InitializeView> {
     },
     {
       "type" : "500 ml",
-      "time" : "1 Hour",
+      "time" : "Approx. 20 minutes",
       "image" : "assets/svgs/Bottle_500ml.svg",
-      "timer" : 60 // minutes
+      "timer" : 1200 // 1200 seconds
     },
     {
       "type" : "1000 ml",
-      "time" : "1 Hour 30 Minutes",
+      "time" : "Approx. 40 minutes",
       "image" : "assets/svgs/Bottle_1000ml.svg",
-      "timer" : 90 // minutes
+      "timer" : 2400 //seconds
     },
     {
       "type" : "1500 ml",
-      "time" : "2 Hours",
+      "time" : "1 Hour 10 mins",
       "image" : "assets/svgs/Bottle_1500ml.svg",
-      "timer" : 120 // minutes
+      "timer" : 4200 //seconds
     },
     {
       "type" : "2000 ml",
-      "time" : "2 Hours 30 Minutes",
+      "time" : "1 Hour 30 mins",
       "image" : "assets/svgs/Bottle_2000ml.svg",
-      "timer" : 150 // minutes
+      "timer" : 5700 //seconds
     },
   ];
 
 
   @override
   Widget build(BuildContext context) {
-
-    final SettingsProvider settings = Provider.of<SettingsProvider>(context, listen: true);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -137,7 +135,12 @@ class _InitializeViewState extends State<InitializeView> {
             int timer = _options[_clickedOption]["timer"] as int;
 
             await initializeMachine();
-            widget.sensorProvider.updateTime(maxTimer: timer); 
+            setState(() {
+              int maxTimer = _options[_clickedOption]["timer"] as int;
+              if (maxTimer > 0) {
+                _startTimer(maxTimer);
+              }
+              });
           },
           btnIsLoading: _isLoading,
           btnColor: Theme.of(context).colorScheme.primary,
@@ -225,33 +228,70 @@ class _InitializeViewState extends State<InitializeView> {
   );
 }
 
+
+ void _startTimer(int maxTimer) {
+
+  final isStop = widget.settingsProvider.getBool("isStop");
+
+  _timer?.cancel(); 
+  currentValue = 0;
+
+  _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+    if (currentValue <= maxTimer) {
+      int percent = ((currentValue / maxTimer) * 100).toInt();
+      print("Current Value: $currentValue, Max Timer: $maxTimer, Percent: $percent");
+
+      if (!isStop) {
+        
+        print("--------UPDATED COUNTER!-----------");
+
+        if(currentValue == 100) {
+          timer.cancel();
+          
+          _notificationProvider.createNotification(
+            title: "Petamentor has finished.",
+            content: "Petamentor has successfully completed the process.",
+          );
+          
+        }
+
+        await widget.sensorProvider.updateSensor(
+          counter: percent,
+        );
+
+      }
+      currentValue++;
+    } else {
+      timer.cancel();
+      print("Timer Cancelled");
+    }
+  });
+}
+
 Future<void> initializeMachine() async {
     try {
       final _user = _userProvider.getUserData();
+      final isStop = widget.settingsProvider.getBool("isStop");
 
       int maxTimer = _options[_clickedOption]["timer"] as int;
-      int currentValue = 0;
 
       setState(() => _isLoading = true);
-      
-      _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (currentValue <= maxTimer) {
-        await widget.sensorProvider.updateSensor(
-          isInitialized: true,
-          isStart: true,
-          isStop: false,
-          timer: maxTimer,
-          counter: currentValue,
-        );
-        currentValue++;
-      } else {
-        _timer?.cancel();
-      }
-    });
 
+      await widget.sensorProvider.updateSensor(
+        isInitialized: true,
+        isStart: true,
+        isStop: false,
+        timer: maxTimer,
+      );
 
       widget.settingsProvider.setBool("isConnect", true);
+      widget.settingsProvider.setBool("isInitialize", true);
       widget.settingsProvider.setInt("timer", maxTimer);
+
+      _notificationProvider.createNotification(
+        title: "Petamentor has started.",
+        content: "${_user?.username.split(' ').first ?? ""} has initialized the machine. Petamentor is starting.",
+      );
 
       Future.delayed(
         const Duration(seconds: 2),
@@ -259,18 +299,6 @@ Future<void> initializeMachine() async {
             if (mounted) setState(() => _isLoading = false);
           },
       );
-
-      _notificationProvider.createNotification(
-        title: "Petamentor has started.",
-        content: "${_user?.username.split(' ').first ?? ""} has initialized the machine. Petamentor is starting.",
-      );
-
-      // widget.sensorProvider.updateTime(maxTimer: timer);      
-
-      print("user: ${_user?.username.split(' ').first ?? ""}");
-
-      widget.settingsProvider.setBool("isStartProcess", true);
-      print("initialized!");
 
     } catch (e) {
       print("Error updating sensor: $e");
