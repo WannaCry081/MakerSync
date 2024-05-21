@@ -30,6 +30,10 @@ class SensorProvider with ChangeNotifier {
         settings: _settingsProvider
       );
 
+      if(sensor.isStop == true) {
+        stopFetchingSensorValues();
+      }
+
       setSensorData(sensor);
       notifyListeners();
 
@@ -65,6 +69,7 @@ class SensorProvider with ChangeNotifier {
     await fetchSensor();
   }
 
+
   Future<void> startFetchingSensorValues() async {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       await fetchSensor();
@@ -79,7 +84,7 @@ class SensorProvider with ChangeNotifier {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       if (currentValue <= maxTimer) {
         await _sensorService.updateSensor(
-          timer: currentValue,
+          counter: currentValue,
         );
         currentValue++;
       } else {
@@ -90,6 +95,10 @@ class SensorProvider with ChangeNotifier {
 
   SensorModel? getSensorData(){
     return _sensor;
+  }
+
+  void stopFetchingSensorValues() async {
+    _timer?.cancel();
   }
 
 
