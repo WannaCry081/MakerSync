@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:frontend/providers/sensor_provider.dart';
 import 'package:frontend/providers/settings_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:frontend/models/sensor_model.dart';
@@ -25,13 +26,20 @@ class SensorService {
   }) async {
 
     final response = await http.get(Uri.parse(SENSOR_URL));
+
+    print("sensor: ${response.statusCode}");
     
     if (response.statusCode == 200) {
 
     final sensor = SensorModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
-    settings.setBool("isInitialize", sensor.isInitialized);
 
-    return SensorModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      print("isInitialize: ${sensor.isInitialized}");
+      print("counter: ${sensor.counter}");
+
+      settings.setBool("isInitialize", sensor.isInitialized);
+      settings.setBool("isStop", sensor.isStop);
+
+      return SensorModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
 
     } else if (response.statusCode == 400) {
       throw Exception("Invalid sensor request.");
@@ -54,6 +62,7 @@ class SensorService {
   }) async {
       // fetch existing sensor data
       final response = await http.get(Uri.parse(SENSOR_URL));
+      print(SENSOR_URL);
 
       if (response.statusCode != 200) { throw Exception("Failed to fetch sensor data."); }
 
@@ -78,7 +87,7 @@ class SensorService {
       );
 
       if (updatedResponse.statusCode == 200) {
-         return updatedSensorData;
+        return updatedSensorData;
       } else if (updatedResponse.statusCode == 400) {
         throw Exception("Invalid sensor request.");
       } else if (updatedResponse.statusCode == 404) {
