@@ -42,7 +42,7 @@ class ConnectedView extends StatelessWidget {
                 backgroundColor: Theme.of(context).colorScheme.tertiary,
                 circularStrokeCap: CircularStrokeCap.round,
                 center: MSTextWidget(
-                  "${(sensor.timer * 100).toInt()}%",
+                  "${sensor.counter}%",
                   fontColor: Theme.of(context).colorScheme.onBackground,
                   fontSize: 45.sp,
                   fontWeight: FontWeight.w500,
