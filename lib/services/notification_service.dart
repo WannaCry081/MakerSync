@@ -4,10 +4,13 @@ import 'package:frontend/services/local_notification_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:frontend/models/notification_model.dart';
 import 'package:frontend/services/api_constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationService {
+
+  DateTime? _latestNotificationTime;  
   
-    Future<NotificationModel> createNotification({
+  Future<NotificationModel> createNotification({
       required String title,
       required String content
     }) async {
@@ -49,61 +52,87 @@ class NotificationService {
     if (response.statusCode == 200) {
       final List<dynamic> notifications = json.decode(response.body);
 
-
       // overheat and disconnected filament
-      List<NotificationModel> machineNotifications = notifications
-        .map((notification) => NotificationModel.fromJson(notification as Map<String, dynamic>))
-        .where((notification) => notification.title == "Petamentor has been stopped due to some issues.")
-        .toList();
+      // List<NotificationModel> machineNotifications = notifications
+      //   .map((notification) => NotificationModel.fromJson(notification as Map<String, dynamic>))
+      //   .where((notification) => notification.title == "Petamentor has been stopped due to some issues.")
+      //   .toList();
 
-      // machine has been initialized, process is starting
-      List<NotificationModel> startNotifications = notifications
-        .map((notification) => NotificationModel.fromJson(notification as Map<String, dynamic>))
-        .where((notification) => notification.title == "Petamentor has started.")
-        .toList();
+      // // machine has been initialized, process is starting
+      // List<NotificationModel> startNotifications = notifications
+      //   .map((notification) => NotificationModel.fromJson(notification as Map<String, dynamic>))
+      //   .where((notification) => notification.title == "Petamentor has started.")
+      //   .toList();
       
-      // emergency button has been clicked
-      List<NotificationModel> emergencyNotifications = notifications
-        .map((notification) => NotificationModel.fromJson(notification as Map<String, dynamic>))
-        .where((notification) => notification.title == "Petamentor's emergency stop has been activated.")
-        .toList();
+      // // emergency button has been clicked
+      // List<NotificationModel> emergencyNotifications = notifications
+      //   .map((notification) => NotificationModel.fromJson(notification as Map<String, dynamic>))
+      //   .where((notification) => notification.title == "Petamentor's emergency stop has been activated.")
+      //   .toList();
 
-      // process has finished 
-      List<NotificationModel> finishNotifications = notifications
-        .map((notification) => NotificationModel.fromJson(notification as Map<String, dynamic>))
-        .where((notification) => notification.title == "Petamentor has successfully completed the process.")
-        .toList();
+      // // process has finished 
+      // List<NotificationModel> finishNotifications = notifications
+      //   .map((notification) => NotificationModel.fromJson(notification as Map<String, dynamic>))
+      //   .where((notification) => notification.title == "Petamentor has successfully completed the process.")
+      //   .toList();
 
 
 
-      if (machineNotifications.isNotEmpty) {
-        LocalNotificationService.showScheduledNotification(
-          title: machineNotifications[0].title,
-          body: machineNotifications[0].content,
-          scheduleDate: DateTime.now().add(const Duration(seconds: 2)),
-        );
-      }
+      // if (machineNotifications.isNotEmpty) {
+      //   LocalNotificationService.showScheduledNotification(
+      //     title: machineNotifications[0].title,
+      //     body: machineNotifications[0].content,
+      //     scheduleDate: DateTime.now().add(const Duration(seconds: 2)),
+      //   );
+      // }
 
-      if (startNotifications.isNotEmpty) {
-        LocalNotificationService.showScheduledNotification(
-          title: startNotifications[0].title,
-          body: startNotifications[0].content,
-          scheduleDate: DateTime.now().add(const Duration(seconds: 2)),
-        );
-      }
+      // if (startNotifications.isNotEmpty) {
+      //   LocalNotificationService.showScheduledNotification(
+      //     title: startNotifications[0].title,
+      //     body: startNotifications[0].content,
+      //     scheduleDate: DateTime.now().add(const Duration(seconds: 2)),
+      //   );
+      // }
       
-      if (emergencyNotifications.isNotEmpty) {
-        LocalNotificationService.showScheduledNotification(
-          title: emergencyNotifications[0].title,
-          body: emergencyNotifications[0].content,
-          scheduleDate: DateTime.now().add(const Duration(seconds: 2)),
-        );
+      // if (emergencyNotifications.isNotEmpty) {
+      //   LocalNotificationService.showScheduledNotification(
+      //     title: emergencyNotifications[0].title,
+      //     body: emergencyNotifications[0].content,
+      //     scheduleDate: DateTime.now().add(const Duration(seconds: 2)),
+      //   );
+      // }
+
+      // if (finishNotifications.isNotEmpty) {
+      //   LocalNotificationService.showScheduledNotification(
+      //     title: finishNotifications[0].title,
+      //     body: finishNotifications[0].content,
+      //     scheduleDate: DateTime.now().add(const Duration(seconds: 2)),
+      //   );
+      // }
+
+
+      DateTime? latestTime = _latestNotificationTime;
+
+      // Filter notifications based on the title and created time
+      List<NotificationModel> filteredNotifications = notifications
+          .map((notification) => NotificationModel.fromJson(notification as Map<String, dynamic>))
+          .where((notification) {
+            DateTime notificationTime = DateTime.parse(notification.created!);
+            return latestTime == null || notificationTime.isAfter(latestTime);
+          }).toList();
+
+      // Update the latest notification time
+      if (filteredNotifications.isNotEmpty) {
+        _latestNotificationTime = filteredNotifications
+            .map((notification) => DateTime.parse(notification.created!))
+            .reduce((a, b) => a.isAfter(b) ? a : b);
       }
 
-      if (finishNotifications.isNotEmpty) {
+      // Trigger local notifications
+      for (var notification in filteredNotifications) {
         LocalNotificationService.showScheduledNotification(
-          title: finishNotifications[0].title,
-          body: finishNotifications[0].content,
+          title: notification.title,
+          body: notification.content,
           scheduleDate: DateTime.now().add(const Duration(seconds: 2)),
         );
       }
