@@ -141,14 +141,19 @@ class _EmergencyViewState extends State<EmergencyView> {
   }
 
   void resetMachine() async { 
+    _sensorProvider.stopFetchingSensorValues();
+    
     await _sensorProvider.updateSensor(
       counter: 0,
       timer: 0,
-      temperature: 0,
       isInitialized: false,
+      isStop: true,
+      isStart: false
     );
 
+
     _settingsProvider.setBool("isInitialize", false);
+    _settingsProvider.setBool("isStop", true);
 
     if (widget.navigateToOverview != null) {
       widget.navigateToOverview!(); 
