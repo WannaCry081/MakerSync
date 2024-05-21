@@ -18,7 +18,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin  {
-  late SettingsProvider _settingsProvider;
   late UserProvider _userProvider;
   late TabController _tabController;
 
@@ -41,7 +40,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    _settingsProvider = Provider.of<SettingsProvider>(context);
+    final SettingsProvider _settingsProvider = Provider.of<SettingsProvider>(context,listen: true);
     _userProvider = Provider.of<UserProvider>(context);
     
     final _user = _userProvider.getUserData();
@@ -72,7 +71,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
 
                       _settingsProvider.getBool("isConnect")
                       ?  MSTextWidget(
-                          "Hello, ${_user?.name.split(' ').first ?? ""}!",
+                          "Hello, ${_user?.username.split(' ').first ?? ""}!",
                           fontSize: 26.sp,
                           fontWeight: FontWeight.bold,
                           fontColor: Theme.of(context).colorScheme.primary

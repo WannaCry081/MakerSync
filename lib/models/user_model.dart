@@ -1,23 +1,23 @@
 class UserModel {
   final String email;
-  final String name;
+  final String username;
 
   const UserModel({
     required this.email,
-    required this.name
+    required this.username
   });
 
   factory UserModel.fromJson(Map <String, dynamic> json){
     return UserModel(
       email: json["email"] as String? ?? "",
-      name: json["name"] as String? ?? ""
+      username: json["username"] as String? ?? ""
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       "email" : email,
-      "name" : name
+      "username" : username
     };
   }
 }

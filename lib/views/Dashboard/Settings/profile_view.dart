@@ -36,7 +36,7 @@ class _ProfileViewState extends State<ProfileView> {
     super.initState();
     _userProvider = Provider.of<UserProvider>(context, listen: false);
     _user = context.read<UserProvider>().getUserData();
-    _currentDisplayName = TextEditingController(text: _user?.name);
+    _currentDisplayName = TextEditingController(text: _user?.username);
     _newDisplayName = TextEditingController(text: "");
   }
 
@@ -252,7 +252,7 @@ class _ProfileViewState extends State<ProfileView> {
 
   await _userProvider.updateUserCredential(
     email: _user?.email ?? "",
-    name: _newDisplayName.text.trim()
+    username: _newDisplayName.text.trim()
   );
 
   Future.delayed(

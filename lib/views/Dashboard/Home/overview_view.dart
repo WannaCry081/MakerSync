@@ -16,7 +16,10 @@ import "package:provider/provider.dart";
 
 
 class OverviewView extends StatefulWidget {
-  const OverviewView({ super.key });
+
+  const OverviewView({
+    super.key
+  });
 
   @override
   State<OverviewView> createState() => _OverviewViewState();
@@ -26,9 +29,8 @@ class _OverviewViewState extends State<OverviewView> {
 
   bool _isScanFail = false;
   late String _email;
-  late String _name;
+  late String _username;
 
-  late SettingsProvider _settingsProvider;
   late SensorProvider _sensorProvider;
   late UserProvider _userProvider;
   late NotificationProvider _notificationProvider;
@@ -37,48 +39,64 @@ class _OverviewViewState extends State<OverviewView> {
   void initState() {
     super.initState();
     _email = MakerSyncAuthentication().getUserEmail;
-    _name = MakerSyncAuthentication().getUserDisplayName;
+    _username = MakerSyncAuthentication().getUserDisplayName;
 
-    _settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
     _sensorProvider = Provider.of<SensorProvider>(context, listen: false);
     _userProvider = Provider.of<UserProvider>(context, listen: false);
     _notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
+    
+    fetchData();
+  }
+
+  void fetchData() async {
+    _sensorProvider.fetchSensor();
+    _sensorProvider.startFetchingSensorValues();
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    _sensorProvider.stopFetchingSensorValues();
   }
 
   @override
   Widget build(BuildContext context){
-
+    
     _sensorProvider.fetchSensor();
-    _notificationProvider.fetchNotifications();
+    _sensorProvider.startFetchingSensorValues();
+    print("REBUILD!");
 
-    final bool _isConnect = _settingsProvider.getBool("isConnect");
-    final bool _isInitialize = _settingsProvider.getBool("isInitialize");
+    return Consumer<SettingsProvider>(
+      builder: (context, _settingsProvider, _) {
+        final bool _isConnect = _settingsProvider.getBool("isConnect");
+        final bool _isInitialize = _settingsProvider.getBool("isInitialize");
 
-    print("----------------");
-    print("Is connected : $_isConnect");
-    print("Is intialized : $_isInitialize");
-    print("----------------");
-
-    return Scaffold( 
-      body : Center(
-        child: _isConnect 
-        ? _isInitialize
-          ? ConnectedView(
-            settingsProvider: _settingsProvider,
-            sensorProvider: _sensorProvider,
-          )
-          : InitializeView(
-            sensorProvider: _sensorProvider,
-          )
-        : DisconnectedView(
-              isScanFail: _isScanFail, 
-              btnOnTap: () => scanQRCode(context)) 
-      )
+        return Scaffold(
+          body: Center(
+            child: _isConnect
+                ? _isInitialize
+                    ? ConnectedView(
+                        settingsProvider: _settingsProvider,
+                      )
+                    : InitializeView(
+                        sensorProvider: _sensorProvider,
+                        settingsProvider: _settingsProvider,
+                      )
+                : DisconnectedView(
+                    isScanFail: _isScanFail,
+                    btnOnTap: () => scanQRCode(context, _settingsProvider),
+                  ),
+          ),
+        );
+      },
     );
+
   }
+
   
   Future<void> scanQRCode(
     BuildContext context, 
+    SettingsProvider _settingsProvider
   ) async {
     String scan;
     try{
@@ -90,7 +108,10 @@ class _OverviewViewState extends State<OverviewView> {
         ScanMode.QR
       );
 
-      updateMachineCode(scan);
+      print(scan);
+      print(SENSOR_URL);
+      _settingsProvider.setString("code", scan);
+
 
       if(!mounted) return;
       
@@ -102,9 +123,10 @@ class _OverviewViewState extends State<OverviewView> {
         _sensorProvider.fetchSensor();
         _sensorProvider.startFetchingSensorValues();
 
+
         _userProvider.addUserCredential(
           email: _email, 
-          name: _name
+          username: _username
         );
 
         const MSSnackbarWidget(

@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
@@ -11,9 +13,11 @@ import "package:provider/provider.dart";
 
 class InitializeView extends StatefulWidget {
   final SensorProvider sensorProvider;
+  final SettingsProvider settingsProvider;
 
   const InitializeView({
     required this.sensorProvider,
+    required this.settingsProvider,
     super.key
   });
 
@@ -26,6 +30,10 @@ class _InitializeViewState extends State<InitializeView> {
 
   late UserProvider _userProvider;
   late NotificationProvider _notificationProvider;  
+
+  int currentValue = 0;
+  Timer? _timer;
+  
 
   @override
   void initState() {
@@ -44,36 +52,33 @@ class _InitializeViewState extends State<InitializeView> {
     },
     {
       "type" : "500 ml",
-      "time" : "1 Hour",
+      "time" : "Approx. 20 minutes",
       "image" : "assets/svgs/Bottle_500ml.svg",
-      "timer" : 60 // minutes
+      "timer" : 1200 // 1200 seconds
     },
     {
       "type" : "1000 ml",
-      "time" : "1 Hour 30 Minutes",
+      "time" : "Approx. 40 minutes",
       "image" : "assets/svgs/Bottle_1000ml.svg",
-      "timer" : 90 // minutes
+      "timer" : 2400 //seconds
     },
     {
       "type" : "1500 ml",
-      "time" : "2 Hours",
+      "time" : "1 Hour 10 mins",
       "image" : "assets/svgs/Bottle_1500ml.svg",
-      "timer" : 120 // minutes
+      "timer" : 4200 //seconds
     },
     {
       "type" : "2000 ml",
-      "time" : "2 Hours 30 Minutes",
+      "time" : "1 Hour 30 mins",
       "image" : "assets/svgs/Bottle_2000ml.svg",
-      "timer" : 150 // minutes
+      "timer" : 5700 //seconds
     },
   ];
 
 
   @override
   Widget build(BuildContext context) {
-
-    final SettingsProvider settings = Provider.of<SettingsProvider>(context, listen: false);;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -126,9 +131,17 @@ class _InitializeViewState extends State<InitializeView> {
         ),
         
         MSButtonWidget(
-          btnOnTap: () => initializeMachine(
-            settings: settings
-          ),
+          btnOnTap: () async {
+            int timer = _options[_clickedOption]["timer"] as int;
+
+            await initializeMachine();
+            setState(() {
+              int maxTimer = _options[_clickedOption]["timer"] as int;
+              if (maxTimer > 0) {
+                _startTimer(maxTimer);
+              }
+              });
+          },
           btnIsLoading: _isLoading,
           btnColor: Theme.of(context).colorScheme.primary,
           child: Center(
@@ -215,55 +228,78 @@ class _InitializeViewState extends State<InitializeView> {
   );
 }
 
-  Future<void> initializeMachine({
-    required SettingsProvider settings
-  }) async {
+
+ void _startTimer(int maxTimer) {
+
+  final isStop = widget.settingsProvider.getBool("isStop");
+
+  _timer?.cancel(); 
+  currentValue = 0;
+
+  _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+    if (currentValue <= maxTimer) {
+      int percent = ((currentValue / maxTimer) * 100).toInt();
+      print("Current Value: $currentValue, Max Timer: $maxTimer, Percent: $percent");
+
+      if (!isStop) {
+        
+        print("--------UPDATED COUNTER!-----------");
+
+        if(currentValue == 100) {
+          timer.cancel();
+          
+          _notificationProvider.createNotification(
+            title: "Petamentor has finished.",
+            content: "Petamentor has successfully completed the process.",
+          );
+          
+        }
+
+        await widget.sensorProvider.updateSensor(
+          counter: percent,
+        );
+
+      }
+      currentValue++;
+    } else {
+      timer.cancel();
+      print("Timer Cancelled");
+    }
+  });
+}
+
+Future<void> initializeMachine() async {
     try {
       final _user = _userProvider.getUserData();
+      final isStop = widget.settingsProvider.getBool("isStop");
+
+      int maxTimer = _options[_clickedOption]["timer"] as int;
 
       setState(() => _isLoading = true);
+
       await widget.sensorProvider.updateSensor(
-          isInitialized: true,
-          isStart: true,
-          isStop: false,
-          timer: _options[_clickedOption]["timer"] as int
+        isInitialized: true,
+        isStart: true,
+        isStop: false,
+        timer: maxTimer,
       );
 
-      settings.setBool("isConnect", true);
-
-      Future.delayed(
-      const Duration(seconds: 2),
-        () => setState(() => _isLoading = false),
-      );
-
-
-      // LocalNotificationService.showScheduledNotification(
-      //   title: "Petamentor has started.",
-      //   body: "${_user?.name.split(' ').first ?? ""} has initialized the machine. Petamentor is starting.",
-      //   payload: "Process is starting.",
-      //   scheduleDate: DateTime.now().add(const Duration(seconds: 1))
-      // );
-
-
-      // LocalNotificationService.showScheduledNotification(
-      //   title: "Petamentor has finished the current process.",
-      //   body: "Your 3D filament is ready.",
-      //   payload: "Process has finished.",
-      //   scheduleDate: DateTime.now().add(Duration(seconds: _options[_clickedOption]["timer"] as int))
-      // );
+      widget.settingsProvider.setBool("isConnect", true);
+      widget.settingsProvider.setBool("isInitialize", true);
+      widget.settingsProvider.setInt("timer", maxTimer);
 
       _notificationProvider.createNotification(
         title: "Petamentor has started.",
-        content: "${_user?.name.split(' ').first ?? ""} has initialized the machine. Petamentor is starting.",
+        content: "${_user?.username.split(' ').first ?? ""} has initialized the machine. Petamentor is starting.",
       );
 
       Future.delayed(
-        Duration(seconds: _options[_clickedOption]["timer"] as int),
-        () => _notificationProvider.createNotification(
-          title: "Petamentor has successfully completed the process.",
-          content: "Your 3D filament is ready.",
-        )
+        const Duration(seconds: 2),
+          () {
+            if (mounted) setState(() => _isLoading = false);
+          },
       );
+
     } catch (e) {
       print("Error updating sensor: $e");
     }

@@ -19,6 +19,8 @@ import 'firebase_options.dart';
 import "package:timezone/data/latest.dart" as tz;
 
 
+String MACHINE_CODE = "";
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   tz.initializeTimeZones();
@@ -60,10 +62,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
+
     return Builder(
       builder: (context) {
         final SettingsProvider settings = Provider.of<SettingsProvider>(context);
         final String theme = settings.getString("theme");
+
+        MACHINE_CODE = settings.getString("code");
 
         return ScreenUtilInit(
           designSize: const Size(360, 690),
