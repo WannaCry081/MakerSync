@@ -1,18 +1,11 @@
-import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:frontend/providers/notification_provider.dart';
-import 'package:frontend/providers/settings_provider.dart';
 import 'package:frontend/services/local_notification_service.dart';
 import 'package:frontend/views/Dashboard/Home/index.dart';
 import 'package:frontend/views/Dashboard/Notifications/index.dart';
-import 'package:frontend/views/Dashboard/Notifications/notification_preview.dart';
 import 'package:frontend/views/Dashboard/Settings/index.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
-import 'package:provider/provider.dart';
-
 class DashboardView extends StatefulWidget {
   DashboardView({Key? key}) : super(key:key);
 
@@ -22,8 +15,6 @@ class DashboardView extends StatefulWidget {
 
 class _DashboardViewState extends State<DashboardView> {
   final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
-
-  Completer<void>? _notificationCompleter;
 
   @override 
   void initState() {
@@ -65,28 +56,6 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   Widget build(BuildContext context) {
-    final SettingsProvider _settingsProvider  = Provider.of<SettingsProvider>(context);
-    final NotificationProvider _notificationProvider = Provider.of<NotificationProvider>(context);
-
-    final bool _isStartProcess = _settingsProvider.getBool("isStartProcess");
-
-    if(_isStartProcess) {
-        Future.delayed(
-          Duration(seconds: _settingsProvider.getInt("timer")),
-          () {  
-            if (!_notificationCompleter!.isCompleted) {
-              _notificationProvider.createNotification(
-                title: "Petamentor has successfully completed the process.",
-                content: "Your 3D filament is ready.",
-              );
-            }
-          }
-        );
-      } else {
-        _notificationCompleter?.complete();
-      }
-
-
 
     return Scaffold(
       body: PersistentTabView(
